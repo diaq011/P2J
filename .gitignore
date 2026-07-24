@@ -211,3 +211,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Local auth session tokens (do not commit)
+v0_demo/backend/data/sessions.json

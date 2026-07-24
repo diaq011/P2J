@@ -1,1 +1,8 @@
+# 运行依赖（Runtime）
+# 说明：LLM 调用使用 Python 标准库 urllib，未依赖 requests；
+# knowledge_rag 使用标准库 math/re，未依赖 numpy。因此运行时仅需 Flask。
 flask==3.0.3
+
+# 可选：运行自动化单测（test_availability_skill.py / test_knowledge_rag.py 可直接用 python3 运行，
+# 若想用统一入口 `python3 -m pytest`，再安装以下依赖）。
+# pytest==8.2.2

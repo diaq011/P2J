@@ -13,6 +13,21 @@ from threading import Lock
 from typing import Any
 from uuid import uuid4
 
+
+def _load_local_env() -> None:
+    env_path = Path(__file__).resolve().parent / "run.local.env"
+    if not env_path.exists():
+        return
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+_load_local_env()
+
 from flask import Flask, jsonify, request, send_from_directory
 
 from deepseek_client import (
@@ -43,6 +58,7 @@ store_lock = Lock()
 FRONTEND_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = Path(__file__).resolve().parent / "data"
 USERS_FILE = DATA_DIR / "users.json"
+SESSIONS_FILE = DATA_DIR / "sessions.json"
 USER_DATA_DIR = DATA_DIR / "users"
 KNOWLEDGE_FILE = DATA_DIR / "knowledge" / "task_knowledge_v2.jsonl"
 KNOWLEDGE_FILE_LEGACY = DATA_DIR / "knowledge" / "task_duration_knowledge.jsonl"
@@ -227,6 +243,24 @@ def load_users() -> None:
         users_db = raw if isinstance(raw, dict) else {}
     except Exception:
         users_db = {}
+
+
+def save_sessions() -> None:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    SESSIONS_FILE.write_text(json.dumps(sessions, ensure_ascii=False), encoding="utf-8")
+
+
+def load_sessions() -> None:
+    global sessions
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    if not SESSIONS_FILE.exists():
+        sessions = {}
+        return
+    try:
+        raw = json.loads(SESSIONS_FILE.read_text(encoding="utf-8"))
+        sessions = raw if isinstance(raw, dict) else {}
+    except Exception:
+        sessions = {}
 
 
 def hash_password(password: str, salt: str) -> str:
@@ -829,6 +863,7 @@ def auth_register():
         save_user_state(identifier, default_user_state())
         token = secrets.token_urlsafe(32)
         sessions[token] = identifier
+        save_sessions()
     return jsonify({"ok": True, "user": {"username": identifier, "type": id_type}, "token": token, "isNew": True})
 
 
@@ -846,6 +881,7 @@ def auth_login():
             return jsonify({"message": "手机号/邮箱或密码错误"}), 401
         token = secrets.token_urlsafe(32)
         sessions[token] = identifier
+        save_sessions()
     return jsonify({"ok": True, "user": {"username": identifier, "type": user.get("type")}, "token": token})
 
 
@@ -856,6 +892,7 @@ def auth_logout():
     with store_lock:
         if token and token in sessions:
             sessions.pop(token, None)
+            save_sessions()
     return jsonify({"ok": True})
 
 
@@ -1231,7 +1268,8 @@ def run_plan_generation(username: str, target_date: str) -> dict[str, Any]:
                     "4) A task can be split across multiple days, but never scheduled after its deadline.\n"
                     "5) If evidence is insufficient, explicitly state the risk.\n"
                     "6) Output keys exactly: task_order, task_estimates, risks, notes.\n"
-                    "7) task_estimates[].evidence_ids must reference rag_examples.sample_id values."
+                    "7) task_estimates[].evidence_ids must reference rag_examples.sample_id values.\n"
+                    "8) All human-readable text — task_estimates[].reason, every item in risks, and notes — MUST be written in Simplified Chinese (简体中文), clear and concise for a high-school student to read. Keep JSON keys, sample_id and evidence_ids in their original form; do not translate identifiers."
                 ),
             },
             {"role": "user", "content": json.dumps(prompt_context, ensure_ascii=False)},
@@ -1480,6 +1518,7 @@ def create_checkin():
 
 with store_lock:
     load_users()
+    load_sessions()
 
 
 if __name__ == "__main__":

@@ -1,5 +1,11 @@
 # v0_demo (Frontend + Flask Backend)
 
+> 📌 **本目录是「J人模拟器」的应用源码。** 项目整体介绍、安装运行、截图与展示请看仓库根目录的
+> **[README.md](../README.md)**（作品集展示页），工程细节见 [../LLM_ENGINEERING_NOTES.md](../LLM_ENGINEERING_NOTES.md)。
+>
+> 快速启动（推荐）：在 `v0_demo/backend/` 下 `cp run.local.env.example run.local.env` 填入
+> `DEEPSEEK_API_KEY` 后运行 `python3 app.py`，访问 http://127.0.0.1:5001/ 。
+
 ## 目录结构
 - `index.html` / `styles.css` / `app.js`: 前端页面（静态资源）
 - `backend/app.py`: Flask API
@@ -52,14 +58,17 @@ set ESTIMATE_PERCENTILE=p50
 python app.py
 ```
 
-### 配置文件方式（.env 文件）
+### 配置文件方式（推荐：run.local.env）
 
-你也可以在 `v0_demo/backend/` 目录下创建 `.env` 文件，写入：
+后端启动时会由 `app.py::_load_local_env()` 自动读取本目录下的 `run.local.env`（已被 `.gitignore` 忽略）。
+从模板复制并填入你的 key：
 
+```bash
+cp run.local.env.example run.local.env
+# 然后编辑 run.local.env 填入 DEEPSEEK_API_KEY
 ```
-DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-DEEPSEEK_MODEL=deepseek-chat
-```
+
+模板中的键：`DEEPSEEK_API_KEY`、`DEEPSEEK_API_URL`、`DEEPSEEK_MODEL`、`AVAILABILITY_DEEPSEEK_MODEL`、`APP_PORT`。
 
 ## 已实现接口
 - `GET /api/health`

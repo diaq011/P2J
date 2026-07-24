@@ -91,7 +91,7 @@ const state = {
 
 const ui = {
   pages: Array.from(document.querySelectorAll(".page")),
-  navItems: Array.from(document.querySelectorAll(".nav-item")),
+  navItems: Array.from(document.querySelectorAll(".nav-item[data-nav]")),
   timerDisplay: document.getElementById("timerDisplay"),
   timerToggleBtn: document.getElementById("timerToggleBtn"),
   timerResetBtn: document.getElementById("timerResetBtn"),
@@ -133,18 +133,19 @@ const ui = {
   assistantChatInput: document.getElementById("assistantChatInput"),
   assistantChatSendBtn: document.getElementById("assistantChatSendBtn"),
   authGate: document.getElementById("authGate"),
-  authGateForm: document.getElementById("authGateForm"),
-  authGateTitle: document.getElementById("authGateTitle"),
-  gateIdentifier: document.getElementById("gateIdentifier"),
-  gatePassword: document.getElementById("gatePassword"),
-  gateLoginBtn: document.getElementById("gateLoginBtn"),
-  gateRegisterBtn: document.getElementById("gateRegisterBtn"),
-  gateStatus: document.getElementById("gateStatus"),
+  authLogo: document.getElementById("authLogo"),
+  authActions: document.getElementById("authActions"),
+  authNotice: document.getElementById("authNotice"),
+  scrollHint: document.getElementById("scrollHint"),
+  loginCards: Array.from(document.querySelectorAll(".login-card")),
+  railActions: document.getElementById("railActions"),
+  actionRail: document.getElementById("actionRail"),
   accountSettings: document.getElementById("accountSettings"),
   focusSettingsPage: document.getElementById("focusSettingsPage"),
   openAvailabilitySettingsBtn: document.getElementById("openAvailabilitySettingsBtn"),
   openAccountSettingsBtn: document.getElementById("openAccountSettingsBtn"),
   openFocusSettingsPageBtn: document.getElementById("openFocusSettingsPageBtn"),
+  startFocusFromSettingsBtn: document.getElementById("startFocusFromSettingsBtn"),
   backSettingsBtn: document.getElementById("backSettingsBtn"),
   backAccountSettingsBtn: document.getElementById("backAccountSettingsBtn"),
   backFocusSettingsBtn: document.getElementById("backFocusSettingsBtn"),
@@ -157,6 +158,7 @@ const ui = {
   weekStrip: document.getElementById("weekStrip"),
   planInfoModal: document.getElementById("planInfoModal"),
   closePlanInfoBtn: document.getElementById("closePlanInfoBtn"),
+  planSummaryStrip: document.getElementById("planSummaryStrip"),
   planReasonText: document.getElementById("planReasonText"),
   planRiskList: document.getElementById("planRiskList"),
   planEstimateList: document.getElementById("planEstimateList"),
@@ -214,25 +216,27 @@ const ui = {
   authStatus: document.getElementById("authStatus"),
 };
 
-bootstrap().catch((error) => setFeedback(`初始化失败：${error.message}`, true));
-
-ui.authGateForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  await gateLogin();
-});
-ui.gateRegisterBtn.addEventListener("click", async () => {
-  await gateRegister();
-});
+setupAuthGate();
 ui.navItems.forEach((item) => item.addEventListener("click", () => switchPage(item.dataset.nav)));
 ui.assistantChatForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   await sendAssistantMessage();
 });
+let assistantChatComposing = false;
+ui.assistantChatInput.addEventListener("compositionstart", () => {
+  assistantChatComposing = true;
+});
+ui.assistantChatInput.addEventListener("compositionend", () => {
+  assistantChatComposing = false;
+});
 ui.assistantChatInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    sendAssistantMessage();
-  }
+  if (event.key !== "Enter" || event.shiftKey) return;
+  // Don't send while an IME is composing (e.g. pressing Enter to commit pinyin
+  // or to keep raw letters). isComposing / keyCode 229 cover the composing Enter;
+  // the flag guards browsers that fire keydown right after compositionend.
+  if (event.isComposing || event.keyCode === 229 || assistantChatComposing) return;
+  event.preventDefault();
+  sendAssistantMessage();
 });
 ui.openTaskCreateBtn.addEventListener("click", () => showTaskCreateView());
 ui.backTaskListBtn.addEventListener("click", () => showTaskListView());
@@ -254,6 +258,9 @@ ui.availabilityChatForm.addEventListener("submit", async (event) => {
 });
 ui.openAccountSettingsBtn.addEventListener("click", () => showAccountSettings());
 ui.openFocusSettingsPageBtn.addEventListener("click", () => showFocusSettingsPage());
+if (ui.startFocusFromSettingsBtn) {
+  ui.startFocusFromSettingsBtn.addEventListener("click", () => openFocusOverlay(true));
+}
 ui.backAccountSettingsBtn.addEventListener("click", () => showSettingsHome());
 ui.backFocusSettingsBtn.addEventListener("click", () => showSettingsHome());
 ui.prevDayBtn.addEventListener("click", () => changeSelectedDate(-1));
@@ -268,9 +275,17 @@ ui.weekStrip.addEventListener("click", async (event) => {
 });
 
 ui.planInfoBtn.addEventListener("click", () => openPlanInfoModal());
-ui.closePlanInfoBtn.addEventListener("click", () => closePlanInfoModal());
+ui.closePlanInfoBtn.addEventListener("click", () => {
+  if (activeRailAction) closeRailSurface();
+  else closePlanInfoModal();
+});
 ui.planInfoModal.addEventListener("click", (e) => {
-  if (e.target === ui.planInfoModal) closePlanInfoModal();
+  if (e.target !== ui.planInfoModal) return;
+  if (activeRailAction) closeRailSurface();
+  else closePlanInfoModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && activeRailAction) closeRailSurface();
 });
 ui.closeTimeShortageBtn.addEventListener("click", () => closeTimeShortageModal());
 ui.timeShortageDetailBtn.addEventListener("click", () => {
@@ -608,8 +623,6 @@ async function logout() {
   clearAppData();
   renderAuthStatus();
   resetAssistantConversation();
-  if (ui.gateIdentifier) ui.gateIdentifier.value = "";
-  if (ui.gatePassword) ui.gatePassword.value = "";
   showAuthGate("已退出登录，请重新登录。");
 }
 
@@ -739,6 +752,28 @@ function openPlanInfoModal() {
     setFeedback("当前日期暂无计划详情。", true);
     return;
   }
+  if (ui.planSummaryStrip) {
+    const blocks = plan.scheduledBlocks || [];
+    const activeBlocks = blocks.filter((block) => {
+      const task = state.tasks.find((t) => t.id === block.taskId);
+      return !task || task.status !== "done";
+    });
+    const totalMinutes = activeBlocks.reduce(
+      (sum, block) => sum + Math.max(0, (block.endMinute || 0) - (block.startMinute || 0)),
+      0,
+    );
+    const dateLabel = plan.date || state.selectedDate;
+    ui.planSummaryStrip.innerHTML = "";
+    const dateChip = document.createElement("span");
+    dateChip.className = "plan-summary-date";
+    dateChip.textContent = dateLabel;
+    const statChip = document.createElement("span");
+    statChip.className = "plan-summary-stat";
+    statChip.textContent = `${activeBlocks.length} 个任务 · 共 ${formatDurationMinutes(totalMinutes)}`;
+    ui.planSummaryStrip.appendChild(dateChip);
+    ui.planSummaryStrip.appendChild(statChip);
+  }
+
   renderTimeShortageDetails(
     plan.details.timeShortage,
     ui.planShortageSummary,
@@ -761,11 +796,29 @@ function openPlanInfoModal() {
   ui.planEstimateList.innerHTML = "";
   (plan.details.taskEstimates || []).forEach((item) => {
     const li = document.createElement("li");
-    li.textContent = `${item.title}：${item.estimatedMinutes} 分钟（${item.reason}）`;
+    li.className = "estimate-row";
+    const head = document.createElement("div");
+    head.className = "estimate-head";
+    const title = document.createElement("span");
+    title.className = "estimate-title";
+    title.textContent = item.title;
+    const badge = document.createElement("span");
+    badge.className = "estimate-badge";
+    badge.textContent = `${item.estimatedMinutes} 分钟`;
+    head.appendChild(title);
+    head.appendChild(badge);
+    li.appendChild(head);
+    if (item.reason) {
+      const reason = document.createElement("p");
+      reason.className = "estimate-reason";
+      reason.textContent = item.reason;
+      li.appendChild(reason);
+    }
     ui.planEstimateList.appendChild(li);
   });
   if ((plan.details.taskEstimates || []).length === 0) {
     const li = document.createElement("li");
+    li.className = "estimate-empty";
     li.textContent = "暂无任务估时详情";
     ui.planEstimateList.appendChild(li);
   }
@@ -782,6 +835,173 @@ function switchPage(pageName) {
   ui.navItems.forEach((item) => item.classList.toggle("nav-active", item.dataset.nav === pageName));
   if (pageName === "settings") showSettingsHome();
   if (pageName === "plan") showTaskListView();
+  renderRailActions(pageName);
+  renderActionRail(pageName);
+}
+
+// Right-side floating rail for page content actions. Each button proxies to the
+// existing in-page control (so behavior stays identical) and shows its name on
+// hover. Icons stack vertically and are separate from the left navigation rail.
+const PENCIL_ICON =
+  '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 25h6l13-13a4 4 0 0 0-6-6L7 19v6z"></path><path d="M18 8l6 6"></path><path d="M6 26h20"></path></svg>';
+
+const ACTION_RAIL = {
+  timeline: [
+    { icon: "✨", label: "生成计划", target: "generateBtn" },
+    { icon: "◎", label: "开始专注", run: () => openFocusOverlay(true) },
+    {
+      icon: "ⓘ",
+      label: "计划详情",
+      surface: "planInfoModal",
+      panelSelector: ".modal-panel",
+      open: () => openPlanInfoModal(),
+      close: () => closePlanInfoModal(),
+    },
+  ],
+  plan: [
+    {
+      icon: PENCIL_ICON,
+      label: "创建新任务",
+      surface: "taskCreateView",
+      open: () => showTaskCreateView(),
+      close: () => showTaskListView(),
+    },
+    { icon: "◎", label: "开始专注", run: () => openFocusOverlay(true) },
+  ],
+};
+
+// Tracks the currently open rail surface so close triggers (✕ button, scrim,
+// Esc) can play the collapse animation and reset the button morph. Null on
+// mobile (there is no action rail there).
+let activeRailBtn = null;
+let activeRailAction = null;
+
+function setRevealOrigin(panel, btn) {
+  const b = btn.getBoundingClientRect();
+  const p = panel.getBoundingClientRect();
+  panel.style.transformOrigin = `${b.left + b.width / 2 - p.left}px ${b.top + b.height / 2 - p.top}px`;
+}
+
+function getRailPanel(action) {
+  const surface = document.getElementById(action.surface);
+  if (!surface) return null;
+  return action.panelSelector ? surface.querySelector(action.panelSelector) : surface;
+}
+
+function openRailSurface(btn, action) {
+  action.open();
+  const panel = getRailPanel(action);
+  if (panel) {
+    setRevealOrigin(panel, btn);
+    // Force reflow so the animation restarts even if the class lingered.
+    void panel.offsetWidth;
+    panel.classList.add("surface-reveal");
+    panel.addEventListener(
+      "animationend",
+      () => panel.classList.remove("surface-reveal"),
+      { once: true },
+    );
+  }
+  btn.classList.add("is-open");
+  btn.title = "关闭";
+  btn.setAttribute("aria-label", "关闭");
+  activeRailBtn = btn;
+  activeRailAction = action;
+}
+
+function closeRailSurface() {
+  if (!activeRailAction) return;
+  const action = activeRailAction;
+  const btn = activeRailBtn;
+  const panel = getRailPanel(action);
+  const finish = () => {
+    if (panel) panel.classList.remove("surface-collapse");
+    action.close();
+  };
+  if (panel) {
+    panel.classList.add("surface-collapse");
+    let done = false;
+    const onEnd = () => {
+      if (done) return;
+      done = true;
+      finish();
+    };
+    panel.addEventListener("animationend", onEnd, { once: true });
+    setTimeout(onEnd, 400);
+  } else {
+    finish();
+  }
+  if (btn) {
+    btn.classList.remove("is-open");
+    btn.title = action.label;
+    btn.setAttribute("aria-label", action.label);
+  }
+  activeRailBtn = null;
+  activeRailAction = null;
+}
+
+function renderActionRail(pageName) {
+  activeRailBtn = null;
+  activeRailAction = null;
+  if (!ui.actionRail) return;
+  ui.actionRail.innerHTML = "";
+  const actions = ACTION_RAIL[pageName] || [];
+  actions.forEach((action) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "action-rail-btn";
+    btn.title = action.label;
+    btn.setAttribute("aria-label", action.label);
+    btn.innerHTML = `<span class="action-rail-icon">${action.icon}</span><span class="action-rail-close" aria-hidden="true">✕</span><span class="action-rail-tip">${action.label}</span>`;
+    if (action.railId === "generate" || action.target === "generateBtn") {
+      btn.dataset.railAction = "generate";
+    }
+    btn.addEventListener("click", () => {
+      if (typeof action.run === "function") {
+        action.run();
+        return;
+      }
+      if (!action.surface) {
+        const target = document.getElementById(action.target);
+        if (target) target.click();
+        return;
+      }
+      if (btn.classList.contains("is-open")) {
+        closeRailSurface();
+      } else {
+        openRailSurface(btn, action);
+      }
+    });
+    ui.actionRail.appendChild(btn);
+  });
+}
+
+// Desktop rail: only interface-level actions (e.g. logout) live here, shown
+// contextually so the rail isn't permanently cluttered. Content actions such as
+// "生成计划" stay as in-page buttons where users expect to find them.
+const RAIL_ACTIONS = {
+  settings: [{ icon: "🚪", label: "退出登录", danger: true, run: () => logout() }],
+};
+
+function renderRailActions(pageName) {
+  if (!ui.railActions) return;
+  ui.railActions.innerHTML = "";
+  const actions = RAIL_ACTIONS[pageName] || [];
+  actions.forEach((action) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `nav-item rail-action${action.danger ? " rail-danger" : ""}`;
+    btn.innerHTML = `<span>${action.icon}</span><em>${action.label}</em>`;
+    btn.addEventListener("click", () => {
+      if (typeof action.run === "function") {
+        action.run();
+      } else if (action.target) {
+        const target = document.getElementById(action.target);
+        if (target) target.click();
+      }
+    });
+    ui.railActions.appendChild(btn);
+  });
 }
 
 function markPlanStale() {
@@ -930,34 +1150,127 @@ function hasIdentity() {
   return !!state.currentUser;
 }
 
+let authScrollRaf = 0;
+
+function setupAuthGate() {
+  if (!ui.authGate) return;
+  ui.loginCards.forEach((card) => {
+    const face = card.querySelector(".login-card-face");
+    const form = card.querySelector(".login-card-form");
+    const backBtn = card.querySelector('[data-action="back"]');
+    const registerBtn = card.querySelector('[data-action="register"]');
+    if (face) face.addEventListener("click", () => openLoginCard(card));
+    if (backBtn) backBtn.addEventListener("click", () => closeLoginCards());
+    if (form) {
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        gateAuth(card, "login");
+      });
+    }
+    if (registerBtn) registerBtn.addEventListener("click", () => gateAuth(card, "register"));
+  });
+  ui.authGate.addEventListener("scroll", () => {
+    if (authScrollRaf) return;
+    authScrollRaf = requestAnimationFrame(() => {
+      authScrollRaf = 0;
+      updateAuthScroll();
+    });
+  });
+  window.addEventListener("resize", updateAuthScroll);
+}
+
+function updateAuthScroll() {
+  if (!ui.authGate || ui.authGate.classList.contains("hidden")) return;
+  if (ui.authActions && ui.authActions.classList.contains("has-open")) return;
+  const threshold = Math.max(window.innerHeight * 0.5, 1);
+  const progress = Math.min(ui.authGate.scrollTop / threshold, 1);
+  if (ui.authLogo) {
+    ui.authLogo.style.transform = `scale(${1 - 0.28 * progress}) translateY(${-12 * progress}vh)`;
+  }
+  if (ui.authActions) {
+    ui.authActions.style.opacity = String(progress);
+    ui.authActions.style.transform = `translateY(${20 * (1 - progress)}px)`;
+    ui.authActions.style.pointerEvents = progress > 0.55 ? "auto" : "none";
+  }
+  if (ui.scrollHint) ui.scrollHint.style.opacity = String(1 - progress);
+}
+
+function openLoginCard(card) {
+  if (!ui.authActions) return;
+  ui.authActions.classList.add("has-open");
+  ui.loginCards.forEach((c) => {
+    c.classList.toggle("open", c === card);
+    c.classList.toggle("dimmed", c !== card);
+  });
+  const input = card.querySelector('[data-field="identifier"]');
+  if (input) setTimeout(() => input.focus(), 200);
+}
+
+function closeLoginCards() {
+  if (ui.authActions) ui.authActions.classList.remove("has-open");
+  ui.loginCards.forEach((c) => {
+    c.classList.remove("open", "dimmed");
+    setCardStatus(c, "");
+  });
+  updateAuthScroll();
+}
+
+function setCardStatus(card, message, isError = true) {
+  const el = card.querySelector('[data-role="status"]');
+  if (!el) return;
+  el.textContent = message || "";
+  el.style.color = isError ? "var(--danger)" : "#2c7a3f";
+}
+
+function setCardLoading(card, loading) {
+  card.querySelectorAll("button").forEach((btn) => {
+    btn.disabled = loading;
+  });
+}
+
 function showAuthGate(message = "") {
   if (!ui.authGate) return;
   ui.authGate.classList.remove("hidden");
-  setGateStatus(message, false);
-  if (ui.gateIdentifier) ui.gateIdentifier.focus();
+  closeLoginCards();
+  ui.authGate.scrollTop = 0;
+  if (ui.authNotice) ui.authNotice.textContent = message || "";
+  updateAuthScroll();
 }
 
 function hideAuthGate() {
   if (!ui.authGate) return;
   ui.authGate.classList.add("hidden");
+  if (ui.authNotice) ui.authNotice.textContent = "";
 }
 
-function setGateStatus(message, isError = true) {
-  if (!ui.gateStatus) return;
-  ui.gateStatus.textContent = message || "";
-  ui.gateStatus.style.color = isError ? "var(--danger)" : "#2c7a3f";
-}
-
-function setGateLoading(loading) {
-  if (ui.gateLoginBtn) ui.gateLoginBtn.disabled = loading;
-  if (ui.gateRegisterBtn) ui.gateRegisterBtn.disabled = loading;
-}
-
-function validIdentifier(value) {
-  const v = String(value || "").trim().toLowerCase();
-  const isPhone = /^1[3-9]\d{9}$/.test(v);
-  const isEmail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v);
-  return isPhone || isEmail;
+async function gateAuth(card, mode) {
+  const idType = card.dataset.login;
+  const identifier = (card.querySelector('[data-field="identifier"]').value || "").trim().toLowerCase();
+  const password = card.querySelector('[data-field="password"]').value || "";
+  const idOk = idType === "phone"
+    ? /^1[3-9]\d{9}$/.test(identifier)
+    : /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(identifier);
+  if (!idOk) return setCardStatus(card, idType === "phone" ? "请输入有效的手机号" : "请输入有效的邮箱");
+  if (password.length < 6) return setCardStatus(card, "密码至少 6 位");
+  setCardLoading(card, true);
+  setCardStatus(card, mode === "login" ? "登录中…" : "正在创建账号…", false);
+  try {
+    const result = await api(`/auth/${mode}`, {
+      method: "POST",
+      body: JSON.stringify({ identifier, password }),
+      authOptional: true,
+    });
+    state.authToken = result.token || "";
+    state.currentUser = result.user?.username || identifier;
+    localStorage.setItem("auth_token", state.authToken);
+    if (mode === "register") resetAssistantConversation();
+    await enterAppAfterAuth();
+    setFeedback(mode === "login" ? `欢迎回来：${state.currentUser}` : `注册成功，欢迎加入：${state.currentUser}`);
+  } catch (error) {
+    setCardStatus(card, error.message || (mode === "login" ? "登录失败" : "注册失败"));
+  } finally {
+    setCardLoading(card, false);
+  }
 }
 
 function resetAssistantConversation() {
@@ -974,59 +1287,6 @@ async function enterAppAfterAuth() {
   renderTimeline();
   renderPlanList();
   renderAuthStatus();
-}
-
-async function gateLogin() {
-  const identifier = ui.gateIdentifier.value.trim().toLowerCase();
-  const password = ui.gatePassword.value;
-  if (!validIdentifier(identifier)) return setGateStatus("请输入有效的手机号或邮箱");
-  if (password.length < 6) return setGateStatus("密码至少 6 位");
-  setGateLoading(true);
-  setGateStatus("登录中…", false);
-  try {
-    const result = await api("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ identifier, password }),
-      authOptional: true,
-    });
-    state.authToken = result.token || "";
-    state.currentUser = result.user?.username || identifier;
-    localStorage.setItem("auth_token", state.authToken);
-    ui.gatePassword.value = "";
-    await enterAppAfterAuth();
-    setFeedback(`欢迎回来：${state.currentUser}`);
-  } catch (error) {
-    setGateStatus(error.message || "登录失败");
-  } finally {
-    setGateLoading(false);
-  }
-}
-
-async function gateRegister() {
-  const identifier = ui.gateIdentifier.value.trim().toLowerCase();
-  const password = ui.gatePassword.value;
-  if (!validIdentifier(identifier)) return setGateStatus("请输入有效的手机号或邮箱");
-  if (password.length < 6) return setGateStatus("密码至少 6 位");
-  setGateLoading(true);
-  setGateStatus("正在创建账号…", false);
-  try {
-    const result = await api("/auth/register", {
-      method: "POST",
-      body: JSON.stringify({ identifier, password }),
-      authOptional: true,
-    });
-    state.authToken = result.token || "";
-    state.currentUser = result.user?.username || identifier;
-    localStorage.setItem("auth_token", state.authToken);
-    ui.gatePassword.value = "";
-    resetAssistantConversation();
-    await enterAppAfterAuth();
-    setFeedback(`注册成功，欢迎加入：${state.currentUser}`);
-  } catch (error) {
-    setGateStatus(error.message || "注册失败");
-  } finally {
-    setGateLoading(false);
-  }
 }
 
 function loadAssistantMessages() {
@@ -1325,6 +1585,14 @@ function setGenerateLoading(loading) {
   ui.generateBtn.disabled = loading;
   ui.generateBtn.classList.toggle("loading", loading);
   ui.generateSpinner.setAttribute("aria-hidden", loading ? "false" : "true");
+  const railBtn = document.querySelector('#actionRail .action-rail-btn[data-rail-action="generate"]');
+  if (railBtn) {
+    railBtn.classList.toggle("is-loading", loading);
+    railBtn.disabled = loading;
+  }
+  // Only announce the loading state; leave the success/failure feedback to the
+  // caller (generatePlanForToday) so it isn't overwritten when loading ends.
+  if (loading) setFeedback("正在生成计划…");
 }
 
 async function refreshAvailability() {
@@ -1557,9 +1825,8 @@ function renderTimeline() {
     });
 
   const minBlockStart = renderBlocks.length ? Math.min(...renderBlocks.map((block) => block.startMinute)) : 6 * 60;
-  const maxBlockEnd = renderBlocks.length ? Math.max(...renderBlocks.map((block) => block.endMinute)) : 24 * 60;
-  const startHour = Math.max(0, Math.floor(Math.max(0, minBlockStart - 60) / 60));
-  const endHour = Math.min(24, Math.max(startHour + 6, Math.ceil(Math.min(24 * 60, maxBlockEnd + 60) / 60)));
+  const startHour = 0;
+  const endHour = 24;
   content.style.height = `${(endHour - startHour) * 60 * pxPerMinute}px`;
 
   for (let hour = startHour; hour <= endHour; hour += 1) {
@@ -1593,6 +1860,9 @@ function renderTimeline() {
     el.innerHTML = block.html;
     content.appendChild(el);
   });
+
+  const firstStart = renderBlocks.length ? minBlockStart : 6 * 60;
+  ui.timelineCanvas.scrollTop = Math.max(0, (firstStart - 30) * pxPerMinute);
 }
 
 function layoutTimelineBlocks(blocks) {
@@ -1932,3 +2202,7 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
+
+// Kick off initialization last, after every top-level const/function above is
+// initialized, so bootstrap() can safely call into them on first load/refresh.
+bootstrap().catch((error) => setFeedback(`初始化失败：${error.message}`, true));

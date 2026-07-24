@@ -774,6 +774,162 @@ textarea {
   line-height: 1.5;
 }
 
+/* Shared top-right close (✕) icon button for modals. */
+.modal-close {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.modal-close:hover {
+  background: var(--panel-alt);
+  border-color: var(--line);
+  color: var(--danger);
+}
+
+/* Plan detail modal: scannable stacked cards. */
+.plan-info-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.plan-summary-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--primary-soft);
+  border: 1px solid var(--line);
+}
+
+.plan-summary-date {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.plan-summary-stat {
+  margin-left: auto;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.plan-card {
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+}
+
+.plan-card-title {
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.plan-card-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.plan-reason-text {
+  margin: 0;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.estimate-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.estimate-row {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.estimate-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.estimate-title {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.estimate-badge {
+  flex: none;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.estimate-reason {
+  margin: 6px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--muted, #6b7480);
+}
+
+.estimate-empty {
+  font-size: 0.85rem;
+  color: var(--muted, #6b7480);
+}
+
+/* Task edit modal footer: primary save prominent, destructive delete demoted
+   and pushed far left to reduce mis-clicks. */
+.task-edit-actions {
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.task-edit-actions #saveTaskEditBtn {
+  min-width: 120px;
+}
+
+.btn.danger-ghost {
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid rgba(204, 46, 46, 0.4);
+}
+
+.btn.danger-ghost:hover {
+  background: rgba(204, 46, 46, 0.08);
+}
+
 .availability-chat-view {
   display: flex;
   flex-direction: column;
@@ -784,76 +940,198 @@ textarea {
   position: fixed;
   inset: 0;
   z-index: 60;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px calc(24px + env(safe-area-inset-bottom));
   overflow-y: auto;
+  overflow-x: hidden;
   background:
-    radial-gradient(circle, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 100%),
-    linear-gradient(180deg, rgba(24, 38, 56, 0.62), rgba(24, 38, 56, 0.74));
-  background-size: 6px 6px, auto;
-  backdrop-filter: blur(10px) saturate(1.1);
-  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.5) 0 1.4px, transparent 1.6px 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.78));
+  background-size: 22px 22px, auto;
+  backdrop-filter: blur(16px) saturate(1.08);
+  -webkit-backdrop-filter: blur(16px) saturate(1.08);
 }
 
 .auth-gate.hidden {
   display: none;
 }
 
-.auth-gate-inner {
-  width: min(100%, 420px);
+.auth-scroll {
+  position: relative;
+  min-height: 178vh;
+}
+
+.auth-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  justify-content: center;
+  gap: 30px;
+  padding: 24px;
+  text-align: center;
 }
 
-.auth-gate-logo {
-  display: block;
-  width: min(70%, 240px);
+.auth-logo {
+  width: min(82%, 360px);
   height: auto;
   image-rendering: pixelated;
-  filter: drop-shadow(2px 2px 0 #1d1b21);
+  filter: drop-shadow(0 10px 22px rgba(40, 52, 70, 0.28));
+  transform-origin: center center;
+  transition: transform 0.12s ease-out;
+  will-change: transform;
 }
 
-.auth-gate-card {
-  width: 100%;
-}
-
-.auth-gate-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 6px;
-}
-
-.auth-gate-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.auth-notice {
+  margin: 0;
+  min-height: 18px;
   font-size: 0.9rem;
+  color: var(--primary-dark);
 }
 
-.auth-gate-form input {
+.auth-actions {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 7vh;
+  transform: translateX(-50%);
+  color: var(--muted);
+  font-size: 0.9rem;
+  animation: floatHint 1.8s ease-in-out infinite;
+}
+
+@keyframes floatHint {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 6px); }
+}
+
+.login-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  background: var(--glass-panel-strong);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition:
+    width 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.38s ease,
+    box-shadow 0.38s ease,
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    padding 0.38s ease;
+}
+
+.login-card-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 20px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.login-card-emoji {
+  font-size: 1.2rem;
+}
+
+.login-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 0;
+  opacity: 0;
+  padding: 0 18px;
+  overflow: hidden;
+  transition: max-height 0.38s ease, opacity 0.3s ease, padding 0.38s ease;
+}
+
+.login-input {
   width: 100%;
 }
 
-.auth-gate-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
+.login-card-status {
+  margin: 0;
+  min-height: 16px;
+  font-size: 0.82rem;
+  color: var(--danger);
 }
 
-.auth-gate-actions .btn {
+.login-card-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.login-card-buttons .btn {
   flex: 1 1 0;
 }
 
-.auth-gate-status {
-  margin: 10px 0 0;
-  min-height: 20px;
-  font-size: 0.86rem;
-  color: var(--danger);
+.login-card-back {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  padding: 2px 0 4px;
+}
+
+.login-card.open {
+  width: min(86vw, 360px);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.login-card.open .login-card-face {
+  cursor: default;
+}
+
+.login-card.open .login-card-form {
+  max-height: 380px;
+  opacity: 1;
+  padding: 0 18px 16px;
+}
+
+.auth-actions.has-open .login-card.dimmed {
+  width: 0;
+  margin: 0 -9px;
+  opacity: 0;
+  transform: scale(0.9);
+  border-width: 0;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+@media (max-width: 560px) {
+  .auth-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .auth-actions.has-open .login-card.dimmed {
+    width: min(86vw, 360px);
+    height: 0;
+    margin: -9px 0;
+    padding: 0;
+  }
 }
 
 .chat-header {
@@ -1178,6 +1456,10 @@ textarea {
   margin-top: 10px;
 }
 
+#startFocusFromSettingsBtn {
+  margin-top: 18px;
+}
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -1285,6 +1567,43 @@ textarea {
   box-shadow: 2px 2px 0 #00000045;
 }
 
+/* Rail-only elements: hidden on mobile (bottom-nav), shown on desktop rail. */
+.rail-actions {
+  display: none;
+}
+
+/* Right-side action rail: desktop-only; mobile uses in-page buttons. */
+.action-rail {
+  display: none;
+}
+
+/* Reveal-from-button + morph-to-close animation for rail-opened surfaces. */
+.surface-reveal { animation: surfaceReveal 320ms cubic-bezier(0.22, 1, 0.36, 1); }
+.surface-collapse { animation: surfaceCollapse 260ms cubic-bezier(0.4, 0, 1, 1) forwards; }
+@keyframes surfaceReveal { from { opacity: 0; transform: scale(0.12); } to { opacity: 1; transform: scale(1); } }
+@keyframes surfaceCollapse { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.12); } }
+@keyframes scrimFade { from { background: rgba(0,0,0,0); } to { background: rgba(0,0,0,0.45); } }
+.modal:not(.hidden) { animation: scrimFade 220ms ease; }
+
+.action-rail-icon, .action-rail-close { transition: opacity 220ms ease, transform 220ms ease; }
+.action-rail-close {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: rotate(-90deg); font-size: 1.15rem; color: var(--danger); pointer-events: none;
+}
+.action-rail-btn.is-open .action-rail-icon { opacity: 0; transform: rotate(90deg); }
+.action-rail-btn.is-open .action-rail-close { opacity: 1; transform: rotate(0); }
+.action-rail-btn.is-open {
+  border-color: var(--danger);
+  background: var(--panel);
+  box-shadow: 0 0 0 3px var(--primary-soft), var(--shadow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface-reveal, .surface-collapse, .modal:not(.hidden) { animation: none; }
+  .action-rail-icon, .action-rail-close { transition: opacity 120ms ease; }
+  .action-rail-btn.is-open .action-rail-icon, .action-rail-btn.is-open .action-rail-close { transform: none; }
+}
+
 @media (max-width: 520px) {
   .app-shell {
     padding: 10px 8px 88px;
@@ -1318,6 +1637,236 @@ textarea {
 
   .date-nav-row {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  /* Desktop shell: center content, leave room on the left for the floating rail. */
+  .app-shell {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 28px 40px 28px 284px;
+  }
+
+  /* Unified content width across every page. */
+  .page {
+    min-height: 0;
+    max-width: 880px;
+    margin-inline: auto;
+    padding: 4px 8px;
+  }
+
+  .page-header h1,
+  .chat-title {
+    font-size: 1.5rem;
+  }
+
+  /* Chat page: fixed-height window filling the viewport (no bottom nav). */
+  .page[data-page="chat"] {
+    height: calc(100dvh - 56px);
+  }
+
+  /* Floating left navigation rail: vertical, rounded, height fits its content. */
+  .bottom-nav {
+    left: 28px;
+    right: auto;
+    bottom: auto;
+    top: 28px;
+    transform: none;
+    width: 168px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle, rgba(255, 255, 255, 0.4) 0 1px, transparent 1.4px 100%),
+      var(--glass-panel-strong);
+    background-size: 18px 18px, auto;
+    box-shadow: var(--shadow);
+    padding: 12px;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    color: var(--ink);
+  }
+
+  .nav-item span {
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+
+  .nav-item em {
+    display: inline;
+    font-style: normal;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .nav-item.nav-active {
+    border-color: transparent;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Rail interface-action group (e.g. logout); only shown when it has items. */
+  .rail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .rail-actions:not(:empty) {
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .nav-item.rail-action.rail-danger {
+    color: var(--danger);
+  }
+
+  /* Chat page: same width as other pages; card fills that width and full height. */
+  .page[data-page="chat"] {
+    align-items: stretch;
+  }
+
+  .page[data-page="chat"] .chat-header,
+  .page > .card.assistant-chat-view:last-of-type {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  /* Action rail sits just to the right of the left navigation rail. */
+  .action-rail {
+    position: fixed;
+    top: 28px;
+    left: 208px;
+    right: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .action-rail:empty {
+    display: none;
+  }
+
+  /* Below the modal scrim (z-index 50) so the rail dims with the nav; the
+     active (morphed-to-close) button jumps above the scrim to stay clickable. */
+  .action-rail-btn {
+    z-index: 31;
+  }
+
+  .action-rail-btn.is-open {
+    z-index: 60;
+  }
+
+  #closePlanInfoBtn,
+  #backTaskListBtn {
+    display: none;
+  }
+
+  .action-rail-btn {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--glass-panel-strong);
+    box-shadow: var(--shadow-sm);
+    color: var(--ink);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+
+  .action-rail-btn:hover {
+    transform: translateY(-1px);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+  }
+
+  .action-rail-btn.is-loading {
+    pointer-events: none;
+    opacity: 0.85;
+    cursor: wait;
+  }
+
+  .action-rail-btn.is-loading .action-rail-icon {
+    opacity: 0;
+  }
+
+  .action-rail-btn.is-loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    border: 3px solid var(--primary-soft);
+    border-top-color: var(--primary);
+    animation: spin 0.7s linear infinite;
+  }
+
+  .action-rail-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    display: inline-flex;
+  }
+
+  .action-rail-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .action-rail-tip {
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-6px);
+    white-space: nowrap;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    background: var(--ink);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .action-rail-btn:hover .action-rail-tip,
+  .action-rail-btn:focus-visible .action-rail-tip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  /* In-page action buttons now live on the right rail; hide their duplicates. */
+  .page[data-page="plan"] #openTaskCreateBtn,
+  .page[data-page="timeline"] .card:has(.timeline-actions-row) {
+    display: none;
+  }
+
+  .timeline-canvas {
+    height: min(64dvh, 640px);
   }
 }
 

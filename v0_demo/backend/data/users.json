@@ -20,5 +20,23 @@
     "password_hash": "6efb6b66ad08b15a07e86227bf3a4c5625af9f2fc0be01faed56fcecd34f1291",
     "created_at": "2026-06-29T14:01:59",
     "type": "phone"
+  },
+  "15928071132": {
+    "salt": "2121ec83a83871b9",
+    "password_hash": "b1767e88bedcecdd72a398cefff2348a51b0e05ccfa0559dcfbd38f71b8cf0a5",
+    "created_at": "2026-06-29T15:32:16",
+    "type": "phone"
+  },
+  "13900000001": {
+    "salt": "53a8f7b9bc725768",
+    "password_hash": "cd36799148f38452b16a8026122543fbb398d02529ea951685d57633051d031d",
+    "created_at": "2026-06-29T16:09:16",
+    "type": "phone"
+  },
+  "13900000099": {
+    "salt": "118eeb729d12b441",
+    "password_hash": "07c30c43b13f8835ffaf360b320951f9e5905bbeb4697085ee1cabf526219899",
+    "created_at": "2026-06-30T12:04:32",
+    "type": "phone"
   }
 }
