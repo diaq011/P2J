@@ -15,7 +15,7 @@
         <div id="authActions" class="auth-actions">
           <div class="login-card" data-login="phone">
             <button type="button" class="login-card-face">
-              <span class="login-card-emoji" aria-hidden="true">📱</span>
+              <span class="login-card-emoji" aria-hidden="true"><img src="/assets/icons/mobile-button.png" class="ui-icon" alt=""></span>
               <span class="login-card-text">手机号登录</span>
             </button>
             <form class="login-card-form" novalidate>
@@ -33,7 +33,7 @@
           </div>
           <div class="login-card" data-login="email">
             <button type="button" class="login-card-face">
-              <span class="login-card-emoji" aria-hidden="true">✉️</span>
+              <span class="login-card-emoji" aria-hidden="true"><img src="/assets/icons/envelope.png" class="ui-icon" alt=""></span>
               <span class="login-card-text">邮箱登录</span>
             </button>
             <form class="login-card-form" novalidate>
@@ -57,6 +57,37 @@
 
   <main class="app-shell">
     <section class="page page-active" data-page="chat">
+      <aside class="focus-panel" aria-label="专注">
+        <div id="focusModeSwitch" class="mode-switch" role="tablist" aria-label="专注模式">
+          <span class="mode-switch-indicator" aria-hidden="true"></span>
+          <button class="mode-switch-btn is-active" type="button" role="tab" data-focus-mode="countup">正计时</button>
+          <button class="mode-switch-btn" type="button" role="tab" data-focus-mode="countdown">倒计时</button>
+          <button class="mode-switch-btn" type="button" role="tab" data-focus-mode="pomodoro">番茄钟</button>
+        </div>
+        <input id="focusGoalInput" class="focus-goal-input" type="text" placeholder="这次专注做什么？" autocomplete="off">
+        <div id="focusDial" class="focus-dial">
+          <svg class="focus-dial-svg" viewBox="0 0 240 240" role="slider" aria-label="专注时长" tabindex="0">
+            <g class="focus-dial-ticks"></g>
+            <path class="focus-dial-sector" d=""></path>
+            <line class="focus-dial-hand" x1="120" y1="120" x2="120" y2="24"></line>
+            <circle class="focus-dial-knob" cx="120" cy="120" r="11"></circle>
+          </svg>
+        </div>
+        <div id="focusReadout" class="focus-readout">00:00</div>
+        <p id="focusEndHint" class="focus-end-hint" hidden>预计 --:-- 结束</p>
+        <p id="focusPomodoroStatus" class="focus-pomodoro-status" hidden></p>
+        <div class="focus-controls">
+          <button id="focusStartBtn" class="btn primary focus-start-btn" type="button">开始专注</button>
+          <div id="focusRunningControls" class="focus-running-controls" hidden>
+            <button id="focusPauseResumeBtn" class="btn" type="button">暂停</button>
+            <button id="focusStopBtn" class="btn primary" type="button">结束</button>
+          </div>
+          <div id="focusPomodoroChoice" class="focus-pomodoro-choice" hidden>
+            <button id="focusLongBreakBtn" class="btn" type="button">大休息</button>
+            <button id="focusPomodoroStopBtn" class="btn primary" type="button">终止</button>
+          </div>
+        </div>
+      </aside>
       <div class="card assistant-chat-view">
         <div id="assistantChatMessages" class="chat-messages" aria-live="polite"></div>
         <form id="assistantChatForm" class="chat-composer">
@@ -81,7 +112,7 @@
             <span class="btn-text">生成计划</span>
             <span id="generateSpinner" class="spinner" aria-hidden="true"></span>
           </button>
-          <button id="planInfoBtn" class="btn info-btn" type="button" title="查看计划详情" aria-label="查看计划详情">i</button>
+          <button id="planInfoBtn" class="btn info-btn" type="button" title="查看计划详情" aria-label="查看计划详情"><img src="/assets/icons/info.png" class="ui-icon ui-icon-btn" alt=""></button>
         </div>
       </div>
       <div class="card timeline-card">
@@ -93,11 +124,7 @@
     <section class="page" data-page="plan">
       <header class="page-header page-header-row">
         <button id="openTaskCreateBtn" class="icon-action-btn" type="button" aria-label="添加任务">
-          <svg class="edit-svg" viewBox="0 0 32 32" aria-hidden="true">
-            <path d="M7 25h6l13-13a4 4 0 0 0-6-6L7 19v6z"></path>
-            <path d="M18 8l6 6"></path>
-            <path d="M6 26h20"></path>
-          </svg>
+          <img src="/assets/icons/add.png" class="ui-icon ui-icon-btn" alt="">
         </button>
       </header>
       <div id="taskCreateView" class="card" hidden>
@@ -212,7 +239,7 @@
       <div id="availabilityAiSettings" class="settings-view card availability-chat-view" hidden>
         <div class="settings-detail-head">
           <button id="backFromAvailabilityAiBtn" class="btn small" type="button">‹ 返回</button>
-          <h2>AI 设置空闲时间</h2>
+          <h2><img src="/assets/icons/brain.png" class="ui-icon ui-icon-heading" alt="">AI 设置空闲时间</h2>
         </div>
         <p class="hint">用自然语言描述你的空闲时间，AI 会自动解析并保存。例如：「工作日晚上 7 点到 9 点有空，周末下午 2 点到 5 点。」</p>
         <div id="availabilityChatMessages" class="chat-messages" aria-live="polite"></div>
@@ -233,7 +260,7 @@
             <button id="copyAllDaysBtn" class="btn" type="button">复制到全周</button>
           </div>
           <div id="availabilityEditor" class="availability-editor"></div>
-          <button id="saveAvailabilityBtn" type="submit" class="btn primary">保存空闲时段</button>
+          <button id="saveAvailabilityBtn" type="submit" class="btn primary"><img src="/assets/icons/check.png" class="ui-icon" alt="">保存空闲时段</button>
         </form>
       </div>
       <div id="accountSettings" class="settings-view card" hidden>
@@ -253,7 +280,7 @@
             <input id="profileNameInput" type="text" placeholder="例如：刘知行">
           </label>
           <div class="auth-actions">
-            <button id="saveProfileBtn" class="btn primary" type="button">保存资料</button>
+            <button id="saveProfileBtn" class="btn primary" type="button"><img src="/assets/icons/check.png" class="ui-icon" alt="">保存资料</button>
             <button id="profileLogoutBtn" class="btn danger" type="button">退出账号</button>
           </div>
         </div>
@@ -309,7 +336,7 @@
     <div class="modal-panel">
       <div class="modal-head">
         <h3>专注设置</h3>
-        <button id="closeFocusSettingsBtn" class="btn small" type="button">关闭</button>
+        <button id="closeFocusSettingsBtn" class="btn small" type="button"><img src="/assets/icons/cross-small.png" class="ui-icon" alt="">关闭</button>
       </div>
       <div class="modal-body">
         <label class="radio-row">
@@ -328,7 +355,7 @@
     <div class="modal-panel">
       <div class="modal-head">
         <h3>专注内容</h3>
-        <button id="closeFocusContentBtn" class="btn small" type="button">关闭</button>
+        <button id="closeFocusContentBtn" class="btn small" type="button"><img src="/assets/icons/cross-small.png" class="ui-icon" alt="">关闭</button>
       </div>
       <div class="modal-body">
         <label>
@@ -336,7 +363,7 @@
           <input id="focusContentInput" type="text" placeholder="例如：数学卷选择题">
         </label>
         <div class="modal-actions">
-          <button id="saveFocusContentBtn" class="btn primary" type="button">保存</button>
+          <button id="saveFocusContentBtn" class="btn primary" type="button"><img src="/assets/icons/check.png" class="ui-icon" alt="">保存</button>
         </div>
       </div>
     </div>
@@ -346,7 +373,7 @@
     <div class="modal-panel">
       <div class="modal-head">
         <h3>编辑时间段</h3>
-        <button id="closeTimelineEditBtn" class="btn small" type="button">关闭</button>
+        <button id="closeTimelineEditBtn" class="btn small" type="button"><img src="/assets/icons/cross-small.png" class="ui-icon" alt="">关闭</button>
       </div>
       <div class="modal-body">
         <label>
@@ -369,7 +396,7 @@
         </label>
         <div class="modal-actions danger-row">
           <button id="deleteTimelineBlockBtn" class="btn danger" type="button">删除</button>
-          <button id="saveTimelineBlockBtn" class="btn primary" type="button">保存</button>
+          <button id="saveTimelineBlockBtn" class="btn primary" type="button"><img src="/assets/icons/check.png" class="ui-icon" alt="">保存</button>
         </div>
       </div>
     </div>
@@ -379,7 +406,7 @@
     <div class="modal-panel">
       <div class="modal-head">
         <h3>编辑任务</h3>
-        <button id="closeTaskEditBtn" class="modal-close" type="button" aria-label="关闭">✕</button>
+        <button id="closeTaskEditBtn" class="modal-close" type="button" aria-label="关闭"><img src="/assets/icons/cross-small.png" class="ui-icon ui-icon-btn" alt=""></button>
       </div>
       <div class="modal-body">
         <label>
@@ -435,8 +462,8 @@
           <input id="editEstimateInput" type="number" min="1" placeholder="例如：90">
         </label>
         <div class="modal-actions task-edit-actions">
-          <button id="deleteTaskBtn" class="btn danger-ghost" type="button">删除任务</button>
-          <button id="saveTaskEditBtn" class="btn primary" type="button">保存任务</button>
+          <button id="deleteTaskBtn" class="btn danger-ghost" type="button"><img src="/assets/icons/trash.png" class="ui-icon" alt="">删除任务</button>
+          <button id="saveTaskEditBtn" class="btn primary" type="button"><img src="/assets/icons/check.png" class="ui-icon" alt="">保存任务</button>
         </div>
       </div>
     </div>
@@ -461,7 +488,7 @@
     <div class="modal-panel">
       <div class="modal-head">
         <h3>计划详情</h3>
-        <button id="closePlanInfoBtn" class="modal-close" type="button" aria-label="关闭">✕</button>
+        <button id="closePlanInfoBtn" class="modal-close" type="button" aria-label="关闭"><img src="/assets/icons/cross-small.png" class="ui-icon ui-icon-btn" alt=""></button>
       </div>
       <div class="modal-body plan-info-body">
         <div id="planSummaryStrip" class="plan-summary-strip"></div>
@@ -487,10 +514,10 @@
   </div>
 
   <nav class="bottom-nav">
-    <button class="nav-item nav-active" data-nav="chat" type="button"><span>💬</span><em>对话</em></button>
-    <button class="nav-item" data-nav="timeline" type="button"><span>🕒</span><em>时间轴</em></button>
-    <button class="nav-item" data-nav="plan" type="button"><span>📋</span><em>计划列表</em></button>
-    <button class="nav-item" data-nav="settings" type="button"><span>⚙️</span><em>设置</em></button>
+    <button class="nav-item nav-active" data-nav="chat" type="button"><span><img src="/assets/icons/home.png" class="ui-icon ui-icon-nav" alt=""></span><em>主页</em></button>
+    <button class="nav-item" data-nav="timeline" type="button"><span><img src="/assets/icons/calendar-clock.png" class="ui-icon ui-icon-nav" alt=""></span><em>时间轴</em></button>
+    <button class="nav-item" data-nav="plan" type="button"><span><img src="/assets/icons/rectangle-list.png" class="ui-icon ui-icon-nav" alt=""></span><em>计划列表</em></button>
+    <button class="nav-item" data-nav="settings" type="button"><span><img src="/assets/icons/settings.png" class="ui-icon ui-icon-nav" alt=""></span><em>设置</em></button>
     <div id="railActions" class="rail-actions"></div>
   </nav>
 

@@ -76,6 +76,13 @@ const state = {
   focusElapsedMs: 0,
   focusDisplayMode: localStorage.getItem("focus_display_mode") || "elapsed",
   focusContent: localStorage.getItem("focus_content") || "",
+  focusMode: "countup",
+  focusTargetMinutes: 25,
+  focusPanelHandle: null,
+  focusDialDrag: false,
+  pomodoroPhase: "idle", // idle | work | shortBreak | longBreak | awaitingChoice
+  pomodoroWorkCount: 0,
+  pomodoroWorkMinutes: 25,
   focusBlocks: loadFocusBlocks(),
   timelineBlockEdits: loadTimelineBlockEdits(),
   editingTimelineBlock: null,
@@ -128,6 +135,26 @@ const ui = {
   availabilityChatForm: document.getElementById("availabilityChatForm"),
   availabilityChatInput: document.getElementById("availabilityChatInput"),
   availabilityChatSendBtn: document.getElementById("availabilityChatSendBtn"),
+  focusPanel: document.querySelector(".focus-panel"),
+  focusModeSwitch: document.getElementById("focusModeSwitch"),
+  focusModeIndicator: document.querySelector("#focusModeSwitch .mode-switch-indicator"),
+  focusModeBtns: Array.from(document.querySelectorAll("#focusModeSwitch .mode-switch-btn")),
+  focusGoalInput: document.getElementById("focusGoalInput"),
+  focusDial: document.getElementById("focusDial"),
+  focusDialSvg: document.querySelector("#focusDial .focus-dial-svg"),
+  focusDialTicks: document.querySelector("#focusDial .focus-dial-ticks"),
+  focusDialSector: document.querySelector("#focusDial .focus-dial-sector"),
+  focusDialHand: document.querySelector("#focusDial .focus-dial-hand"),
+  focusReadout: document.getElementById("focusReadout"),
+  focusEndHint: document.getElementById("focusEndHint"),
+  focusPomodoroStatus: document.getElementById("focusPomodoroStatus"),
+  focusStartBtn: document.getElementById("focusStartBtn"),
+  focusRunningControls: document.getElementById("focusRunningControls"),
+  focusPauseResumeBtn: document.getElementById("focusPauseResumeBtn"),
+  focusStopBtn: document.getElementById("focusStopBtn"),
+  focusPomodoroChoice: document.getElementById("focusPomodoroChoice"),
+  focusLongBreakBtn: document.getElementById("focusLongBreakBtn"),
+  focusPomodoroStopBtn: document.getElementById("focusPomodoroStopBtn"),
   assistantChatMessages: document.getElementById("assistantChatMessages"),
   assistantChatForm: document.getElementById("assistantChatForm"),
   assistantChatInput: document.getElementById("assistantChatInput"),
@@ -633,6 +660,7 @@ async function bootstrap() {
   renderFocusClock();
   renderFocusContent();
   syncFocusSettingsInputs();
+  initFocusPanel();
   renderAssistantChat();
   switchPage("chat");
   await tryRestoreSession();
@@ -669,6 +697,9 @@ async function generatePlanForToday() {
     clearPlanStale();
     const note = result.plan?.note ? ` ${result.plan.note}` : "";
     setFeedback(`计划已生成（${state.selectedDate}）。${note}`);
+    // Remember whether this plan had unfittable tasks so the rail icon can show
+    // brain-doubt after generation (set before setGenerateLoading(false) runs).
+    state.planShortage = !!result.plan?.details?.timeShortage?.hasShortage;
     showTimeShortageModal(result.plan);
   } catch (error) {
     setFeedback(`生成计划失败：${error.message}`, true);
@@ -843,14 +874,13 @@ function switchPage(pageName) {
 // existing in-page control (so behavior stays identical) and shows its name on
 // hover. Icons stack vertically and are separate from the left navigation rail.
 const PENCIL_ICON =
-  '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 25h6l13-13a4 4 0 0 0-6-6L7 19v6z"></path><path d="M18 8l6 6"></path><path d="M6 26h20"></path></svg>';
+  '<img src="/assets/icons/add.png" class="ui-icon" alt="">';
 
 const ACTION_RAIL = {
   timeline: [
-    { icon: "✨", label: "生成计划", target: "generateBtn" },
-    { icon: "◎", label: "开始专注", run: () => openFocusOverlay(true) },
+    { icon: '<img src="/assets/icons/brain.png" class="ui-icon" alt="">', label: "生成计划", target: "generateBtn" },
     {
-      icon: "ⓘ",
+      icon: '<img src="/assets/icons/info.png" class="ui-icon" alt="">',
       label: "计划详情",
       surface: "planInfoModal",
       panelSelector: ".modal-panel",
@@ -866,7 +896,6 @@ const ACTION_RAIL = {
       open: () => showTaskCreateView(),
       close: () => showTaskListView(),
     },
-    { icon: "◎", label: "开始专注", run: () => openFocusOverlay(true) },
   ],
 };
 
@@ -974,6 +1003,24 @@ function renderActionRail(pageName) {
     });
     ui.actionRail.appendChild(btn);
   });
+  updateGenerateRailIcon();
+}
+
+// The "生成计划" rail button has three faces:
+//   default  → brain.png
+//   loading  → brain-lightning.png (with the spinning ring from .is-loading)
+//   conflict → brain-doubt.png (last plan couldn't fit every task before its DDL)
+let generatePlanLoading = false;
+
+function updateGenerateRailIcon() {
+  const railBtn = document.querySelector('#actionRail .action-rail-btn[data-rail-action="generate"]');
+  if (!railBtn) return;
+  const img = railBtn.querySelector(".action-rail-icon img");
+  if (!img) return;
+  let name = "brain";
+  if (generatePlanLoading) name = "brain-lightning";
+  else if (state.planShortage) name = "brain-doubt";
+  img.src = `/assets/icons/${name}.png`;
 }
 
 // Desktop rail: only interface-level actions (e.g. logout) live here, shown
@@ -1546,6 +1593,463 @@ function endFocusSession() {
   setFeedback("专注记录已添加到时间轴。");
 }
 
+/* ===== Homepage focus panel (segmented modes + dial) ===== */
+const FOCUS_DIAL = { cx: 120, cy: 120, faceR: 78, tickOuter: 104, tickInner: 92, handR: 96 };
+const FOCUS_MODE_INDEX = { countup: 0, countdown: 1, pomodoro: 2 };
+
+// Pomodoro defaults (tweak here). A 组/set = `setsBeforeLongBreak` work intervals,
+// each followed by a short break (except the last, which offers a long break or stop).
+const POMODORO = {
+  workMinutes: 25,
+  shortBreakMinutes: 5,
+  longBreakMinutes: 15,
+  setsBeforeLongBreak: 3,
+};
+
+function focusMinutesToPoint(minutes, radius) {
+  const theta = (Math.min(60, Math.max(0, minutes)) / 60) * Math.PI * 2;
+  return {
+    x: FOCUS_DIAL.cx + radius * Math.sin(theta),
+    y: FOCUS_DIAL.cy - radius * Math.cos(theta),
+  };
+}
+
+function buildFocusDialTicks() {
+  if (!ui.focusDialTicks) return;
+  const parts = [];
+  for (let i = 0; i < 60; i += 1) {
+    const major = i % 5 === 0;
+    const inner = focusMinutesToPoint(i, major ? FOCUS_DIAL.tickInner : FOCUS_DIAL.tickInner + 4);
+    const outer = focusMinutesToPoint(i, FOCUS_DIAL.tickOuter);
+    parts.push(
+      `<line class="focus-tick ${major ? "major" : "minor"}" x1="${inner.x.toFixed(2)}" y1="${inner.y.toFixed(2)}" x2="${outer.x.toFixed(2)}" y2="${outer.y.toFixed(2)}"></line>`
+    );
+  }
+  // A soft background face behind the sector.
+  ui.focusDialTicks.insertAdjacentHTML(
+    "beforebegin",
+    `<circle class="focus-dial-face" cx="${FOCUS_DIAL.cx}" cy="${FOCUS_DIAL.cy}" r="${FOCUS_DIAL.faceR}"></circle>`
+  );
+  ui.focusDialTicks.innerHTML = parts.join("");
+}
+
+function focusSectorPath(minutes) {
+  const m = Math.min(60, Math.max(0, minutes));
+  if (m <= 0) return "";
+  const r = FOCUS_DIAL.faceR;
+  if (m >= 60) {
+    // Full circle.
+    return `M ${FOCUS_DIAL.cx} ${FOCUS_DIAL.cy - r} A ${r} ${r} 0 1 1 ${FOCUS_DIAL.cx - 0.01} ${FOCUS_DIAL.cy - r} Z`;
+  }
+  const start = focusMinutesToPoint(0, r);
+  const end = focusMinutesToPoint(m, r);
+  const largeArc = m > 30 ? 1 : 0;
+  return `M ${FOCUS_DIAL.cx} ${FOCUS_DIAL.cy} L ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${r} ${r} 0 ${largeArc} 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)} Z`;
+}
+
+function focusDialArcMinutes() {
+  // Minutes to visualize on the dial (arc + hand).
+  if (!state.timerRunning && !isFocusSessionActive()) {
+    // Count-up mode is non-adjustable: the arc starts at 0 and only grows while running.
+    return state.focusMode === "countup" ? 0 : state.focusTargetMinutes;
+  }
+  const elapsedMs = getFocusElapsedMs();
+  if (state.focusMode === "countup") {
+    return (elapsedMs / 60000) % 60;
+  }
+  const targetMs = state.focusTargetMinutes * 60000;
+  const remaining = Math.max(0, targetMs - elapsedMs);
+  return remaining / 60000;
+}
+
+function isFocusSessionActive() {
+  return !!state.focusBlockStartAt;
+}
+
+function isFocusDialLocked() {
+  // The dial is only user-adjustable in countdown/pomodoro while no session runs.
+  return state.focusMode === "countup" || isFocusSessionActive();
+}
+
+function renderFocusDial() {
+  const minutes = focusDialArcMinutes();
+  if (ui.focusDialSector) ui.focusDialSector.setAttribute("d", focusSectorPath(minutes));
+  if (ui.focusDialHand) {
+    const tip = focusMinutesToPoint(minutes, FOCUS_DIAL.handR);
+    ui.focusDialHand.setAttribute("x2", tip.x.toFixed(2));
+    ui.focusDialHand.setAttribute("y2", tip.y.toFixed(2));
+  }
+  if (ui.focusDial) ui.focusDial.classList.toggle("is-locked", isFocusDialLocked());
+}
+
+function formatMMSS(totalSeconds) {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  if (m >= 60) return formatDuration(s);
+  return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+}
+
+function renderFocusReadout() {
+  let seconds;
+  if (!isFocusSessionActive()) {
+    // Count-up starts at 00:00; countdown/pomodoro preview the chosen target.
+    seconds = state.focusMode === "countup" ? 0 : state.focusTargetMinutes * 60;
+  } else if (state.focusMode === "countup") {
+    seconds = Math.floor(getFocusElapsedMs() / 1000);
+  } else {
+    const remaining = state.focusTargetMinutes * 60000 - getFocusElapsedMs();
+    seconds = Math.ceil(Math.max(0, remaining) / 1000);
+  }
+  if (ui.focusReadout) ui.focusReadout.textContent = formatMMSS(seconds);
+}
+
+function renderFocusEndHint() {
+  if (!ui.focusEndHint) return;
+  // Count-up has no fixed end time, so hide the hint entirely.
+  if (state.focusMode === "countup") {
+    ui.focusEndHint.hidden = true;
+    return;
+  }
+  // Nothing to project when a completed set is awaiting the user's choice.
+  if (state.pomodoroPhase === "awaitingChoice") {
+    ui.focusEndHint.hidden = true;
+    return;
+  }
+  ui.focusEndHint.hidden = false;
+  const start = isFocusSessionActive() && state.focusBlockStartAt
+    ? new Date(state.focusBlockStartAt)
+    : new Date();
+  const end = new Date(start.getTime() + state.focusTargetMinutes * 60000);
+  const fmt = (d) => `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  ui.focusEndHint.textContent = `预计 ${fmt(end)} 结束`;
+}
+
+function pomodoroPhaseLabel(phase) {
+  if (phase === "work") return "专注中";
+  if (phase === "shortBreak") return "休息中";
+  if (phase === "longBreak") return "大休息中";
+  return "";
+}
+
+function renderFocusPomodoroStatus() {
+  if (!ui.focusPomodoroStatus) return;
+  const active = state.focusMode === "pomodoro"
+    && (isFocusSessionActive() || state.pomodoroPhase === "awaitingChoice");
+  if (!active) {
+    ui.focusPomodoroStatus.hidden = true;
+    return;
+  }
+  ui.focusPomodoroStatus.hidden = false;
+  const total = POMODORO.setsBeforeLongBreak;
+  if (state.pomodoroPhase === "awaitingChoice") {
+    ui.focusPomodoroStatus.textContent = `已完成一组番茄（${total}/${total}）`;
+  } else {
+    const done = state.pomodoroPhase === "work"
+      ? state.pomodoroWorkCount + 1
+      : state.pomodoroWorkCount;
+    const shown = Math.min(total, Math.max(1, done));
+    ui.focusPomodoroStatus.textContent = `番茄 ${shown}/${total} · ${pomodoroPhaseLabel(state.pomodoroPhase)}`;
+  }
+}
+
+function renderFocusPanelControls() {
+  const running = isFocusSessionActive();
+  const awaitingChoice = state.pomodoroPhase === "awaitingChoice";
+  if (ui.focusStartBtn) ui.focusStartBtn.hidden = running || awaitingChoice;
+  if (ui.focusRunningControls) ui.focusRunningControls.hidden = !running;
+  if (ui.focusPomodoroChoice) ui.focusPomodoroChoice.hidden = !awaitingChoice;
+  if (ui.focusPauseResumeBtn) ui.focusPauseResumeBtn.textContent = state.timerRunning ? "暂停" : "继续";
+  if (ui.focusModeBtns) {
+    ui.focusModeBtns.forEach((btn) => {
+      btn.disabled = running || awaitingChoice;
+    });
+  }
+}
+
+function renderFocusPanel() {
+  renderFocusDial();
+  renderFocusReadout();
+  renderFocusEndHint();
+  renderFocusPomodoroStatus();
+  renderFocusPanelControls();
+}
+
+function setFocusMode(mode) {
+  if (!FOCUS_MODE_INDEX[mode] && mode !== "countup") return;
+  if (isFocusSessionActive()) return; // don't switch mid-session
+  state.focusMode = mode;
+  ui.focusModeBtns.forEach((btn) => btn.classList.toggle("is-active", btn.dataset.focusMode === mode));
+  if (ui.focusModeSwitch) ui.focusModeSwitch.style.setProperty("--mode-index", String(FOCUS_MODE_INDEX[mode]));
+  state.pomodoroPhase = "idle";
+  state.pomodoroWorkCount = 0;
+  if (mode === "pomodoro") state.focusTargetMinutes = POMODORO.workMinutes;
+  renderFocusPanel();
+}
+
+function setFocusTargetMinutes(minutes) {
+  const clamped = Math.min(60, Math.max(1, Math.round(minutes)));
+  state.focusTargetMinutes = clamped;
+  renderFocusPanel();
+}
+
+function focusDialMinutesFromEvent(event) {
+  const rect = ui.focusDialSvg.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const dx = event.clientX - cx;
+  const dy = event.clientY - cy;
+  let theta = Math.atan2(dx, -dy); // 0 at top, clockwise positive
+  if (theta < 0) theta += Math.PI * 2;
+  const minutes = (theta / (Math.PI * 2)) * 60;
+  return minutes;
+}
+
+function onFocusDialPointerDown(event) {
+  if (isFocusDialLocked()) return; // dial locked while running or in count-up mode
+  event.preventDefault(); // stop text/selection box appearing during drag
+  state.focusDialDrag = true;
+  try {
+    ui.focusDialSvg.setPointerCapture(event.pointerId);
+  } catch (_) {
+    /* noop */
+  }
+  setFocusTargetMinutes(focusDialMinutesFromEvent(event) || 1);
+}
+
+function onFocusDialPointerMove(event) {
+  if (!state.focusDialDrag) return;
+  setFocusTargetMinutes(focusDialMinutesFromEvent(event) || 1);
+}
+
+function onFocusDialPointerUp(event) {
+  if (!state.focusDialDrag) return;
+  state.focusDialDrag = false;
+  try {
+    ui.focusDialSvg.releasePointerCapture(event.pointerId);
+  } catch (_) {
+    /* noop */
+  }
+}
+
+function ensureFocusPanelTicker() {
+  if (state.focusPanelHandle) return;
+  state.focusPanelHandle = setInterval(() => {
+    if (!isFocusSessionActive()) return;
+    if (state.focusMode !== "countup" && state.timerRunning) {
+      const remaining = state.focusTargetMinutes * 60000 - getFocusElapsedMs();
+      if (remaining <= 0) {
+        if (state.focusMode === "pomodoro") {
+          advancePomodoro();
+        } else {
+          stopFocusPanelSession(true);
+        }
+        return;
+      }
+    }
+    renderFocusPanel();
+  }, 250);
+}
+
+function stopFocusPanelTicker() {
+  if (state.focusPanelHandle) clearInterval(state.focusPanelHandle);
+  state.focusPanelHandle = null;
+}
+
+function startFocusPanelSession() {
+  if (isFocusSessionActive()) return;
+  if (state.focusMode !== "countup" && state.focusTargetMinutes < 1) {
+    setFeedback("请先设置一个时长。", true);
+    return;
+  }
+  if (state.focusMode === "pomodoro") {
+    // The dial value is the work length for the whole cycle.
+    state.pomodoroWorkMinutes = state.focusTargetMinutes;
+    state.pomodoroWorkCount = 0;
+    beginPomodoroPhase("work");
+    return;
+  }
+  const now = new Date().toISOString();
+  state.focusBlockStartAt = now;
+  state.focusSessionStartAt = now;
+  state.focusElapsedMs = 0;
+  state.timerRunning = true;
+  ensureFocusPanelTicker();
+  renderFocusPanel();
+}
+
+/* ===== Pomodoro state machine ===== */
+function beginPomodoroPhase(phase) {
+  state.pomodoroPhase = phase;
+  if (phase === "work") state.focusTargetMinutes = state.pomodoroWorkMinutes || POMODORO.workMinutes;
+  else if (phase === "shortBreak") state.focusTargetMinutes = POMODORO.shortBreakMinutes;
+  else if (phase === "longBreak") state.focusTargetMinutes = POMODORO.longBreakMinutes;
+  const now = new Date().toISOString();
+  state.focusBlockStartAt = now;
+  state.focusSessionStartAt = now;
+  state.focusElapsedMs = 0;
+  state.timerRunning = true;
+  ensureFocusPanelTicker();
+  renderFocusPanel();
+}
+
+function pomodoroPhaseBlockMeta(phase) {
+  if (phase === "work") {
+    const goal = state.focusContent.trim();
+    return { kind: "work", title: goal ? `专注 · 番茄 · ${goal}` : "专注 · 番茄" };
+  }
+  if (phase === "longBreak") return { kind: "break", title: "大休息" };
+  return { kind: "break", title: "休息" };
+}
+
+function recordCurrentPomodoroInterval() {
+  if (!state.focusBlockStartAt) return;
+  const startedAt = new Date(state.focusBlockStartAt);
+  // A completed interval spans its full target duration.
+  const elapsedMs = state.focusTargetMinutes * 60000;
+  const meta = pomodoroPhaseBlockMeta(state.pomodoroPhase);
+  addFocusTimelineBlock(startedAt, elapsedMs, meta.title, meta.kind);
+}
+
+function advancePomodoro() {
+  const finishedPhase = state.pomodoroPhase;
+  recordCurrentPomodoroInterval();
+  renderTimeline();
+  if (finishedPhase === "work") {
+    state.pomodoroWorkCount += 1;
+    if (state.pomodoroWorkCount >= POMODORO.setsBeforeLongBreak) {
+      enterPomodoroChoice();
+    } else {
+      beginPomodoroPhase("shortBreak");
+      setFeedback("完成一个番茄，休息一下 ☕️");
+    }
+  } else if (finishedPhase === "shortBreak") {
+    beginPomodoroPhase("work");
+    setFeedback("休息结束，继续专注！");
+  } else if (finishedPhase === "longBreak") {
+    state.pomodoroWorkCount = 0;
+    beginPomodoroPhase("work");
+    setFeedback("大休息结束，新的一组开始！");
+  }
+}
+
+function enterPomodoroChoice() {
+  // The 3rd work interval is already recorded; pause and let the user choose.
+  state.pomodoroPhase = "awaitingChoice";
+  state.timerRunning = false;
+  state.focusBlockStartAt = "";
+  state.focusSessionStartAt = "";
+  state.focusElapsedMs = 0;
+  stopFocusPanelTicker();
+  renderFocusPanel();
+  setFeedback("完成一组番茄！可以「大休息」或「终止」。");
+}
+
+function startPomodoroLongBreak() {
+  if (state.pomodoroPhase !== "awaitingChoice") return;
+  beginPomodoroPhase("longBreak");
+  setFeedback("开始大休息，好好放松一下 🌿");
+}
+
+function endPomodoro() {
+  stopFocusPanelTicker();
+  state.pomodoroPhase = "idle";
+  state.pomodoroWorkCount = 0;
+  state.timerRunning = false;
+  state.focusBlockStartAt = "";
+  state.focusSessionStartAt = "";
+  state.focusElapsedMs = 0;
+  renderFocusPanel();
+  renderTimeline();
+  setFeedback("番茄钟已结束。");
+}
+
+function toggleFocusPanelPause() {
+  if (!isFocusSessionActive()) return;
+  if (state.timerRunning) {
+    state.focusElapsedMs = getFocusElapsedMs();
+    state.focusSessionStartAt = "";
+    state.timerRunning = false;
+  } else {
+    state.focusSessionStartAt = new Date().toISOString();
+    state.timerRunning = true;
+  }
+  renderFocusPanel();
+}
+
+function stopFocusPanelSession(auto = false) {
+  if (!isFocusSessionActive()) return;
+  const elapsedMs = state.focusMode === "countup"
+    ? getFocusElapsedMs()
+    : Math.min(getFocusElapsedMs(), state.focusTargetMinutes * 60000);
+  const startedAt = state.focusBlockStartAt ? new Date(state.focusBlockStartAt) : new Date(Date.now() - elapsedMs);
+  let title = state.focusContent.trim() || "专注";
+  let kind = "focus";
+  if (state.focusMode === "pomodoro") {
+    const meta = pomodoroPhaseBlockMeta(state.pomodoroPhase);
+    title = meta.title;
+    kind = meta.kind;
+  }
+  if (elapsedMs >= 1000) {
+    addFocusTimelineBlock(startedAt, elapsedMs, title, kind);
+  }
+  stopFocusPanelTicker();
+  state.timerRunning = false;
+  state.focusElapsedMs = 0;
+  state.focusBlockStartAt = "";
+  state.focusSessionStartAt = "";
+  if (state.focusMode === "pomodoro") {
+    state.pomodoroPhase = "idle";
+    state.pomodoroWorkCount = 0;
+  }
+  renderFocusPanel();
+  renderTimeline();
+  if (auto) {
+    const rest = state.focusMode === "pomodoro" ? "该休息一下啦 ☕️" : "专注完成";
+    setFeedback(`${rest}，记录已添加到时间轴。`);
+  } else {
+    setFeedback("专注记录已添加到时间轴。");
+  }
+}
+
+function initFocusPanel() {
+  if (!ui.focusPanel) return;
+  buildFocusDialTicks();
+  if (ui.focusGoalInput) {
+    ui.focusGoalInput.value = state.focusContent;
+    ui.focusGoalInput.addEventListener("input", () => {
+      state.focusContent = ui.focusGoalInput.value;
+      localStorage.setItem("focus_content", state.focusContent.trim());
+    });
+  }
+  ui.focusModeBtns.forEach((btn) => {
+    btn.addEventListener("click", () => setFocusMode(btn.dataset.focusMode));
+  });
+  if (ui.focusDialSvg) {
+    ui.focusDialSvg.addEventListener("pointerdown", onFocusDialPointerDown);
+    ui.focusDialSvg.addEventListener("pointermove", onFocusDialPointerMove);
+    ui.focusDialSvg.addEventListener("pointerup", onFocusDialPointerUp);
+    ui.focusDialSvg.addEventListener("pointercancel", onFocusDialPointerUp);
+    ui.focusDialSvg.addEventListener("keydown", (event) => {
+      if (isFocusDialLocked()) return; // no keyboard adjust while locked / in count-up
+      if (event.key === "ArrowUp" || event.key === "ArrowRight") {
+        event.preventDefault();
+        setFocusTargetMinutes(state.focusTargetMinutes + 1);
+      } else if (event.key === "ArrowDown" || event.key === "ArrowLeft") {
+        event.preventDefault();
+        setFocusTargetMinutes(state.focusTargetMinutes - 1);
+      }
+    });
+  }
+  if (ui.focusStartBtn) ui.focusStartBtn.addEventListener("click", () => startFocusPanelSession());
+  if (ui.focusPauseResumeBtn) ui.focusPauseResumeBtn.addEventListener("click", () => toggleFocusPanelPause());
+  if (ui.focusStopBtn) ui.focusStopBtn.addEventListener("click", () => stopFocusPanelSession(false));
+  if (ui.focusLongBreakBtn) ui.focusLongBreakBtn.addEventListener("click", () => startPomodoroLongBreak());
+  if (ui.focusPomodoroStopBtn) ui.focusPomodoroStopBtn.addEventListener("click", () => endPomodoro());
+  setFocusMode("countup");
+  renderFocusPanel();
+}
+
 function startFocusBubbleDrag(event) {
   ui.focusBubble.setPointerCapture(event.pointerId);
   const rect = ui.focusBubble.getBoundingClientRect();
@@ -1582,6 +2086,7 @@ function endFocusBubbleDrag(event) {
 }
 
 function setGenerateLoading(loading) {
+  generatePlanLoading = loading;
   ui.generateBtn.disabled = loading;
   ui.generateBtn.classList.toggle("loading", loading);
   ui.generateSpinner.setAttribute("aria-hidden", loading ? "false" : "true");
@@ -1590,6 +2095,7 @@ function setGenerateLoading(loading) {
     railBtn.classList.toggle("is-loading", loading);
     railBtn.disabled = loading;
   }
+  updateGenerateRailIcon();
   // Only announce the loading state; leave the success/failure feedback to the
   // caller (generatePlanForToday) so it isn't overwritten when loading ends.
   if (loading) setFeedback("正在生成计划…");
@@ -1810,15 +2316,17 @@ function renderTimeline() {
   state.focusBlocks
     .filter((block) => block.date === state.selectedDate)
     .forEach((block) => {
+      const focusKind = block.kind || "focus";
+      const kindLabel = focusKind === "work" ? "番茄" : focusKind === "break" ? "休息" : "专注";
       renderBlocks.push({
         kind: "focus",
         id: block.id,
         startMinute: block.startMinute,
         endMinute: block.endMinute,
-        extraClass: "focus-block",
+        extraClass: `focus-block focus-block-${focusKind}`,
         html: `
         <p>${escapeHtml(block.title)}</p>
-        <p class="ddl">${escapeHtml(minutesToHHMM(block.startMinute))}-${escapeHtml(minutesToHHMM(block.endMinute))} · 专注</p>
+        <p class="ddl">${escapeHtml(minutesToHHMM(block.startMinute))}-${escapeHtml(minutesToHHMM(block.endMinute))} · ${escapeHtml(kindLabel)}</p>
         ${block.description ? `<p class="desc">${escapeHtml(block.description)}</p>` : ""}
       `,
       });
@@ -1828,6 +2336,22 @@ function renderTimeline() {
   const startHour = 0;
   const endHour = 24;
   content.style.height = `${(endHour - startHour) * 60 * pxPerMinute}px`;
+
+  // ① Free-time bands: light background tint behind the grid showing the
+  // selected date's weekday availability. Drawn first so blocks stay on top.
+  const weekdayKey = WEEK_KEYS[(parseDate(state.selectedDate).getDay() + 6) % 7];
+  (state.weeklyAvailability[weekdayKey] || []).forEach((slot) => {
+    if (!slot || !slot.start || !slot.end) return;
+    const s = hhmmToMinutes(slot.start);
+    const e = hhmmToMinutes(slot.end);
+    if (!Number.isFinite(s) || !Number.isFinite(e) || e <= s) return;
+    const band = document.createElement("div");
+    band.className = "timeline-free-band";
+    band.style.top = `${(s - startHour * 60) * pxPerMinute}px`;
+    band.style.height = `${(e - s) * pxPerMinute}px`;
+    band.title = `空闲 ${slot.start}-${slot.end}`;
+    content.appendChild(band);
+  });
 
   for (let hour = startHour; hour <= endHour; hour += 1) {
     const top = (hour - startHour) * 60 * pxPerMinute;
@@ -1920,16 +2444,17 @@ function saveTimelineBlockEdits() {
   localStorage.setItem("timeline_block_edits", JSON.stringify(state.timelineBlockEdits));
 }
 
-function addFocusTimelineBlock(startedAt, elapsedMs, title) {
+function addFocusTimelineBlock(startedAt, elapsedMs, title, kind = "focus") {
   const startMinute = startedAt.getHours() * 60 + startedAt.getMinutes();
   const durationMinutes = Math.max(1, Math.ceil(elapsedMs / 60000));
   const endMinute = Math.min(24 * 60, startMinute + durationMinutes);
   const block = {
-    id: `focus-${Date.now()}`,
+    id: `focus-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     date: formatDate(startedAt),
     startMinute,
     endMinute,
     title,
+    kind,
     description: "",
   };
   state.focusBlocks.push(block);
