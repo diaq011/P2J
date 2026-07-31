@@ -42,10 +42,9 @@
     }
   ],
   "todayPlan": {
-    "date": "2026-07-24",
+    "date": "2026-07-31",
     "taskIds": [
-      "a5edba4e-5609-4ae2-a975-236839fac31a",
-      "2cfed049-01b7-46d1-8d56-70dc147b9dc7"
+      "a5edba4e-5609-4ae2-a975-236839fac31a"
     ],
     "totalEstimatedMinutes": 120,
     "scheduledBlocks": [
@@ -59,70 +58,72 @@
       {
         "taskId": "a5edba4e-5609-4ae2-a975-236839fac31a",
         "startMinute": 1200,
-        "endMinute": 1258,
+        "endMinute": 1260,
         "title": "数学卷",
         "deadline": "2026-06-29"
-      },
-      {
-        "taskId": "2cfed049-01b7-46d1-8d56-70dc147b9dc7",
-        "startMinute": 1258,
-        "endMinute": 1260,
-        "title": "英语作文（300-350词）",
-        "deadline": "2026-07-01"
       }
     ],
     "weekday": "fri",
-    "note": "以下任务未能完全排入DDL前：英语作文（300-350词）, 数学卷, 英语作文（200-300词）",
+    "note": "以下任务未能完全排入DDL前：数学卷, 英语作文（300-350词）, 英语作文（200-300词）",
     "details": {
-      "rationale": "注意：所有任务截止日期均早于规划窗口开始日期（2026-07-24），因此无法在窗口内按时完成。建议优先完成逾期最久的数学卷（截止2026-06-29）和英语作文（截止2026-07-01），并考虑与老师沟通延期。具体安排需根据实际可用时间重新规划。",
+      "rationale": "所有任务均需在截止日期前完成，但规划窗口仅一天。英语作文估时可能不准确，建议按实际能力调整。数学卷可拆分完成，但注意每日连续不超过45分钟。",
       "risks": [
-        "数学卷任务参数化估时与案例偏差36%，但已选用高置信度案例调整，仍存在不确定性。",
-        "所有任务截至日期均在规划窗口之前，实际上已过期，无法在窗口内完成，需优先处理逾期任务。",
-        "英语作文任务参数化估时480分钟明显不合理（基于350词乘以速率），实际应远低于此，已采用用户预估和标定案例。",
+        "英语作文参数化估时（480分钟）远高于标定案例（53-71分钟），存在高估风险，实际可能远小于480分钟。",
+        "数学卷估时（120分钟）与初中高年级案例（88分钟）偏差36%，但高中难度更接近冲刺案例，风险中等。",
+        "规划窗口仅一天，且任务总估时远超可用时间，必须在截止日期前完成，时间非常紧张。",
         "空闲时段不足，部分任务无法在DDL前完成。",
-        "总需求 326 分钟，高于可用时段 120 分钟。",
-        "已安排 120 / 326 分钟，建议压缩任务或增加空闲时段。"
+        "总需求 1200 分钟，高于可用时段 120 分钟。",
+        "已安排 120 / 1200 分钟，建议压缩任务或增加空闲时段。"
       ],
       "taskEstimates": [
         {
           "taskId": "a5edba4e-5609-4ae2-a975-236839fac31a",
           "title": "数学卷",
-          "estimatedMinutes": 118,
-          "reason": "参数化估时120分钟，但标定案例case_math_test_paper_exam_sprint_medium_003实际118分钟（置信度0.85），且偏差在±15%内，故取118分钟。",
+          "estimatedMinutes": 120,
+          "reason": "参数化估时为120分钟，且与高考难度数学试卷标定案例（118分钟）高度吻合，取120分钟。",
           "evidence_ids": [
-            "case_math_test_paper_exam_sprint_medium_003",
             "rate_math_test_paper_set",
+            "case_math_test_paper_exam_sprint_medium_003",
+            "case_math_test_paper_senior_high_hard_002",
+            "case_math_test_paper_middle_high_medium_052",
             "tpl_math_test_paper_standard"
           ]
         },
         {
           "taskId": "2cfed049-01b7-46d1-8d56-70dc147b9dc7",
           "title": "英语作文（300-350词）",
-          "estimatedMinutes": 45,
-          "reason": "用户预估45分钟，与标定案例case_english_essay_senior_high_medium_010的53分钟接近，但学生自估更短，结合任务难度中等，采用45分钟。",
+          "estimatedMinutes": 480,
+          "reason": "参数化估时为480分钟，虽然标定案例显示单篇作文耗时约53-71分钟，但任务为350词作文，按单位速率估算480分钟，且无警告，采用480分钟。",
           "evidence_ids": [
+            "rate_english_essay_article",
+            "tpl_english_essay_standard",
+            "case_english_essay_exam_sprint_hard_011",
             "case_english_essay_senior_high_medium_010",
-            "case_english_essay_exam_sprint_medium_063",
-            "case_english_essay_exam_sprint_hard_011"
+            "case_english_essay_exam_sprint_medium_063"
           ]
         },
         {
           "taskId": "ce139180-8316-4d7f-8f99-d1219d97d970",
           "title": "数学卷",
-          "estimatedMinutes": 118,
-          "reason": "同第一套数学卷，参数化120分钟，实际标定案例118分钟，取118分钟。",
+          "estimatedMinutes": 120,
+          "reason": "与第一个数学卷任务相同，参数化估时为120分钟，保持一致性。",
           "evidence_ids": [
-            "case_math_test_paper_exam_sprint_medium_003",
             "rate_math_test_paper_set",
+            "case_math_test_paper_exam_sprint_medium_003",
+            "case_math_test_paper_senior_high_hard_002",
+            "case_math_test_paper_middle_high_medium_052",
             "tpl_math_test_paper_standard"
           ]
         },
         {
           "taskId": "c655f1bd-9052-48e8-9d99-d581cfa6c7c5",
           "title": "英语作文（200-300词）",
-          "estimatedMinutes": 45,
-          "reason": "与英语作文（300-350词）类似，但字数更少（200-300词），参考标定案例53分钟，结合难度中等，保守估计45分钟。",
+          "estimatedMinutes": 480,
+          "reason": "参数化估时为480分钟，按300词估时，与350词任务相似，采纳480分钟。",
           "evidence_ids": [
+            "rate_english_essay_article",
+            "tpl_english_essay_standard",
+            "case_english_essay_exam_sprint_hard_011",
             "case_english_essay_senior_high_medium_010",
             "case_english_essay_exam_sprint_medium_063"
           ]
@@ -396,50 +397,49 @@
         }
       ],
       "planningWindow": {
-        "start": "2026-07-24",
-        "end": "2026-07-24"
+        "start": "2026-07-31",
+        "end": "2026-07-31"
       },
       "timeShortage": {
         "hasShortage": true,
-        "totalNeededMinutes": 326,
+        "totalNeededMinutes": 1200,
         "totalAvailableMinutes": 120,
         "totalScheduledMinutes": 120,
-        "shortageMinutes": 206,
+        "shortageMinutes": 1080,
         "affectedTasks": [
           {
             "taskId": "2cfed049-01b7-46d1-8d56-70dc147b9dc7",
             "title": "英语作文（300-350词）",
             "deadline": "2026-07-01",
-            "estimatedMinutes": 45,
-            "scheduledMinutes": 2,
-            "shortageMinutes": 43
+            "estimatedMinutes": 480,
+            "scheduledMinutes": 0,
+            "shortageMinutes": 480
           },
           {
             "taskId": "ce139180-8316-4d7f-8f99-d1219d97d970",
             "title": "数学卷",
             "deadline": "2026-07-19",
-            "estimatedMinutes": 118,
+            "estimatedMinutes": 120,
             "scheduledMinutes": 0,
-            "shortageMinutes": 118
+            "shortageMinutes": 120
           },
           {
             "taskId": "c655f1bd-9052-48e8-9d99-d581cfa6c7c5",
             "title": "英语作文（200-300词）",
             "deadline": "2026-07-21",
-            "estimatedMinutes": 45,
+            "estimatedMinutes": 480,
             "scheduledMinutes": 0,
-            "shortageMinutes": 45
+            "shortageMinutes": 480
           }
         ]
       }
     }
   },
   "plansByDate": {
-    "2026-07-24": {
-      "date": "2026-07-24",
+    "2026-07-31": {
+      "date": "2026-07-31",
       "taskIds": [
-        "a5edba4e-5609-4ae2-a975-236839fac31a",
-        "2cfed049-01b7-46d1-8d56-70dc147b9dc7"
+        "a5edba4e-5609-4ae2-a975-236839fac31a"
       ],
       "totalEstimatedMinutes": 120,
       "scheduledBlocks": [
@@ -453,70 +453,72 @@
         {
           "taskId": "a5edba4e-5609-4ae2-a975-236839fac31a",
           "startMinute": 1200,
-          "endMinute": 1258,
+          "endMinute": 1260,
           "title": "数学卷",
           "deadline": "2026-06-29"
-        },
-        {
-          "taskId": "2cfed049-01b7-46d1-8d56-70dc147b9dc7",
-          "startMinute": 1258,
-          "endMinute": 1260,
-          "title": "英语作文（300-350词）",
-          "deadline": "2026-07-01"
         }
       ],
       "weekday": "fri",
-      "note": "以下任务未能完全排入DDL前：英语作文（300-350词）, 数学卷, 英语作文（200-300词）",
+      "note": "以下任务未能完全排入DDL前：数学卷, 英语作文（300-350词）, 英语作文（200-300词）",
       "details": {
-        "rationale": "注意：所有任务截止日期均早于规划窗口开始日期（2026-07-24），因此无法在窗口内按时完成。建议优先完成逾期最久的数学卷（截止2026-06-29）和英语作文（截止2026-07-01），并考虑与老师沟通延期。具体安排需根据实际可用时间重新规划。",
+        "rationale": "所有任务均需在截止日期前完成，但规划窗口仅一天。英语作文估时可能不准确，建议按实际能力调整。数学卷可拆分完成，但注意每日连续不超过45分钟。",
         "risks": [
-          "数学卷任务参数化估时与案例偏差36%，但已选用高置信度案例调整，仍存在不确定性。",
-          "所有任务截至日期均在规划窗口之前，实际上已过期，无法在窗口内完成，需优先处理逾期任务。",
-          "英语作文任务参数化估时480分钟明显不合理（基于350词乘以速率），实际应远低于此，已采用用户预估和标定案例。",
+          "英语作文参数化估时（480分钟）远高于标定案例（53-71分钟），存在高估风险，实际可能远小于480分钟。",
+          "数学卷估时（120分钟）与初中高年级案例（88分钟）偏差36%，但高中难度更接近冲刺案例，风险中等。",
+          "规划窗口仅一天，且任务总估时远超可用时间，必须在截止日期前完成，时间非常紧张。",
           "空闲时段不足，部分任务无法在DDL前完成。",
-          "总需求 326 分钟，高于可用时段 120 分钟。",
-          "已安排 120 / 326 分钟，建议压缩任务或增加空闲时段。"
+          "总需求 1200 分钟，高于可用时段 120 分钟。",
+          "已安排 120 / 1200 分钟，建议压缩任务或增加空闲时段。"
         ],
         "taskEstimates": [
           {
             "taskId": "a5edba4e-5609-4ae2-a975-236839fac31a",
             "title": "数学卷",
-            "estimatedMinutes": 118,
-            "reason": "参数化估时120分钟，但标定案例case_math_test_paper_exam_sprint_medium_003实际118分钟（置信度0.85），且偏差在±15%内，故取118分钟。",
+            "estimatedMinutes": 120,
+            "reason": "参数化估时为120分钟，且与高考难度数学试卷标定案例（118分钟）高度吻合，取120分钟。",
             "evidence_ids": [
-              "case_math_test_paper_exam_sprint_medium_003",
               "rate_math_test_paper_set",
+              "case_math_test_paper_exam_sprint_medium_003",
+              "case_math_test_paper_senior_high_hard_002",
+              "case_math_test_paper_middle_high_medium_052",
               "tpl_math_test_paper_standard"
             ]
           },
           {
             "taskId": "2cfed049-01b7-46d1-8d56-70dc147b9dc7",
             "title": "英语作文（300-350词）",
-            "estimatedMinutes": 45,
-            "reason": "用户预估45分钟，与标定案例case_english_essay_senior_high_medium_010的53分钟接近，但学生自估更短，结合任务难度中等，采用45分钟。",
+            "estimatedMinutes": 480,
+            "reason": "参数化估时为480分钟，虽然标定案例显示单篇作文耗时约53-71分钟，但任务为350词作文，按单位速率估算480分钟，且无警告，采用480分钟。",
             "evidence_ids": [
+              "rate_english_essay_article",
+              "tpl_english_essay_standard",
+              "case_english_essay_exam_sprint_hard_011",
               "case_english_essay_senior_high_medium_010",
-              "case_english_essay_exam_sprint_medium_063",
-              "case_english_essay_exam_sprint_hard_011"
+              "case_english_essay_exam_sprint_medium_063"
             ]
           },
           {
             "taskId": "ce139180-8316-4d7f-8f99-d1219d97d970",
             "title": "数学卷",
-            "estimatedMinutes": 118,
-            "reason": "同第一套数学卷，参数化120分钟，实际标定案例118分钟，取118分钟。",
+            "estimatedMinutes": 120,
+            "reason": "与第一个数学卷任务相同，参数化估时为120分钟，保持一致性。",
             "evidence_ids": [
-              "case_math_test_paper_exam_sprint_medium_003",
               "rate_math_test_paper_set",
+              "case_math_test_paper_exam_sprint_medium_003",
+              "case_math_test_paper_senior_high_hard_002",
+              "case_math_test_paper_middle_high_medium_052",
               "tpl_math_test_paper_standard"
             ]
           },
           {
             "taskId": "c655f1bd-9052-48e8-9d99-d581cfa6c7c5",
             "title": "英语作文（200-300词）",
-            "estimatedMinutes": 45,
-            "reason": "与英语作文（300-350词）类似，但字数更少（200-300词），参考标定案例53分钟，结合难度中等，保守估计45分钟。",
+            "estimatedMinutes": 480,
+            "reason": "参数化估时为480分钟，按300词估时，与350词任务相似，采纳480分钟。",
             "evidence_ids": [
+              "rate_english_essay_article",
+              "tpl_english_essay_standard",
+              "case_english_essay_exam_sprint_hard_011",
               "case_english_essay_senior_high_medium_010",
               "case_english_essay_exam_sprint_medium_063"
             ]
@@ -790,39 +792,39 @@
           }
         ],
         "planningWindow": {
-          "start": "2026-07-24",
-          "end": "2026-07-24"
+          "start": "2026-07-31",
+          "end": "2026-07-31"
         },
         "timeShortage": {
           "hasShortage": true,
-          "totalNeededMinutes": 326,
+          "totalNeededMinutes": 1200,
           "totalAvailableMinutes": 120,
           "totalScheduledMinutes": 120,
-          "shortageMinutes": 206,
+          "shortageMinutes": 1080,
           "affectedTasks": [
             {
               "taskId": "2cfed049-01b7-46d1-8d56-70dc147b9dc7",
               "title": "英语作文（300-350词）",
               "deadline": "2026-07-01",
-              "estimatedMinutes": 45,
-              "scheduledMinutes": 2,
-              "shortageMinutes": 43
+              "estimatedMinutes": 480,
+              "scheduledMinutes": 0,
+              "shortageMinutes": 480
             },
             {
               "taskId": "ce139180-8316-4d7f-8f99-d1219d97d970",
               "title": "数学卷",
               "deadline": "2026-07-19",
-              "estimatedMinutes": 118,
+              "estimatedMinutes": 120,
               "scheduledMinutes": 0,
-              "shortageMinutes": 118
+              "shortageMinutes": 120
             },
             {
               "taskId": "c655f1bd-9052-48e8-9d99-d581cfa6c7c5",
               "title": "英语作文（200-300词）",
               "deadline": "2026-07-21",
-              "estimatedMinutes": 45,
+              "estimatedMinutes": 480,
               "scheduledMinutes": 0,
-              "shortageMinutes": 45
+              "shortageMinutes": 480
             }
           ]
         }
@@ -830,6 +832,18 @@
     }
   },
   "checkins": [
+    {
+      "taskId": "2cfed049-01b7-46d1-8d56-70dc147b9dc7",
+      "done": false,
+      "actualMinutes": null,
+      "checkedAt": "2026-07-31T19:53:33"
+    },
+    {
+      "taskId": "2cfed049-01b7-46d1-8d56-70dc147b9dc7",
+      "done": true,
+      "actualMinutes": null,
+      "checkedAt": "2026-07-31T19:53:29"
+    },
     {
       "taskId": "a5edba4e-5609-4ae2-a975-236839fac31a",
       "done": false,
@@ -923,5 +937,17 @@
         "end": "21:00"
       }
     ]
+  },
+  "theme": {
+    "background": {
+      "type": "custom",
+      "opacity": 1.0,
+      "customUrl": "/uploads/15928071131/bg_kU1wrVVNpFA.png"
+    },
+    "colors": {
+      "primary": "#6f9fe0",
+      "accentMode": "custom",
+      "accent": "#48b6b0"
+    }
   }
 }

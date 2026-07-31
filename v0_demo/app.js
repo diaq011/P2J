@@ -55,6 +55,14 @@ const ASSISTANT_INTRO =
   "• 说一句「帮我排计划」，我就会按你的空闲时间把任务排到 DDL 之前。\n" +
   "想从哪一件开始？";
 
+// Theme defaults (declared before `state` because state's initializer reads them).
+const DEFAULT_THEME = {
+  background: { type: "default", opacity: 0.45, customUrl: null },
+  colors: { primary: "#ef8b50", accentMode: "auto", accent: "#5cbd92" },
+};
+const DEFAULT_BG_IMAGE_URL = "/assets/bg-pixel-field.png";
+const HEX6_RE = /^#[0-9a-fA-F]{6}$/;
+
 const state = {
   authToken: localStorage.getItem("auth_token") || "",
   currentUser: "",
@@ -94,7 +102,243 @@ const state = {
   assistantMessages: loadAssistantMessages(),
   assistantChatSending: false,
   lastTap: { taskId: "", ts: 0 },
+  theme: loadCachedTheme(),
 };
+
+// ---------------------------------------------------------------------------
+// Theme system: custom background (image + opacity) and theme colors
+// (primary + accent). Colors apply app-wide via CSS variables on :root, with
+// auto contrast so text/icons stay readable on any chosen color.
+// (DEFAULT_THEME / HEX6_RE are declared above `state` because state's
+// initializer calls loadCachedTheme(), which reads them.)
+// ---------------------------------------------------------------------------
+function clamp01(x) {
+  return Math.max(0, Math.min(1, x));
+}
+
+function hexToRgb(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex || "").trim());
+  if (!m) return null;
+  const n = parseInt(m[1], 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+}
+
+function rgbToHex(r, g, b) {
+  const h = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0");
+  return `#${h(r)}${h(g)}${h(b)}`;
+}
+
+function rgbToHsl({ r, g, b }) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h /= 6;
+  }
+  return { h: h * 360, s, l };
+}
+
+function hslToRgb({ h, s, l }) {
+  h = (((h % 360) + 360) % 360) / 360;
+  if (s === 0) {
+    const v = Math.round(l * 255);
+    return { r: v, g: v, b: v };
+  }
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const hue = (t) => {
+    t = (t + 1) % 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+  };
+  return {
+    r: Math.round(hue(h + 1 / 3) * 255),
+    g: Math.round(hue(h) * 255),
+    b: Math.round(hue(h - 1 / 3) * 255),
+  };
+}
+
+function relLuminance({ r, g, b }) {
+  const f = (c) => {
+    c /= 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+}
+
+// Pick a readable text/icon color (near-black or near-white) for a given fill.
+function contrastColor(hex) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return "#fffdf8";
+  return relLuminance(rgb) > 0.55 ? "#2a2f38" : "#fffdf8";
+}
+
+function adjustLightness(hex, delta) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  const hsl = rgbToHsl(rgb);
+  hsl.l = clamp01(hsl.l + delta);
+  const o = hslToRgb(hsl);
+  return rgbToHex(o.r, o.g, o.b);
+}
+
+// A very light, low-saturation tint of the color (for soft backgrounds).
+function softTint(hex) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return "#fff1e6";
+  const hsl = rgbToHsl(rgb);
+  hsl.s = Math.min(hsl.s, 0.5);
+  hsl.l = 0.94;
+  const o = hslToRgb(hsl);
+  return rgbToHex(o.r, o.g, o.b);
+}
+
+// A softer, desaturated variant of a color (used for the pomodoro break block).
+function muteColor(hex) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return "#8fb7a4";
+  const hsl = rgbToHsl(rgb);
+  hsl.s = Math.min(hsl.s, 0.28);
+  hsl.l = Math.max(0.6, Math.min(0.72, hsl.l + 0.08));
+  const o = hslToRgb(hsl);
+  return rgbToHex(o.r, o.g, o.b);
+}
+
+// Derive a harmonious accent from the primary when accentMode is "auto":
+// rotate the hue into a pleasant secondary band and normalize S/L for contrast.
+function deriveAccent(primaryHex) {
+  const rgb = hexToRgb(primaryHex);
+  if (!rgb) return "#5cbd92";
+  const hsl = rgbToHsl(rgb);
+  const h = (hsl.h + 150) % 360;
+  const s = clamp01(Math.max(0.35, Math.min(0.55, hsl.s || 0.45)));
+  const l = 0.55;
+  const o = hslToRgb({ h, s, l });
+  return rgbToHex(o.r, o.g, o.b);
+}
+
+function normalizeThemeClient(theme) {
+  const base = JSON.parse(JSON.stringify(DEFAULT_THEME));
+  if (theme && typeof theme === "object") {
+    const b = theme.background;
+    if (b && typeof b === "object") {
+      if (b.type === "default" || b.type === "custom") base.background.type = b.type;
+      if (typeof b.opacity === "number") base.background.opacity = clamp01(b.opacity);
+      if (typeof b.customUrl === "string" && b.customUrl) base.background.customUrl = b.customUrl;
+      else if (b.customUrl === null) base.background.customUrl = null;
+    }
+    const c = theme.colors;
+    if (c && typeof c === "object") {
+      if (HEX6_RE.test(c.primary || "")) base.colors.primary = String(c.primary).toLowerCase();
+      if (c.accentMode === "auto" || c.accentMode === "custom") base.colors.accentMode = c.accentMode;
+      if (HEX6_RE.test(c.accent || "")) base.colors.accent = String(c.accent).toLowerCase();
+    }
+  }
+  if (base.background.type === "custom" && !base.background.customUrl) base.background.type = "default";
+  return base;
+}
+
+function resolveAccent(theme) {
+  return theme.colors.accentMode === "custom" ? theme.colors.accent : deriveAccent(theme.colors.primary);
+}
+
+function applyTheme(theme) {
+  const t = normalizeThemeClient(theme);
+  const root = document.documentElement;
+  const primary = t.colors.primary;
+  root.style.setProperty("--primary", primary);
+  root.style.setProperty("--primary-dark", adjustLightness(primary, -0.1));
+  root.style.setProperty("--primary-light", adjustLightness(primary, 0.08));
+  root.style.setProperty("--primary-soft", softTint(primary));
+  root.style.setProperty("--primary-contrast", contrastColor(primary));
+  const accent = resolveAccent(t);
+  root.style.setProperty("--accent", accent);
+  root.style.setProperty("--accent-contrast", contrastColor(accent));
+  // Accent-derived tints so timeline free-band / pomodoro break also follow the theme.
+  const aRgb = hexToRgb(accent) || { r: 92, g: 189, b: 146 };
+  root.style.setProperty("--accent-band", `rgba(${aRgb.r}, ${aRgb.g}, ${aRgb.b}, 0.14)`);
+  root.style.setProperty("--accent-band-line", `rgba(${aRgb.r}, ${aRgb.g}, ${aRgb.b}, 0.4)`);
+  root.style.setProperty("--accent-muted", muteColor(accent));
+  const imgUrl =
+    t.background.type === "custom" && t.background.customUrl ? t.background.customUrl : DEFAULT_BG_IMAGE_URL;
+  root.style.setProperty("--app-bg-image", `url("${imgUrl}")`);
+  // Higher opacity => image more visible => thinner white veil. Floor keeps
+  // translucent panels legible over dark/busy images.
+  const veil = 0.85 - clamp01(t.background.opacity) * 0.73;
+  root.style.setProperty("--app-bg-overlay", veil.toFixed(3));
+}
+
+function loadCachedTheme() {
+  try {
+    const raw = localStorage.getItem("app_theme");
+    if (raw) return normalizeThemeClient(JSON.parse(raw));
+  } catch (err) {
+    /* ignore */
+  }
+  return JSON.parse(JSON.stringify(DEFAULT_THEME));
+}
+
+function cacheTheme(theme) {
+  try {
+    localStorage.setItem("app_theme", JSON.stringify(normalizeThemeClient(theme)));
+  } catch (err) {
+    /* ignore */
+  }
+}
+
+// Overlay only the provided fields of `patch` onto `current` (so a partial
+// update like {background:{opacity}} keeps the custom background/colors).
+function mergeThemeClient(current, patch) {
+  const merged = normalizeThemeClient(current);
+  if (patch && typeof patch === "object") {
+    if (patch.background && typeof patch.background === "object") {
+      Object.assign(merged.background, patch.background);
+    }
+    if (patch.colors && typeof patch.colors === "object") {
+      Object.assign(merged.colors, patch.colors);
+    }
+  }
+  return merged;
+}
+
+// Apply a (possibly partial) theme change: merge onto the current theme, apply
+// + cache, and persist to the backend when logged in. Returns the merged theme.
+function setTheme(patch, { persist = true } = {}) {
+  state.theme = normalizeThemeClient(mergeThemeClient(state.theme, patch));
+  applyTheme(state.theme);
+  cacheTheme(state.theme);
+  if (persist && hasIdentity()) {
+    api("/settings/theme", { method: "POST", body: JSON.stringify({ theme: state.theme }) }).catch(() => {});
+  }
+  return state.theme;
+}
+
+async function uploadThemeBackground(file) {
+  const form = new FormData();
+  form.append("file", file);
+  const headers = {};
+  if (state.authToken) headers.Authorization = `Bearer ${state.authToken}`;
+  const res = await fetch(`${API_BASE}/settings/theme/background`, { method: "POST", headers, body: form });
+  const raw = await res.text();
+  const data = raw ? JSON.parse(raw) : {};
+  if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
+  return data;
+}
+
+// Apply the cached theme immediately at load so there's no color/background flash.
+applyTheme(state.theme);
 
 const ui = {
   pages: Array.from(document.querySelectorAll(".page")),
@@ -172,10 +416,27 @@ const ui = {
   openAvailabilitySettingsBtn: document.getElementById("openAvailabilitySettingsBtn"),
   openAccountSettingsBtn: document.getElementById("openAccountSettingsBtn"),
   openFocusSettingsPageBtn: document.getElementById("openFocusSettingsPageBtn"),
+  openThemeSettingsBtn: document.getElementById("openThemeSettingsBtn"),
   startFocusFromSettingsBtn: document.getElementById("startFocusFromSettingsBtn"),
   backSettingsBtn: document.getElementById("backSettingsBtn"),
   backAccountSettingsBtn: document.getElementById("backAccountSettingsBtn"),
   backFocusSettingsBtn: document.getElementById("backFocusSettingsBtn"),
+  themeSettings: document.getElementById("themeSettings"),
+  backThemeSettingsBtn: document.getElementById("backThemeSettingsBtn"),
+  themeBgPreview: document.getElementById("themeBgPreview"),
+  themeBgUploadBtn: document.getElementById("themeBgUploadBtn"),
+  themeBgDefaultBtn: document.getElementById("themeBgDefaultBtn"),
+  themeBgFileInput: document.getElementById("themeBgFileInput"),
+  themeOpacityInput: document.getElementById("themeOpacityInput"),
+  themeOpacityValue: document.getElementById("themeOpacityValue"),
+  themePrimarySwatches: document.getElementById("themePrimarySwatches"),
+  themePrimaryHex: document.getElementById("themePrimaryHex"),
+  themePrimaryPreview: document.getElementById("themePrimaryPreview"),
+  themeAccentAuto: document.getElementById("themeAccentAuto"),
+  themeAccentControls: document.getElementById("themeAccentControls"),
+  themeAccentSwatches: document.getElementById("themeAccentSwatches"),
+  themeAccentHex: document.getElementById("themeAccentHex"),
+  themeAccentPreview: document.getElementById("themeAccentPreview"),
   copyWeekdaysBtn: document.getElementById("copyWeekdaysBtn"),
   copyAllDaysBtn: document.getElementById("copyAllDaysBtn"),
   timeOptions: document.getElementById("timeOptions"),
@@ -210,7 +471,7 @@ const ui = {
   closeFocusContentBtn: document.getElementById("closeFocusContentBtn"),
   focusContentInput: document.getElementById("focusContentInput"),
   saveFocusContentBtn: document.getElementById("saveFocusContentBtn"),
-  focusDisplayModeInputs: Array.from(document.querySelectorAll("input[name='focusDisplayMode']")),
+  focusDisplayModeInputs: Array.from(document.querySelectorAll("input[name^='focusDisplayMode']")),
   timelineEditModal: document.getElementById("timelineEditModal"),
   closeTimelineEditBtn: document.getElementById("closeTimelineEditBtn"),
   timelineEditTitleInput: document.getElementById("timelineEditTitleInput"),
@@ -285,6 +546,58 @@ ui.availabilityChatForm.addEventListener("submit", async (event) => {
 });
 ui.openAccountSettingsBtn.addEventListener("click", () => showAccountSettings());
 ui.openFocusSettingsPageBtn.addEventListener("click", () => showFocusSettingsPage());
+if (ui.openThemeSettingsBtn) ui.openThemeSettingsBtn.addEventListener("click", () => showThemeSettings());
+if (ui.backThemeSettingsBtn) ui.backThemeSettingsBtn.addEventListener("click", () => showSettingsHome());
+if (ui.themeBgUploadBtn) ui.themeBgUploadBtn.addEventListener("click", () => ui.themeBgFileInput.click());
+if (ui.themeBgFileInput) {
+  ui.themeBgFileInput.addEventListener("change", (event) => {
+    const file = event.target.files && event.target.files[0];
+    handleThemeBackgroundFile(file);
+    event.target.value = "";
+  });
+}
+if (ui.themeBgDefaultBtn) {
+  ui.themeBgDefaultBtn.addEventListener("click", () => {
+    setTheme({ background: { type: "default", customUrl: null } });
+    renderThemeSettings();
+  });
+}
+if (ui.themeOpacityInput) {
+  ui.themeOpacityInput.addEventListener("input", () => {
+    const pct = Number(ui.themeOpacityInput.value);
+    if (ui.themeOpacityValue) ui.themeOpacityValue.textContent = `${pct}%`;
+    setTheme({ background: { opacity: pct / 100 } });
+  });
+}
+if (ui.themePrimaryHex) {
+  ui.themePrimaryHex.addEventListener("change", () => {
+    const color = parseColorInput(ui.themePrimaryHex.value);
+    if (color) {
+      setTheme({ colors: { primary: color } });
+    }
+    renderThemeSettings();
+  });
+}
+if (ui.themeAccentAuto) {
+  ui.themeAccentAuto.addEventListener("change", () => {
+    if (ui.themeAccentAuto.checked) {
+      setTheme({ colors: { accentMode: "auto" } });
+    } else {
+      // Switching to custom seeds with the currently shown (derived) accent.
+      setTheme({ colors: { accentMode: "custom", accent: resolveAccent(state.theme) } });
+    }
+    renderThemeSettings();
+  });
+}
+if (ui.themeAccentHex) {
+  ui.themeAccentHex.addEventListener("change", () => {
+    const color = parseColorInput(ui.themeAccentHex.value);
+    if (color) {
+      setTheme({ colors: { accentMode: "custom", accent: color } });
+    }
+    renderThemeSettings();
+  });
+}
 if (ui.startFocusFromSettingsBtn) {
   ui.startFocusFromSettingsBtn.addEventListener("click", () => openFocusOverlay(true));
 }
@@ -654,6 +967,7 @@ async function logout() {
 }
 
 async function bootstrap() {
+  applyTheme(state.theme);
   buildTimeOptions();
   renderAvailabilityEditor();
   renderTimer();
@@ -1082,6 +1396,7 @@ function hideAllSettingsViews() {
   ui.availabilitySettings.hidden = true;
   ui.accountSettings.hidden = true;
   ui.focusSettingsPage.hidden = true;
+  if (ui.themeSettings) ui.themeSettings.hidden = true;
 }
 
 function showSettingsHome() {
@@ -1125,6 +1440,152 @@ function showFocusSettingsPage() {
   hideAllSettingsViews();
   ui.focusSettingsPage.hidden = false;
   syncFocusSettingsInputs();
+}
+
+function showThemeSettings() {
+  hideAllSettingsViews();
+  ui.themeSettings.hidden = false;
+  renderThemeSettings();
+}
+
+const THEME_PRIMARY_PRESETS = ["#ef8b50", "#6f9fe0", "#5cbd92", "#9b7ede", "#e57ea8", "#48b6b0", "#e06a6a", "#6d78d6"];
+const THEME_ACCENT_PRESETS = ["#5cbd92", "#48b6b0", "#6f9fe0", "#e6a94b", "#e57ea8", "#9b7ede"];
+let themeSwatchesBuilt = false;
+
+// Accept "#RRGGBB", "RRGGBB", or "r,g,b" (0-255). Returns normalized #rrggbb or null.
+function parseColorInput(text) {
+  const raw = String(text || "").trim();
+  if (!raw) return null;
+  if (HEX6_RE.test(raw)) return raw.toLowerCase();
+  if (/^[0-9a-f]{6}$/i.test(raw)) return `#${raw.toLowerCase()}`;
+  const parts = raw.split(/[,\s]+/).filter(Boolean);
+  if (parts.length === 3 && parts.every((p) => /^\d{1,3}$/.test(p))) {
+    const nums = parts.map((p) => Number(p));
+    if (nums.every((n) => n >= 0 && n <= 255)) return rgbToHex(nums[0], nums[1], nums[2]);
+  }
+  return null;
+}
+
+function buildThemeSwatches() {
+  if (themeSwatchesBuilt) return;
+  const build = (container, presets, onPick) => {
+    if (!container) return;
+    container.innerHTML = "";
+    presets.forEach((color) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "theme-swatch";
+      btn.style.background = color;
+      btn.dataset.color = color;
+      btn.setAttribute("aria-label", color);
+      btn.addEventListener("click", () => onPick(color));
+      container.appendChild(btn);
+    });
+  };
+  build(ui.themePrimarySwatches, THEME_PRIMARY_PRESETS, (color) => {
+    setTheme({ colors: { primary: color } });
+    renderThemeSettings();
+  });
+  build(ui.themeAccentSwatches, THEME_ACCENT_PRESETS, (color) => {
+    setTheme({ colors: { accentMode: "custom", accent: color } });
+    renderThemeSettings();
+  });
+  themeSwatchesBuilt = true;
+}
+
+function markSelectedSwatch(container, color) {
+  if (!container) return;
+  const target = (color || "").toLowerCase();
+  container.querySelectorAll(".theme-swatch").forEach((btn) => {
+    btn.classList.toggle("is-selected", (btn.dataset.color || "").toLowerCase() === target);
+  });
+}
+
+function renderThemeSettings() {
+  buildThemeSwatches();
+  const t = state.theme;
+  // Background preview + opacity.
+  const bgUrl =
+    t.background.type === "custom" && t.background.customUrl ? t.background.customUrl : DEFAULT_BG_IMAGE_URL;
+  if (ui.themeBgPreview) ui.themeBgPreview.style.backgroundImage = `url("${bgUrl}")`;
+  const pct = Math.round(clamp01(t.background.opacity) * 100);
+  if (ui.themeOpacityInput) ui.themeOpacityInput.value = String(pct);
+  if (ui.themeOpacityValue) ui.themeOpacityValue.textContent = `${pct}%`;
+  // Primary.
+  if (ui.themePrimaryHex && document.activeElement !== ui.themePrimaryHex) {
+    ui.themePrimaryHex.value = t.colors.primary;
+  }
+  if (ui.themePrimaryPreview) ui.themePrimaryPreview.style.background = t.colors.primary;
+  markSelectedSwatch(ui.themePrimarySwatches, t.colors.primary);
+  // Accent.
+  const isAuto = t.colors.accentMode === "auto";
+  if (ui.themeAccentAuto) ui.themeAccentAuto.checked = isAuto;
+  if (ui.themeAccentControls) ui.themeAccentControls.classList.toggle("is-disabled", isAuto);
+  const accentColor = resolveAccent(t);
+  if (ui.themeAccentHex && document.activeElement !== ui.themeAccentHex) {
+    ui.themeAccentHex.value = accentColor;
+  }
+  if (ui.themeAccentPreview) ui.themeAccentPreview.style.background = accentColor;
+  markSelectedSwatch(ui.themeAccentSwatches, isAuto ? "" : t.colors.accent);
+}
+
+// Downscale a chosen image (longest side <= maxDim) and return a Blob to upload.
+function downscaleImageFile(file, maxDim = 1600, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+      if (scale >= 1 && file.size <= 1.5 * 1024 * 1024) {
+        resolve(file);
+        return;
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(img.width * scale));
+      canvas.height = Math.max(1, Math.round(img.height * scale));
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new Error("图片处理失败"))),
+        "image/jpeg",
+        quality,
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("无法读取图片"));
+    };
+    img.src = url;
+  });
+}
+
+async function handleThemeBackgroundFile(file) {
+  if (!file) return;
+  if (!hasIdentity()) {
+    setFeedback("请先登录再上传背景图。", true);
+    return;
+  }
+  try {
+    setFeedback("正在上传背景图…");
+    const blob = await downscaleImageFile(file);
+    const upload = new File([blob], file.name || "background.jpg", { type: blob.type || file.type });
+    const data = await uploadThemeBackground(upload);
+    if (data.theme) {
+      state.theme = normalizeThemeClient(data.theme);
+    } else if (data.url) {
+      state.theme = normalizeThemeClient({
+        ...state.theme,
+        background: { ...state.theme.background, type: "custom", customUrl: data.url },
+      });
+    }
+    applyTheme(state.theme);
+    cacheTheme(state.theme);
+    renderThemeSettings();
+    setFeedback("背景图已更新。");
+  } catch (error) {
+    setFeedback(`上传失败：${error.message}`, true);
+  }
 }
 
 function renderAvailabilityChat() {
@@ -2118,6 +2579,12 @@ async function refreshState() {
   if (data.weeklyAvailability) {
     state.weeklyAvailability = data.weeklyAvailability;
     renderAvailabilityEditor();
+  }
+  if (data.theme) {
+    state.theme = normalizeThemeClient(data.theme);
+    applyTheme(state.theme);
+    cacheTheme(state.theme);
+    if (typeof renderThemeSettings === "function") renderThemeSettings();
   }
 }
 

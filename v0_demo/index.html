@@ -89,6 +89,7 @@
         </div>
       </aside>
       <div class="card assistant-chat-view">
+        <div class="chat-view-header">AI 助手对话</div>
         <div id="assistantChatMessages" class="chat-messages" aria-live="polite"></div>
         <form id="assistantChatForm" class="chat-composer">
           <textarea id="assistantChatInput" rows="2" placeholder="说点什么…"></textarea>
@@ -214,6 +215,12 @@
             </span>
             <span class="settings-entry-arrow">›</span>
           </button>
+          <button id="openThemeSettingsBtn" class="settings-entry" type="button">
+            <span>
+              <strong>主题</strong>
+            </span>
+            <span class="settings-entry-arrow">›</span>
+          </button>
         </div>
       </div>
       <div id="availabilityModeSettings" class="settings-view card" hidden>
@@ -301,14 +308,68 @@
           <h2>专注</h2>
         </div>
         <label class="radio-row">
-          <input type="radio" name="focusDisplayMode" value="elapsed">
+          <input type="radio" name="focusDisplayModePage" value="elapsed" checked>
           显示计时器累积时长
         </label>
         <label class="radio-row">
-          <input type="radio" name="focusDisplayMode" value="clock">
+          <input type="radio" name="focusDisplayModePage" value="clock">
           显示实时时间
         </label>
         <button id="startFocusFromSettingsBtn" class="btn primary" type="button">开始专注</button>
+      </div>
+      <div id="themeSettings" class="settings-view card" hidden>
+        <div class="settings-detail-head">
+          <button id="backThemeSettingsBtn" class="btn small" type="button">‹ 返回</button>
+          <h2>主题</h2>
+        </div>
+
+        <section class="theme-section">
+          <h3 class="theme-section-title">全局背景</h3>
+          <div id="themeBgPreview" class="theme-bg-preview"></div>
+          <div class="theme-bg-actions">
+            <button id="themeBgUploadBtn" class="btn" type="button">上传图片</button>
+            <button id="themeBgDefaultBtn" class="btn" type="button">恢复默认背景</button>
+            <input id="themeBgFileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+          </div>
+          <label class="theme-slider-row">
+            <span class="theme-field-label">透明度</span>
+            <input id="themeOpacityInput" type="range" min="0" max="100" value="45">
+            <output id="themeOpacityValue" class="theme-slider-value">45%</output>
+          </label>
+          <p class="hint">透明度越高，背景图越清晰；越低背景越淡、内容更突出。</p>
+        </section>
+
+        <section class="theme-section">
+          <h3 class="theme-section-title">主题色</h3>
+          <div class="theme-field">
+            <span class="theme-field-label">主色</span>
+            <div id="themePrimarySwatches" class="theme-swatches"></div>
+            <div class="theme-color-input">
+              <input id="themePrimaryHex" type="text" maxlength="15" placeholder="#ef8b50 或 239,139,80" spellcheck="false" autocomplete="off">
+              <span id="themePrimaryPreview" class="theme-color-chip" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="theme-field">
+            <div class="theme-field-head">
+              <span class="theme-field-label">强调色</span>
+              <label class="theme-auto-toggle">
+                <input id="themeAccentAuto" type="checkbox" checked>
+                跟随主色
+              </label>
+            </div>
+            <div id="themeAccentControls" class="theme-accent-controls">
+              <div id="themeAccentSwatches" class="theme-swatches"></div>
+              <div class="theme-color-input">
+                <input id="themeAccentHex" type="text" maxlength="15" placeholder="#5cbd92 或 92,189,146" spellcheck="false" autocomplete="off">
+                <span id="themeAccentPreview" class="theme-color-chip" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+          <div class="theme-live-preview">
+            <button class="btn primary" type="button" tabindex="-1">主色按钮</button>
+            <button class="btn accent" type="button" tabindex="-1">强调色按钮</button>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -340,11 +401,11 @@
       </div>
       <div class="modal-body">
         <label class="radio-row">
-          <input type="radio" name="focusDisplayMode" value="elapsed">
+          <input type="radio" name="focusDisplayModeModal" value="elapsed" checked>
           显示计时器累积时长
         </label>
         <label class="radio-row">
-          <input type="radio" name="focusDisplayMode" value="clock">
+          <input type="radio" name="focusDisplayModeModal" value="clock">
           显示实时时间
         </label>
       </div>

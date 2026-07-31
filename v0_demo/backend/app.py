@@ -54,12 +54,16 @@ if str(V0_DEMO_ROOT) not in sys.path:
 from skills.availability import AvailabilitySkillHandler, normalize_and_validate_availability  # noqa: E402
 
 app = Flask(__name__)
+# Cap request bodies so a huge image upload can't exhaust memory. The frontend
+# downscales images before upload, so 8MB is comfortably large.
+app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024
 store_lock = Lock()
 FRONTEND_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = Path(__file__).resolve().parent / "data"
 USERS_FILE = DATA_DIR / "users.json"
 SESSIONS_FILE = DATA_DIR / "sessions.json"
 USER_DATA_DIR = DATA_DIR / "users"
+USER_UPLOADS_DIR = USER_DATA_DIR / "uploads"
 KNOWLEDGE_FILE = DATA_DIR / "knowledge" / "task_knowledge_v2.jsonl"
 KNOWLEDGE_FILE_LEGACY = DATA_DIR / "knowledge" / "task_duration_knowledge.jsonl"
 
@@ -184,6 +188,66 @@ def tokenize_title(text: str) -> set[str]:
     return set(parts)
 
 
+HEX_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
+
+
+def default_theme() -> dict[str, Any]:
+    return {
+        "background": {"type": "default", "opacity": 0.45, "customUrl": None},
+        "colors": {"primary": "#ef8b50", "accentMode": "auto", "accent": "#5cbd92"},
+    }
+
+
+def normalize_theme(raw: Any) -> dict[str, Any]:
+    """Coerce a (possibly partial/untrusted) theme dict onto safe defaults."""
+    theme = default_theme()
+    if not isinstance(raw, dict):
+        return theme
+    bg = raw.get("background")
+    if isinstance(bg, dict):
+        if bg.get("type") in ("default", "custom"):
+            theme["background"]["type"] = bg["type"]
+        op = bg.get("opacity")
+        if isinstance(op, (int, float)) and not isinstance(op, bool):
+            theme["background"]["opacity"] = max(0.0, min(1.0, float(op)))
+        url = bg.get("customUrl")
+        if isinstance(url, str) and url.strip():
+            theme["background"]["customUrl"] = url.strip()
+        elif url is None:
+            theme["background"]["customUrl"] = None
+    colors = raw.get("colors")
+    if isinstance(colors, dict):
+        primary = colors.get("primary")
+        if isinstance(primary, str) and HEX_COLOR_RE.match(primary.strip()):
+            theme["colors"]["primary"] = primary.strip().lower()
+        if colors.get("accentMode") in ("auto", "custom"):
+            theme["colors"]["accentMode"] = colors["accentMode"]
+        accent = colors.get("accent")
+        if isinstance(accent, str) and HEX_COLOR_RE.match(accent.strip()):
+            theme["colors"]["accent"] = accent.strip().lower()
+    # A custom background with no image is meaningless; fall back to default.
+    if theme["background"]["type"] == "custom" and not theme["background"]["customUrl"]:
+        theme["background"]["type"] = "default"
+    return theme
+
+
+def merge_theme(current: dict[str, Any], payload: Any) -> dict[str, Any]:
+    """Overlay only the fields present in payload onto the current theme."""
+    merged = json.loads(json.dumps(current))
+    if isinstance(payload, dict):
+        bg = payload.get("background")
+        if isinstance(bg, dict):
+            for key in ("type", "opacity", "customUrl"):
+                if key in bg:
+                    merged.setdefault("background", {})[key] = bg[key]
+        colors = payload.get("colors")
+        if isinstance(colors, dict):
+            for key in ("primary", "accentMode", "accent"):
+                if key in colors:
+                    merged.setdefault("colors", {})[key] = colors[key]
+    return merged
+
+
 def default_user_state() -> dict[str, Any]:
     return {
         "tasks": [],
@@ -192,6 +256,7 @@ def default_user_state() -> dict[str, Any]:
         "checkins": [],
         "lastPlanner": "none",
         "weeklyAvailability": {key: [] for key in WEEK_KEYS},
+        "theme": default_theme(),
     }
 
 
@@ -284,6 +349,7 @@ def load_user_state(username: str) -> dict[str, Any]:
             state["tasks"] = []
         if not isinstance(state.get("checkins"), list):
             state["checkins"] = []
+        state["theme"] = normalize_theme(state.get("theme"))
         return state
     except Exception:
         return default_user_state()
@@ -815,6 +881,13 @@ def assets(filename: str):
     return send_from_directory(FRONTEND_DIR / "assets", filename)
 
 
+@app.route("/uploads/<path:filename>", methods=["GET"])
+def user_uploads(filename: str):
+    # Served without auth because CSS background:url() cannot send auth headers;
+    # filenames contain a random token so they aren't guessable.
+    return send_from_directory(USER_UPLOADS_DIR, filename)
+
+
 @app.route("/api/health", methods=["GET"])
 def health():
     ok, msg = deepseek_model_ready()
@@ -918,6 +991,7 @@ def get_state():
             "checkins": state["checkins"],
             "planner": state["lastPlanner"],
             "weeklyAvailability": state["weeklyAvailability"],
+            "theme": state["theme"],
             "user": {"username": username},
         }
     )
@@ -958,6 +1032,79 @@ def save_availability():
         state["weeklyAvailability"] = normalized
         save_user_state(username, state)
     return jsonify({"ok": True, "weeklyAvailability": normalized})
+
+
+@app.route("/api/settings/theme", methods=["GET"])
+def get_theme():
+    username = get_current_username()
+    if not username:
+        return jsonify({"message": "unauthorized"}), 401
+    with store_lock:
+        state = load_user_state(username)
+    return jsonify({"theme": state["theme"]})
+
+
+@app.route("/api/settings/theme", methods=["POST"])
+def save_theme():
+    username = get_current_username()
+    if not username:
+        return jsonify({"message": "unauthorized"}), 401
+    payload = request.get_json(silent=True) or {}
+    # Accept either a bare theme dict or {"theme": {...}}.
+    incoming = payload.get("theme") if isinstance(payload.get("theme"), dict) else payload
+    with store_lock:
+        state = load_user_state(username)
+        current = normalize_theme(state.get("theme"))
+        state["theme"] = normalize_theme(merge_theme(current, incoming))
+        save_user_state(username, state)
+        theme = state["theme"]
+    return jsonify({"ok": True, "theme": theme})
+
+
+ALLOWED_IMAGE_EXT = {"png": "png", "jpg": "jpg", "jpeg": "jpg", "webp": "webp"}
+ALLOWED_IMAGE_MIME = {
+    "image/png": "png",
+    "image/jpeg": "jpg",
+    "image/jpg": "jpg",
+    "image/webp": "webp",
+}
+
+
+@app.route("/api/settings/theme/background", methods=["POST"])
+def upload_theme_background():
+    username = get_current_username()
+    if not username:
+        return jsonify({"message": "unauthorized"}), 401
+    file = request.files.get("file")
+    if file is None or not file.filename:
+        return jsonify({"message": "no file uploaded"}), 400
+    ext = ""
+    if "." in file.filename:
+        ext = ALLOWED_IMAGE_EXT.get(file.filename.rsplit(".", 1)[-1].lower(), "")
+    if not ext:
+        ext = ALLOWED_IMAGE_MIME.get((file.mimetype or "").lower(), "")
+    if not ext:
+        return jsonify({"message": "unsupported image type (png/jpg/webp only)"}), 400
+    safe = safe_username(username)
+    user_dir = USER_UPLOADS_DIR / safe
+    user_dir.mkdir(parents=True, exist_ok=True)
+    # Only one background per user; clear old files to avoid accumulation.
+    for old in user_dir.glob("bg_*"):
+        try:
+            old.unlink()
+        except OSError:
+            pass
+    filename = f"bg_{secrets.token_urlsafe(8)}.{ext}"
+    file.save(user_dir / filename)
+    url = f"/uploads/{safe}/{filename}"
+    with store_lock:
+        state = load_user_state(username)
+        theme = normalize_theme(state.get("theme"))
+        theme["background"]["type"] = "custom"
+        theme["background"]["customUrl"] = url
+        state["theme"] = theme
+        save_user_state(username, state)
+    return jsonify({"ok": True, "url": url, "theme": theme})
 
 
 @app.route("/api/settings/availability/chat", methods=["POST"])

@@ -56,5 +56,11 @@
     "password_hash": "d7936c8283bb6b2ab567137d17448aa4599b5be81eb083f070974bdeb57e87c2",
     "created_at": "2026-07-24T20:03:06",
     "type": "phone"
+  },
+  "18382091291": {
+    "salt": "dfab7be2592033ed",
+    "password_hash": "617a7add98a77d01383218c5922d6abecc65e9223e4801167d67be3455867f34",
+    "created_at": "2026-07-31T19:08:31",
+    "type": "phone"
   }
 }
