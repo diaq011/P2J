@@ -38,5 +38,23 @@
     "password_hash": "07c30c43b13f8835ffaf360b320951f9e5905bbeb4697085ee1cabf526219899",
     "created_at": "2026-06-30T12:04:32",
     "type": "phone"
+  },
+  "15928071133": {
+    "salt": "78b1406b9a6c6a49",
+    "password_hash": "b971ff201daa8f1c44af47baa9a25d513cadf2b3a8a6aa6b230a77b377d27993",
+    "created_at": "2026-07-24T19:45:02",
+    "type": "phone"
+  },
+  "15928071134": {
+    "salt": "409f044c832efbc3",
+    "password_hash": "f60966cc79e6d303d2c6bad7e9c5256d49acbf4ee3b7f1f2f642d110a79187e5",
+    "created_at": "2026-07-24T19:55:57",
+    "type": "phone"
+  },
+  "15928071135": {
+    "salt": "611e628c9d8107ba",
+    "password_hash": "d7936c8283bb6b2ab567137d17448aa4599b5be81eb083f070974bdeb57e87c2",
+    "created_at": "2026-07-24T20:03:06",
+    "type": "phone"
   }
 }

@@ -1,0 +1,1305 @@
+{
+  "tasks": [
+    {
+      "id": "f63ab665-f052-48f0-b163-7fb26381dba2",
+      "status": "todo",
+      "title": "英语作文 300-400词",
+      "deadline": "2026-07-29",
+      "subject": "english",
+      "taskType": "essay",
+      "difficulty": "medium",
+      "estimatedMinutes": null
+    },
+    {
+      "id": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+      "status": "todo",
+      "title": "两张初三期末模拟英语卷",
+      "deadline": "2026-07-29",
+      "subject": "english",
+      "taskType": "test_paper",
+      "difficulty": "hard",
+      "estimatedMinutes": null
+    }
+  ],
+  "todayPlan": {
+    "date": "2026-07-24",
+    "taskIds": [
+      "f63ab665-f052-48f0-b163-7fb26381dba2"
+    ],
+    "totalEstimatedMinutes": 120,
+    "scheduledBlocks": [
+      {
+        "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+        "startMinute": 1200,
+        "endMinute": 1320,
+        "title": "英语作文 300-400词",
+        "deadline": "2026-07-29"
+      }
+    ],
+    "weekday": "fri",
+    "note": "",
+    "details": {
+      "rationale": "建议优先安排作文，每天最多1篇（45分钟），分散到6天；试卷分4个45分钟块穿插在非作文日，注意每天累计high负荷不超过90分钟。所有任务最晚7月29日完成。",
+      "risks": [
+        "总任务量极大（作文480分钟+试卷约316分钟），6天可用时间约20小时，但需注意每天负荷不超过90分钟，且避免同一天超过2篇作文，可能导致无法完成。",
+        "作文任务证据显示单篇耗时约53-71分钟，但参数估计按400词计算，实际可能严重低估，风险较高。",
+        "试卷任务模板匹配度仅0.21，参数估计基于数学卷，实际英语卷时长可能不同，建议预留时间缓冲。"
+      ],
+      "taskEstimates": [
+        {
+          "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+          "title": "英语作文 300-400词",
+          "estimatedMinutes": 480,
+          "reason": "根据参数估计，400词作文需480分钟，分解建议显示每篇作文约45分钟，但任务要求400词，模板匹配度高，取480分钟作为估计。",
+          "evidence_ids": [
+            "rate_english_essay_article",
+            "tpl_english_essay_standard"
+          ]
+        },
+        {
+          "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+          "title": "两张初三期末模拟英语卷",
+          "estimatedMinutes": 287,
+          "reason": "参数估计p50为287分钟，适配1.18倍P人系数，但试卷任务硬度过高，调整+10%至316分钟，取整316分钟。",
+          "evidence_ids": [
+            "rate_math_test_paper_set",
+            "case_english_test_paper_middle_high_hard_106"
+          ]
+        }
+      ],
+      "ragTopK": 5,
+      "ragExamples": [
+        {
+          "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+          "title": "英语作文 300-400词",
+          "examples": [
+            {
+              "sample_id": "rate_english_essay_article",
+              "source": "unit_rate",
+              "task_title": "单位速率 article×400",
+              "actual_minutes": 480,
+              "estimated_minutes": 480,
+              "estimated_minutes_min": 480,
+              "estimated_minutes_max": 480,
+              "subject": "english",
+              "task_type": "essay",
+              "difficulty": "medium",
+              "score": 0.85
+            },
+            {
+              "sample_id": "case_english_essay_exam_sprint_hard_011",
+              "source": "calibration_case",
+              "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
+              "actual_minutes": 71,
+              "estimated_minutes": 71,
+              "subject": "english",
+              "task_type": "essay",
+              "difficulty": "medium",
+              "score": 0.8
+            },
+            {
+              "sample_id": "tpl_english_essay_standard",
+              "source": "task_template",
+              "task_title": "英语作文 300-400词",
+              "actual_minutes": 480,
+              "estimated_minutes": 480,
+              "estimated_minutes_min": 480,
+              "estimated_minutes_max": 480,
+              "subject": "english",
+              "task_type": "essay",
+              "difficulty": "medium",
+              "planning_advice": "setup(6.0) + 400×rate×fatigue(1.08) ×diff(1.0)×grade(1.0)×subj(1.0)×P(1.18)",
+              "score": 0.7687
+            },
+            {
+              "sample_id": "case_english_essay_senior_high_medium_010",
+              "source": "calibration_case",
+              "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
+              "actual_minutes": 53,
+              "estimated_minutes": 53,
+              "subject": "english",
+              "task_type": "essay",
+              "difficulty": "medium",
+              "score": 0.75
+            },
+            {
+              "sample_id": "case_english_essay_exam_sprint_medium_063",
+              "source": "calibration_case",
+              "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
+              "actual_minutes": 53,
+              "estimated_minutes": 53,
+              "subject": "english",
+              "task_type": "essay",
+              "difficulty": "medium",
+              "score": 0.75
+            }
+          ]
+        },
+        {
+          "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+          "title": "两张初三期末模拟英语卷",
+          "examples": [
+            {
+              "sample_id": "rate_math_test_paper_set",
+              "source": "unit_rate",
+              "task_title": "单位速率 set×2",
+              "actual_minutes": 287,
+              "estimated_minutes": 287,
+              "estimated_minutes_min": 235,
+              "estimated_minutes_max": 353,
+              "subject": "english",
+              "task_type": "test_paper",
+              "difficulty": "hard",
+              "score": 0.85
+            },
+            {
+              "sample_id": "case_english_test_paper_middle_high_hard_106",
+              "source": "calibration_case",
+              "task_title": "初中高年级学生完成一套中考英语模拟卷（不含听力）。",
+              "actual_minutes": 88,
+              "estimated_minutes": 88,
+              "subject": "english",
+              "task_type": "test_paper",
+              "difficulty": "hard",
+              "score": 0.7
+            },
+            {
+              "sample_id": "tpl_math_test_paper_standard",
+              "source": "task_template",
+              "task_title": "两张初三期末模拟英语卷",
+              "actual_minutes": 287,
+              "estimated_minutes": 287,
+              "estimated_minutes_min": 235,
+              "estimated_minutes_max": 353,
+              "subject": "english",
+              "task_type": "test_paper",
+              "difficulty": "hard",
+              "planning_advice": "setup(8.0) + 2×rate×fatigue(1.1) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
+              "score": 0.21
+            }
+          ]
+        }
+      ],
+      "planningWindow": {
+        "start": "2026-07-24",
+        "end": "2026-07-29"
+      },
+      "timeShortage": {
+        "hasShortage": false,
+        "totalNeededMinutes": 767,
+        "totalAvailableMinutes": 840,
+        "totalScheduledMinutes": 767,
+        "shortageMinutes": 0,
+        "affectedTasks": []
+      }
+    }
+  },
+  "plansByDate": {
+    "2026-07-24": {
+      "date": "2026-07-24",
+      "taskIds": [
+        "f63ab665-f052-48f0-b163-7fb26381dba2"
+      ],
+      "totalEstimatedMinutes": 120,
+      "scheduledBlocks": [
+        {
+          "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+          "startMinute": 1200,
+          "endMinute": 1320,
+          "title": "英语作文 300-400词",
+          "deadline": "2026-07-29"
+        }
+      ],
+      "weekday": "fri",
+      "note": "",
+      "details": {
+        "rationale": "建议优先安排作文，每天最多1篇（45分钟），分散到6天；试卷分4个45分钟块穿插在非作文日，注意每天累计high负荷不超过90分钟。所有任务最晚7月29日完成。",
+        "risks": [
+          "总任务量极大（作文480分钟+试卷约316分钟），6天可用时间约20小时，但需注意每天负荷不超过90分钟，且避免同一天超过2篇作文，可能导致无法完成。",
+          "作文任务证据显示单篇耗时约53-71分钟，但参数估计按400词计算，实际可能严重低估，风险较高。",
+          "试卷任务模板匹配度仅0.21，参数估计基于数学卷，实际英语卷时长可能不同，建议预留时间缓冲。"
+        ],
+        "taskEstimates": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "estimatedMinutes": 480,
+            "reason": "根据参数估计，400词作文需480分钟，分解建议显示每篇作文约45分钟，但任务要求400词，模板匹配度高，取480分钟作为估计。",
+            "evidence_ids": [
+              "rate_english_essay_article",
+              "tpl_english_essay_standard"
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "estimatedMinutes": 287,
+            "reason": "参数估计p50为287分钟，适配1.18倍P人系数，但试卷任务硬度过高，调整+10%至316分钟，取整316分钟。",
+            "evidence_ids": [
+              "rate_math_test_paper_set",
+              "case_english_test_paper_middle_high_hard_106"
+            ]
+          }
+        ],
+        "ragTopK": 5,
+        "ragExamples": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "examples": [
+              {
+                "sample_id": "rate_english_essay_article",
+                "source": "unit_rate",
+                "task_title": "单位速率 article×400",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_hard_011",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
+                "actual_minutes": 71,
+                "estimated_minutes": 71,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.8
+              },
+              {
+                "sample_id": "tpl_english_essay_standard",
+                "source": "task_template",
+                "task_title": "英语作文 300-400词",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "planning_advice": "setup(6.0) + 400×rate×fatigue(1.08) ×diff(1.0)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.7687
+              },
+              {
+                "sample_id": "case_english_essay_senior_high_medium_010",
+                "source": "calibration_case",
+                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_medium_063",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              }
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "examples": [
+              {
+                "sample_id": "rate_math_test_paper_set",
+                "source": "unit_rate",
+                "task_title": "单位速率 set×2",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_test_paper_middle_high_hard_106",
+                "source": "calibration_case",
+                "task_title": "初中高年级学生完成一套中考英语模拟卷（不含听力）。",
+                "actual_minutes": 88,
+                "estimated_minutes": 88,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.7
+              },
+              {
+                "sample_id": "tpl_math_test_paper_standard",
+                "source": "task_template",
+                "task_title": "两张初三期末模拟英语卷",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "planning_advice": "setup(8.0) + 2×rate×fatigue(1.1) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.21
+              }
+            ]
+          }
+        ],
+        "planningWindow": {
+          "start": "2026-07-24",
+          "end": "2026-07-29"
+        },
+        "timeShortage": {
+          "hasShortage": false,
+          "totalNeededMinutes": 767,
+          "totalAvailableMinutes": 840,
+          "totalScheduledMinutes": 767,
+          "shortageMinutes": 0,
+          "affectedTasks": []
+        }
+      }
+    },
+    "2026-07-25": {
+      "date": "2026-07-25",
+      "taskIds": [
+        "f63ab665-f052-48f0-b163-7fb26381dba2"
+      ],
+      "totalEstimatedMinutes": 180,
+      "scheduledBlocks": [
+        {
+          "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+          "startMinute": 600,
+          "endMinute": 660,
+          "title": "英语作文 300-400词",
+          "deadline": "2026-07-29"
+        },
+        {
+          "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+          "startMinute": 1200,
+          "endMinute": 1320,
+          "title": "英语作文 300-400词",
+          "deadline": "2026-07-29"
+        }
+      ],
+      "weekday": "sat",
+      "note": "",
+      "details": {
+        "rationale": "建议优先安排作文，每天最多1篇（45分钟），分散到6天；试卷分4个45分钟块穿插在非作文日，注意每天累计high负荷不超过90分钟。所有任务最晚7月29日完成。",
+        "risks": [
+          "总任务量极大（作文480分钟+试卷约316分钟），6天可用时间约20小时，但需注意每天负荷不超过90分钟，且避免同一天超过2篇作文，可能导致无法完成。",
+          "作文任务证据显示单篇耗时约53-71分钟，但参数估计按400词计算，实际可能严重低估，风险较高。",
+          "试卷任务模板匹配度仅0.21，参数估计基于数学卷，实际英语卷时长可能不同，建议预留时间缓冲。"
+        ],
+        "taskEstimates": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "estimatedMinutes": 480,
+            "reason": "根据参数估计，400词作文需480分钟，分解建议显示每篇作文约45分钟，但任务要求400词，模板匹配度高，取480分钟作为估计。",
+            "evidence_ids": [
+              "rate_english_essay_article",
+              "tpl_english_essay_standard"
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "estimatedMinutes": 287,
+            "reason": "参数估计p50为287分钟，适配1.18倍P人系数，但试卷任务硬度过高，调整+10%至316分钟，取整316分钟。",
+            "evidence_ids": [
+              "rate_math_test_paper_set",
+              "case_english_test_paper_middle_high_hard_106"
+            ]
+          }
+        ],
+        "ragTopK": 5,
+        "ragExamples": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "examples": [
+              {
+                "sample_id": "rate_english_essay_article",
+                "source": "unit_rate",
+                "task_title": "单位速率 article×400",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_hard_011",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
+                "actual_minutes": 71,
+                "estimated_minutes": 71,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.8
+              },
+              {
+                "sample_id": "tpl_english_essay_standard",
+                "source": "task_template",
+                "task_title": "英语作文 300-400词",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "planning_advice": "setup(6.0) + 400×rate×fatigue(1.08) ×diff(1.0)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.7687
+              },
+              {
+                "sample_id": "case_english_essay_senior_high_medium_010",
+                "source": "calibration_case",
+                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_medium_063",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              }
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "examples": [
+              {
+                "sample_id": "rate_math_test_paper_set",
+                "source": "unit_rate",
+                "task_title": "单位速率 set×2",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_test_paper_middle_high_hard_106",
+                "source": "calibration_case",
+                "task_title": "初中高年级学生完成一套中考英语模拟卷（不含听力）。",
+                "actual_minutes": 88,
+                "estimated_minutes": 88,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.7
+              },
+              {
+                "sample_id": "tpl_math_test_paper_standard",
+                "source": "task_template",
+                "task_title": "两张初三期末模拟英语卷",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "planning_advice": "setup(8.0) + 2×rate×fatigue(1.1) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.21
+              }
+            ]
+          }
+        ],
+        "planningWindow": {
+          "start": "2026-07-24",
+          "end": "2026-07-29"
+        },
+        "timeShortage": {
+          "hasShortage": false,
+          "totalNeededMinutes": 767,
+          "totalAvailableMinutes": 840,
+          "totalScheduledMinutes": 767,
+          "shortageMinutes": 0,
+          "affectedTasks": []
+        }
+      }
+    },
+    "2026-07-26": {
+      "date": "2026-07-26",
+      "taskIds": [
+        "f63ab665-f052-48f0-b163-7fb26381dba2"
+      ],
+      "totalEstimatedMinutes": 180,
+      "scheduledBlocks": [
+        {
+          "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+          "startMinute": 600,
+          "endMinute": 660,
+          "title": "英语作文 300-400词",
+          "deadline": "2026-07-29"
+        },
+        {
+          "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+          "startMinute": 1200,
+          "endMinute": 1320,
+          "title": "英语作文 300-400词",
+          "deadline": "2026-07-29"
+        }
+      ],
+      "weekday": "sun",
+      "note": "",
+      "details": {
+        "rationale": "建议优先安排作文，每天最多1篇（45分钟），分散到6天；试卷分4个45分钟块穿插在非作文日，注意每天累计high负荷不超过90分钟。所有任务最晚7月29日完成。",
+        "risks": [
+          "总任务量极大（作文480分钟+试卷约316分钟），6天可用时间约20小时，但需注意每天负荷不超过90分钟，且避免同一天超过2篇作文，可能导致无法完成。",
+          "作文任务证据显示单篇耗时约53-71分钟，但参数估计按400词计算，实际可能严重低估，风险较高。",
+          "试卷任务模板匹配度仅0.21，参数估计基于数学卷，实际英语卷时长可能不同，建议预留时间缓冲。"
+        ],
+        "taskEstimates": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "estimatedMinutes": 480,
+            "reason": "根据参数估计，400词作文需480分钟，分解建议显示每篇作文约45分钟，但任务要求400词，模板匹配度高，取480分钟作为估计。",
+            "evidence_ids": [
+              "rate_english_essay_article",
+              "tpl_english_essay_standard"
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "estimatedMinutes": 287,
+            "reason": "参数估计p50为287分钟，适配1.18倍P人系数，但试卷任务硬度过高，调整+10%至316分钟，取整316分钟。",
+            "evidence_ids": [
+              "rate_math_test_paper_set",
+              "case_english_test_paper_middle_high_hard_106"
+            ]
+          }
+        ],
+        "ragTopK": 5,
+        "ragExamples": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "examples": [
+              {
+                "sample_id": "rate_english_essay_article",
+                "source": "unit_rate",
+                "task_title": "单位速率 article×400",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_hard_011",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
+                "actual_minutes": 71,
+                "estimated_minutes": 71,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.8
+              },
+              {
+                "sample_id": "tpl_english_essay_standard",
+                "source": "task_template",
+                "task_title": "英语作文 300-400词",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "planning_advice": "setup(6.0) + 400×rate×fatigue(1.08) ×diff(1.0)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.7687
+              },
+              {
+                "sample_id": "case_english_essay_senior_high_medium_010",
+                "source": "calibration_case",
+                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_medium_063",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              }
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "examples": [
+              {
+                "sample_id": "rate_math_test_paper_set",
+                "source": "unit_rate",
+                "task_title": "单位速率 set×2",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_test_paper_middle_high_hard_106",
+                "source": "calibration_case",
+                "task_title": "初中高年级学生完成一套中考英语模拟卷（不含听力）。",
+                "actual_minutes": 88,
+                "estimated_minutes": 88,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.7
+              },
+              {
+                "sample_id": "tpl_math_test_paper_standard",
+                "source": "task_template",
+                "task_title": "两张初三期末模拟英语卷",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "planning_advice": "setup(8.0) + 2×rate×fatigue(1.1) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.21
+              }
+            ]
+          }
+        ],
+        "planningWindow": {
+          "start": "2026-07-24",
+          "end": "2026-07-29"
+        },
+        "timeShortage": {
+          "hasShortage": false,
+          "totalNeededMinutes": 767,
+          "totalAvailableMinutes": 840,
+          "totalScheduledMinutes": 767,
+          "shortageMinutes": 0,
+          "affectedTasks": []
+        }
+      }
+    },
+    "2026-07-27": {
+      "date": "2026-07-27",
+      "taskIds": [
+        "c1cf4e63-17e4-414f-a46e-a91499fcdad6"
+      ],
+      "totalEstimatedMinutes": 120,
+      "scheduledBlocks": [
+        {
+          "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+          "startMinute": 1200,
+          "endMinute": 1320,
+          "title": "两张初三期末模拟英语卷",
+          "deadline": "2026-07-29"
+        }
+      ],
+      "weekday": "mon",
+      "note": "",
+      "details": {
+        "rationale": "建议优先安排作文，每天最多1篇（45分钟），分散到6天；试卷分4个45分钟块穿插在非作文日，注意每天累计high负荷不超过90分钟。所有任务最晚7月29日完成。",
+        "risks": [
+          "总任务量极大（作文480分钟+试卷约316分钟），6天可用时间约20小时，但需注意每天负荷不超过90分钟，且避免同一天超过2篇作文，可能导致无法完成。",
+          "作文任务证据显示单篇耗时约53-71分钟，但参数估计按400词计算，实际可能严重低估，风险较高。",
+          "试卷任务模板匹配度仅0.21，参数估计基于数学卷，实际英语卷时长可能不同，建议预留时间缓冲。"
+        ],
+        "taskEstimates": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "estimatedMinutes": 480,
+            "reason": "根据参数估计，400词作文需480分钟，分解建议显示每篇作文约45分钟，但任务要求400词，模板匹配度高，取480分钟作为估计。",
+            "evidence_ids": [
+              "rate_english_essay_article",
+              "tpl_english_essay_standard"
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "estimatedMinutes": 287,
+            "reason": "参数估计p50为287分钟，适配1.18倍P人系数，但试卷任务硬度过高，调整+10%至316分钟，取整316分钟。",
+            "evidence_ids": [
+              "rate_math_test_paper_set",
+              "case_english_test_paper_middle_high_hard_106"
+            ]
+          }
+        ],
+        "ragTopK": 5,
+        "ragExamples": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "examples": [
+              {
+                "sample_id": "rate_english_essay_article",
+                "source": "unit_rate",
+                "task_title": "单位速率 article×400",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_hard_011",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
+                "actual_minutes": 71,
+                "estimated_minutes": 71,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.8
+              },
+              {
+                "sample_id": "tpl_english_essay_standard",
+                "source": "task_template",
+                "task_title": "英语作文 300-400词",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "planning_advice": "setup(6.0) + 400×rate×fatigue(1.08) ×diff(1.0)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.7687
+              },
+              {
+                "sample_id": "case_english_essay_senior_high_medium_010",
+                "source": "calibration_case",
+                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_medium_063",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              }
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "examples": [
+              {
+                "sample_id": "rate_math_test_paper_set",
+                "source": "unit_rate",
+                "task_title": "单位速率 set×2",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_test_paper_middle_high_hard_106",
+                "source": "calibration_case",
+                "task_title": "初中高年级学生完成一套中考英语模拟卷（不含听力）。",
+                "actual_minutes": 88,
+                "estimated_minutes": 88,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.7
+              },
+              {
+                "sample_id": "tpl_math_test_paper_standard",
+                "source": "task_template",
+                "task_title": "两张初三期末模拟英语卷",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "planning_advice": "setup(8.0) + 2×rate×fatigue(1.1) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.21
+              }
+            ]
+          }
+        ],
+        "planningWindow": {
+          "start": "2026-07-24",
+          "end": "2026-07-29"
+        },
+        "timeShortage": {
+          "hasShortage": false,
+          "totalNeededMinutes": 767,
+          "totalAvailableMinutes": 840,
+          "totalScheduledMinutes": 767,
+          "shortageMinutes": 0,
+          "affectedTasks": []
+        }
+      }
+    },
+    "2026-07-28": {
+      "date": "2026-07-28",
+      "taskIds": [
+        "c1cf4e63-17e4-414f-a46e-a91499fcdad6"
+      ],
+      "totalEstimatedMinutes": 120,
+      "scheduledBlocks": [
+        {
+          "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+          "startMinute": 1200,
+          "endMinute": 1320,
+          "title": "两张初三期末模拟英语卷",
+          "deadline": "2026-07-29"
+        }
+      ],
+      "weekday": "tue",
+      "note": "",
+      "details": {
+        "rationale": "建议优先安排作文，每天最多1篇（45分钟），分散到6天；试卷分4个45分钟块穿插在非作文日，注意每天累计high负荷不超过90分钟。所有任务最晚7月29日完成。",
+        "risks": [
+          "总任务量极大（作文480分钟+试卷约316分钟），6天可用时间约20小时，但需注意每天负荷不超过90分钟，且避免同一天超过2篇作文，可能导致无法完成。",
+          "作文任务证据显示单篇耗时约53-71分钟，但参数估计按400词计算，实际可能严重低估，风险较高。",
+          "试卷任务模板匹配度仅0.21，参数估计基于数学卷，实际英语卷时长可能不同，建议预留时间缓冲。"
+        ],
+        "taskEstimates": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "estimatedMinutes": 480,
+            "reason": "根据参数估计，400词作文需480分钟，分解建议显示每篇作文约45分钟，但任务要求400词，模板匹配度高，取480分钟作为估计。",
+            "evidence_ids": [
+              "rate_english_essay_article",
+              "tpl_english_essay_standard"
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "estimatedMinutes": 287,
+            "reason": "参数估计p50为287分钟，适配1.18倍P人系数，但试卷任务硬度过高，调整+10%至316分钟，取整316分钟。",
+            "evidence_ids": [
+              "rate_math_test_paper_set",
+              "case_english_test_paper_middle_high_hard_106"
+            ]
+          }
+        ],
+        "ragTopK": 5,
+        "ragExamples": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "examples": [
+              {
+                "sample_id": "rate_english_essay_article",
+                "source": "unit_rate",
+                "task_title": "单位速率 article×400",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_hard_011",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
+                "actual_minutes": 71,
+                "estimated_minutes": 71,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.8
+              },
+              {
+                "sample_id": "tpl_english_essay_standard",
+                "source": "task_template",
+                "task_title": "英语作文 300-400词",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "planning_advice": "setup(6.0) + 400×rate×fatigue(1.08) ×diff(1.0)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.7687
+              },
+              {
+                "sample_id": "case_english_essay_senior_high_medium_010",
+                "source": "calibration_case",
+                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_medium_063",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              }
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "examples": [
+              {
+                "sample_id": "rate_math_test_paper_set",
+                "source": "unit_rate",
+                "task_title": "单位速率 set×2",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_test_paper_middle_high_hard_106",
+                "source": "calibration_case",
+                "task_title": "初中高年级学生完成一套中考英语模拟卷（不含听力）。",
+                "actual_minutes": 88,
+                "estimated_minutes": 88,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.7
+              },
+              {
+                "sample_id": "tpl_math_test_paper_standard",
+                "source": "task_template",
+                "task_title": "两张初三期末模拟英语卷",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "planning_advice": "setup(8.0) + 2×rate×fatigue(1.1) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.21
+              }
+            ]
+          }
+        ],
+        "planningWindow": {
+          "start": "2026-07-24",
+          "end": "2026-07-29"
+        },
+        "timeShortage": {
+          "hasShortage": false,
+          "totalNeededMinutes": 767,
+          "totalAvailableMinutes": 840,
+          "totalScheduledMinutes": 767,
+          "shortageMinutes": 0,
+          "affectedTasks": []
+        }
+      }
+    },
+    "2026-07-29": {
+      "date": "2026-07-29",
+      "taskIds": [
+        "c1cf4e63-17e4-414f-a46e-a91499fcdad6"
+      ],
+      "totalEstimatedMinutes": 47,
+      "scheduledBlocks": [
+        {
+          "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+          "startMinute": 1200,
+          "endMinute": 1247,
+          "title": "两张初三期末模拟英语卷",
+          "deadline": "2026-07-29"
+        }
+      ],
+      "weekday": "wed",
+      "note": "",
+      "details": {
+        "rationale": "建议优先安排作文，每天最多1篇（45分钟），分散到6天；试卷分4个45分钟块穿插在非作文日，注意每天累计high负荷不超过90分钟。所有任务最晚7月29日完成。",
+        "risks": [
+          "总任务量极大（作文480分钟+试卷约316分钟），6天可用时间约20小时，但需注意每天负荷不超过90分钟，且避免同一天超过2篇作文，可能导致无法完成。",
+          "作文任务证据显示单篇耗时约53-71分钟，但参数估计按400词计算，实际可能严重低估，风险较高。",
+          "试卷任务模板匹配度仅0.21，参数估计基于数学卷，实际英语卷时长可能不同，建议预留时间缓冲。"
+        ],
+        "taskEstimates": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "estimatedMinutes": 480,
+            "reason": "根据参数估计，400词作文需480分钟，分解建议显示每篇作文约45分钟，但任务要求400词，模板匹配度高，取480分钟作为估计。",
+            "evidence_ids": [
+              "rate_english_essay_article",
+              "tpl_english_essay_standard"
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "estimatedMinutes": 287,
+            "reason": "参数估计p50为287分钟，适配1.18倍P人系数，但试卷任务硬度过高，调整+10%至316分钟，取整316分钟。",
+            "evidence_ids": [
+              "rate_math_test_paper_set",
+              "case_english_test_paper_middle_high_hard_106"
+            ]
+          }
+        ],
+        "ragTopK": 5,
+        "ragExamples": [
+          {
+            "taskId": "f63ab665-f052-48f0-b163-7fb26381dba2",
+            "title": "英语作文 300-400词",
+            "examples": [
+              {
+                "sample_id": "rate_english_essay_article",
+                "source": "unit_rate",
+                "task_title": "单位速率 article×400",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_hard_011",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
+                "actual_minutes": 71,
+                "estimated_minutes": 71,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.8
+              },
+              {
+                "sample_id": "tpl_english_essay_standard",
+                "source": "task_template",
+                "task_title": "英语作文 300-400词",
+                "actual_minutes": 480,
+                "estimated_minutes": 480,
+                "estimated_minutes_min": 480,
+                "estimated_minutes_max": 480,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "planning_advice": "setup(6.0) + 400×rate×fatigue(1.08) ×diff(1.0)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.7687
+              },
+              {
+                "sample_id": "case_english_essay_senior_high_medium_010",
+                "source": "calibration_case",
+                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "case_english_essay_exam_sprint_medium_063",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "english",
+                "task_type": "essay",
+                "difficulty": "medium",
+                "score": 0.75
+              }
+            ]
+          },
+          {
+            "taskId": "c1cf4e63-17e4-414f-a46e-a91499fcdad6",
+            "title": "两张初三期末模拟英语卷",
+            "examples": [
+              {
+                "sample_id": "rate_math_test_paper_set",
+                "source": "unit_rate",
+                "task_title": "单位速率 set×2",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_english_test_paper_middle_high_hard_106",
+                "source": "calibration_case",
+                "task_title": "初中高年级学生完成一套中考英语模拟卷（不含听力）。",
+                "actual_minutes": 88,
+                "estimated_minutes": 88,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "score": 0.7
+              },
+              {
+                "sample_id": "tpl_math_test_paper_standard",
+                "source": "task_template",
+                "task_title": "两张初三期末模拟英语卷",
+                "actual_minutes": 287,
+                "estimated_minutes": 287,
+                "estimated_minutes_min": 235,
+                "estimated_minutes_max": 353,
+                "subject": "english",
+                "task_type": "test_paper",
+                "difficulty": "hard",
+                "planning_advice": "setup(8.0) + 2×rate×fatigue(1.1) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
+                "score": 0.21
+              }
+            ]
+          }
+        ],
+        "planningWindow": {
+          "start": "2026-07-24",
+          "end": "2026-07-29"
+        },
+        "timeShortage": {
+          "hasShortage": false,
+          "totalNeededMinutes": 767,
+          "totalAvailableMinutes": 840,
+          "totalScheduledMinutes": 767,
+          "shortageMinutes": 0,
+          "affectedTasks": []
+        }
+      }
+    }
+  },
+  "checkins": [],
+  "lastPlanner": "deepseek:deepseek-chat+rag_top_k=5",
+  "weeklyAvailability": {
+    "mon": [
+      {
+        "start": "20:00",
+        "end": "22:00"
+      }
+    ],
+    "tue": [
+      {
+        "start": "20:00",
+        "end": "22:00"
+      }
+    ],
+    "wed": [
+      {
+        "start": "20:00",
+        "end": "22:00"
+      }
+    ],
+    "thu": [
+      {
+        "start": "20:00",
+        "end": "22:00"
+      }
+    ],
+    "fri": [
+      {
+        "start": "20:00",
+        "end": "22:00"
+      }
+    ],
+    "sat": [
+      {
+        "start": "10:00",
+        "end": "11:00"
+      },
+      {
+        "start": "20:00",
+        "end": "22:00"
+      }
+    ],
+    "sun": [
+      {
+        "start": "10:00",
+        "end": "11:00"
+      },
+      {
+        "start": "20:00",
+        "end": "22:00"
+      }
+    ]
+  }
+}

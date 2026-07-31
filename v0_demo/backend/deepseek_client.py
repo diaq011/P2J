@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -10,6 +11,10 @@ DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
 DEEPSEEK_API_URL = os.getenv("DEEPSEEK_API_URL", "https://api.deepseek.com/v1")
 DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
 DEEPSEEK_TIMEOUT_SEC = int(os.getenv("DEEPSEEK_TIMEOUT_SEC", "90"))
+# Transient connection failures (TLS handshake timeout / EOF, common behind a
+# VPN/proxy) are retried a few times before we give up.
+DEEPSEEK_MAX_RETRIES = int(os.getenv("DEEPSEEK_MAX_RETRIES", "3"))
+DEEPSEEK_RETRY_BACKOFF_SEC = float(os.getenv("DEEPSEEK_RETRY_BACKOFF_SEC", "1.5"))
 AVAILABILITY_DEEPSEEK_MODEL = os.getenv("AVAILABILITY_DEEPSEEK_MODEL", "deepseek-chat")
 
 
@@ -26,7 +31,7 @@ def deepseek_model_ready() -> tuple[bool, str]:
         },
     )
     try:
-        with urlopen(req, timeout=3) as resp:
+        with urlopen(req, timeout=8) as resp:
             data = json.loads(resp.read().decode("utf-8"))
     except URLError as exc:
         return False, f"cannot connect to DeepSeek API: {exc}"
@@ -85,27 +90,38 @@ def deepseek_chat(payload: dict[str, Any]) -> dict[str, Any]:
             "Accept": "application/json",
         },
     )
-    try:
-        with urlopen(req, timeout=DEEPSEEK_TIMEOUT_SEC) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except HTTPError as exc:
-        error_body = exc.read().decode("utf-8") if exc.fp else ""
-        raise RuntimeError(
-            f"DeepSeek API HTTP error {exc.code}: {error_body}"
-        ) from exc
-    except TimeoutError as exc:
+    last_transient_error: Exception | None = None
+    for attempt in range(DEEPSEEK_MAX_RETRIES):
+        try:
+            with urlopen(req, timeout=DEEPSEEK_TIMEOUT_SEC) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except HTTPError as exc:
+            # Real API responses (401/400/429/5xx) are not retried here.
+            error_body = exc.read().decode("utf-8") if exc.fp else ""
+            raise RuntimeError(
+                f"DeepSeek API HTTP error {exc.code}: {error_body}"
+            ) from exc
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("DeepSeek API returned non-JSON response") from exc
+        except (TimeoutError, URLError) as exc:
+            # Transient: TLS handshake timeout / EOF / connection reset, often
+            # caused by a flaky VPN/proxy tunnel. Retry with backoff.
+            last_transient_error = exc
+            if attempt < DEEPSEEK_MAX_RETRIES - 1:
+                time.sleep(DEEPSEEK_RETRY_BACKOFF_SEC * (attempt + 1))
+                continue
+
+    exc = last_transient_error
+    reason = getattr(exc, "reason", exc)
+    if isinstance(exc, TimeoutError) or isinstance(reason, TimeoutError):
         raise RuntimeError(
             f"DeepSeek API request timed out after {DEEPSEEK_TIMEOUT_SEC}s"
+            f"（已重试 {DEEPSEEK_MAX_RETRIES} 次，可能是代理/VPN 不稳定）"
         ) from exc
-    except URLError as exc:
-        reason = getattr(exc, "reason", exc)
-        if isinstance(reason, TimeoutError):
-            raise RuntimeError(
-                f"DeepSeek API request timed out after {DEEPSEEK_TIMEOUT_SEC}s"
-            ) from exc
-        raise RuntimeError(f"DeepSeek API unavailable: {exc}") from exc
-    except json.JSONDecodeError as exc:
-        raise RuntimeError("DeepSeek API returned non-JSON response") from exc
+    raise RuntimeError(
+        f"DeepSeek API unavailable: {exc}"
+        f"（已重试 {DEEPSEEK_MAX_RETRIES} 次，可能是代理/VPN 不稳定）"
+    ) from exc
 
 
 def extract_deepseek_content(response: dict[str, Any]) -> str:

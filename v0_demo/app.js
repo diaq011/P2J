@@ -2551,8 +2551,24 @@ function deleteTimelineBlockEdit() {
 }
 
 
+// Map taskId -> AI-computed estimate (minutes) from the most recent plan(s).
+// This is the number the scheduler actually used, so it's what we should show
+// instead of a made-up default.
+function getAiEstimateMap() {
+  const map = {};
+  [state.selectedPlan, state.todayPlan].forEach((plan) => {
+    (plan?.details?.taskEstimates || []).forEach((item) => {
+      if (item && item.taskId && typeof item.estimatedMinutes === "number") {
+        map[item.taskId] = item.estimatedMinutes;
+      }
+    });
+  });
+  return map;
+}
+
 function renderPlanList() {
   ui.planList.innerHTML = "";
+  const aiEstimates = getAiEstimateMap();
   const pending = state.tasks.filter((task) => task.status !== "done").sort((a, b) => a.deadline.localeCompare(b.deadline));
   const done = state.tasks.filter((task) => task.status === "done").sort((a, b) => a.deadline.localeCompare(b.deadline));
   const ordered = [...pending, ...done];
@@ -2568,13 +2584,18 @@ function renderPlanList() {
     const subjectLabel = SUBJECT_LABELS[task.subject] || "综合/其他";
     const taskTypeLabel = TASK_TYPE_LABELS[task.taskType] || "习题/刷题";
     const difficultyLabel = DIFFICULTY_LABELS[task.difficulty] || "普通";
+    // Prefer the AI-computed estimate (what scheduling used); fall back to the
+    // user-entered value; otherwise show that no estimate exists yet.
+    const aiEst = aiEstimates[task.id];
+    const estMinutes = typeof aiEst === "number" ? aiEst : task.estimatedMinutes;
+    const estLabel = estMinutes != null ? `预估 ${estMinutes} 分钟` : "预估 待生成计划";
     const li = document.createElement("li");
     li.innerHTML = `
       <div class="task-item ${doneClass}">
         <div class="task-check ${task.status === "done" ? "checked" : ""}" data-task-id="${task.id}">${checkMark}</div>
         <div class="task-main">
           <div class="task-title">${escapeHtml(task.title)}</div>
-          <div class="task-meta">DDL: ${escapeHtml(task.deadline)} · ${escapeHtml(subjectLabel)} · ${escapeHtml(taskTypeLabel)} · ${escapeHtml(difficultyLabel)} · 预估 ${task.estimatedMinutes || 60} 分钟</div>
+          <div class="task-meta">DDL: ${escapeHtml(task.deadline)} · ${escapeHtml(subjectLabel)} · ${escapeHtml(taskTypeLabel)} · ${escapeHtml(difficultyLabel)} · ${estLabel}</div>
         </div>
         <button class="task-menu-btn" type="button" data-task-menu="${task.id}" aria-label="编辑任务">⋯</button>
       </div>
