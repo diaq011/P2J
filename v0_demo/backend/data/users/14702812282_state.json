@@ -1,0 +1,28 @@
+{
+  "tasks": [],
+  "todayPlan": null,
+  "plansByDate": {},
+  "checkins": [],
+  "lastPlanner": "none",
+  "weeklyAvailability": {
+    "mon": [],
+    "tue": [],
+    "wed": [],
+    "thu": [],
+    "fri": [],
+    "sat": [],
+    "sun": []
+  },
+  "theme": {
+    "background": {
+      "type": "default",
+      "opacity": 0.45,
+      "customUrl": null
+    },
+    "colors": {
+      "primary": "#ef8b50",
+      "accentMode": "auto",
+      "accent": "#5cbd92"
+    }
+  }
+}
