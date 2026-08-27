@@ -1816,13 +1816,96 @@ function saveAssistantMessages() {
   }
 }
 
+function escapeMarkdownHtml(text) {
+  return String(text == null ? "" : text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function renderMarkdownInline(text) {
+  const spans = [];
+  const stash = (html) => `@@MD${spans.push(html) - 1}@@`;
+  return text
+    .replace(/`([^`]+)`/g, (_, code) => stash(`<code class="md-code">${code}</code>`))
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>")
+    .replace(
+      /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener">$1</a>'
+    )
+    .replace(/@@MD(\d+)@@/g, (_, i) => spans[Number(i)]);
+}
+
+function renderMarkdown(source) {
+  const blocks = [];
+  const text = escapeMarkdownHtml(source).replace(
+    /```[^\n]*\n?([\s\S]*?)```/g,
+    (_, code) =>
+      `@@BLOCK${blocks.push(`<pre class="md-pre"><code>${code.replace(/\n+$/, "")}</code></pre>`) - 1}@@`
+  );
+
+  const out = [];
+  let list = null;
+  const closeList = () => {
+    if (list) {
+      out.push(`</${list}>`);
+      list = null;
+    }
+  };
+  const openList = (type) => {
+    if (list !== type) {
+      closeList();
+      out.push(`<${type} class="md-list">`);
+      list = type;
+    }
+  };
+
+  text.split(/\r?\n/).forEach((raw) => {
+    const line = raw.trim();
+    if (!line) {
+      closeList();
+      return;
+    }
+    const heading = line.match(/^(#{1,4})\s+(.*)$/);
+    if (heading) {
+      closeList();
+      out.push(`<div class="md-h md-h${heading[1].length}">${renderMarkdownInline(heading[2])}</div>`);
+      return;
+    }
+    const bullet = line.match(/^[-*•]\s+(.*)$/);
+    if (bullet) {
+      openList("ul");
+      out.push(`<li>${renderMarkdownInline(bullet[1])}</li>`);
+      return;
+    }
+    const numbered = line.match(/^\d+[.)]\s+(.*)$/);
+    if (numbered) {
+      openList("ol");
+      out.push(`<li>${renderMarkdownInline(numbered[1])}</li>`);
+      return;
+    }
+    closeList();
+    out.push(`<p class="md-p">${renderMarkdownInline(line)}</p>`);
+  });
+  closeList();
+
+  return out.join("").replace(/@@BLOCK(\d+)@@/g, (_, i) => blocks[Number(i)]);
+}
+
 function renderAssistantChat() {
   if (!ui.assistantChatMessages) return;
   ui.assistantChatMessages.innerHTML = "";
   state.assistantMessages.forEach((msg) => {
     const bubble = document.createElement("div");
-    bubble.className = `chat-bubble ${msg.role === "user" ? "user" : "assistant"}`;
-    bubble.textContent = msg.content;
+    const isUser = msg.role === "user";
+    bubble.className = `chat-bubble ${isUser ? "user" : "assistant"}`;
+    if (isUser) {
+      bubble.textContent = msg.content;
+    } else {
+      bubble.classList.add("markdown");
+      bubble.innerHTML = renderMarkdown(msg.content);
+    }
     ui.assistantChatMessages.appendChild(bubble);
   });
   if (state.assistantChatSending) {

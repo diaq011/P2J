@@ -1,0 +1,534 @@
+{
+  "tasks": [
+    {
+      "id": "042191be-9118-4a15-966f-2f98055f385f",
+      "status": "todo",
+      "title": "中考模拟数学卷3张",
+      "deadline": "2026-08-29",
+      "subject": "math",
+      "taskType": "test_paper",
+      "difficulty": "medium",
+      "estimatedMinutes": null
+    }
+  ],
+  "todayPlan": {
+    "date": "2026-08-27",
+    "taskIds": [
+      "042191be-9118-4a15-966f-2f98055f385f"
+    ],
+    "totalEstimatedMinutes": 375,
+    "scheduledBlocks": [
+      {
+        "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+        "startMinute": 840,
+        "endMinute": 1215,
+        "title": "中考模拟数学卷3张",
+        "deadline": "2026-08-29"
+      }
+    ],
+    "weekday": "thu",
+    "note": "",
+    "details": {
+      "rationale": "计划在2026-08-27至2026-08-29期间完成，每天可用时间为14:00-21:00。建议将375分钟分为每天不超过90分钟的连续段，每段不超过45分钟，每套完成后休息至少10分钟。确保在截止日期前完成。",
+      "risks": [
+        "估计基于5个样例，但样例覆盖可能不完整，实际用时可能超过估计。",
+        "试卷任务要求连续时间不超过45分钟，需要多次分段完成，可能增加总时间。",
+        "每日高负荷任务不超过90分钟的规则，可能导致安排跨多天，但任务必须在截止日期前完成即可。"
+      ],
+      "taskEstimates": [
+        {
+          "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+          "title": "中考模拟数学卷3张",
+          "estimatedMinutes": 375,
+          "reason": "根据参数估计（p50=375分钟）和模板匹配，考虑到高年级和慢速系数1.18，保持基线估计。证据充分支持该时长。",
+          "evidence_ids": [
+            "rate_math_test_paper_set",
+            "tpl_math_test_paper_standard",
+            "case_math_test_paper_exam_sprint_medium_003"
+          ]
+        }
+      ],
+      "ragTopK": 5,
+      "ragExamples": [
+        {
+          "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+          "title": "中考模拟数学卷3张",
+          "examples": [
+            {
+              "sample_id": "rate_math_test_paper_set",
+              "source": "unit_rate",
+              "task_title": "单位速率 set×3",
+              "actual_minutes": 375,
+              "estimated_minutes": 375,
+              "estimated_minutes_min": 305,
+              "estimated_minutes_max": 461,
+              "subject": "math",
+              "task_type": "test_paper",
+              "difficulty": "medium",
+              "score": 0.85
+            },
+            {
+              "sample_id": "case_math_test_paper_exam_sprint_medium_003",
+              "source": "calibration_case",
+              "task_title": "冲刺阶段学生完成一套高考难度数学模拟卷，包括选择题、填空题和解答题。",
+              "actual_minutes": 118,
+              "estimated_minutes": 118,
+              "subject": "math",
+              "task_type": "test_paper",
+              "difficulty": "medium",
+              "score": 0.85
+            },
+            {
+              "sample_id": "case_math_test_paper_senior_high_medium_001",
+              "source": "calibration_case",
+              "task_title": "高中学生完成数学试卷第1-2页，主要包含选择题和填空题。",
+              "actual_minutes": 53,
+              "estimated_minutes": 53,
+              "subject": "math",
+              "task_type": "test_paper",
+              "difficulty": "medium",
+              "score": 0.75
+            },
+            {
+              "sample_id": "case_math_test_paper_middle_high_medium_052",
+              "source": "calibration_case",
+              "task_title": "初中高年级学生完成一套完整数学试卷。",
+              "actual_minutes": 88,
+              "estimated_minutes": 88,
+              "subject": "math",
+              "task_type": "test_paper",
+              "difficulty": "medium",
+              "score": 0.75
+            },
+            {
+              "sample_id": "tpl_math_test_paper_standard",
+              "source": "task_template",
+              "task_title": "中考模拟数学卷3张",
+              "actual_minutes": 375,
+              "estimated_minutes": 375,
+              "estimated_minutes_min": 305,
+              "estimated_minutes_max": 461,
+              "subject": "math",
+              "task_type": "test_paper",
+              "difficulty": "medium",
+              "planning_advice": "setup(8.0) + 3×rate×fatigue(1.1) ×diff(1.0)×grade(1.0)×subj(1.05)×P(1.18)",
+              "score": 0.65
+            }
+          ]
+        }
+      ],
+      "planningWindow": {
+        "start": "2026-08-27",
+        "end": "2026-08-29"
+      },
+      "timeShortage": {
+        "hasShortage": false,
+        "totalNeededMinutes": 375,
+        "totalAvailableMinutes": 1260,
+        "totalScheduledMinutes": 375,
+        "shortageMinutes": 0,
+        "affectedTasks": []
+      }
+    }
+  },
+  "plansByDate": {
+    "2026-08-27": {
+      "date": "2026-08-27",
+      "taskIds": [
+        "042191be-9118-4a15-966f-2f98055f385f"
+      ],
+      "totalEstimatedMinutes": 375,
+      "scheduledBlocks": [
+        {
+          "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+          "startMinute": 840,
+          "endMinute": 1215,
+          "title": "中考模拟数学卷3张",
+          "deadline": "2026-08-29"
+        }
+      ],
+      "weekday": "thu",
+      "note": "",
+      "details": {
+        "rationale": "计划在2026-08-27至2026-08-29期间完成，每天可用时间为14:00-21:00。建议将375分钟分为每天不超过90分钟的连续段，每段不超过45分钟，每套完成后休息至少10分钟。确保在截止日期前完成。",
+        "risks": [
+          "估计基于5个样例，但样例覆盖可能不完整，实际用时可能超过估计。",
+          "试卷任务要求连续时间不超过45分钟，需要多次分段完成，可能增加总时间。",
+          "每日高负荷任务不超过90分钟的规则，可能导致安排跨多天，但任务必须在截止日期前完成即可。"
+        ],
+        "taskEstimates": [
+          {
+            "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+            "title": "中考模拟数学卷3张",
+            "estimatedMinutes": 375,
+            "reason": "根据参数估计（p50=375分钟）和模板匹配，考虑到高年级和慢速系数1.18，保持基线估计。证据充分支持该时长。",
+            "evidence_ids": [
+              "rate_math_test_paper_set",
+              "tpl_math_test_paper_standard",
+              "case_math_test_paper_exam_sprint_medium_003"
+            ]
+          }
+        ],
+        "ragTopK": 5,
+        "ragExamples": [
+          {
+            "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+            "title": "中考模拟数学卷3张",
+            "examples": [
+              {
+                "sample_id": "rate_math_test_paper_set",
+                "source": "unit_rate",
+                "task_title": "单位速率 set×3",
+                "actual_minutes": 375,
+                "estimated_minutes": 375,
+                "estimated_minutes_min": 305,
+                "estimated_minutes_max": 461,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_math_test_paper_exam_sprint_medium_003",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一套高考难度数学模拟卷，包括选择题、填空题和解答题。",
+                "actual_minutes": 118,
+                "estimated_minutes": 118,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_math_test_paper_senior_high_medium_001",
+                "source": "calibration_case",
+                "task_title": "高中学生完成数学试卷第1-2页，主要包含选择题和填空题。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "case_math_test_paper_middle_high_medium_052",
+                "source": "calibration_case",
+                "task_title": "初中高年级学生完成一套完整数学试卷。",
+                "actual_minutes": 88,
+                "estimated_minutes": 88,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "tpl_math_test_paper_standard",
+                "source": "task_template",
+                "task_title": "中考模拟数学卷3张",
+                "actual_minutes": 375,
+                "estimated_minutes": 375,
+                "estimated_minutes_min": 305,
+                "estimated_minutes_max": 461,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "planning_advice": "setup(8.0) + 3×rate×fatigue(1.1) ×diff(1.0)×grade(1.0)×subj(1.05)×P(1.18)",
+                "score": 0.65
+              }
+            ]
+          }
+        ],
+        "planningWindow": {
+          "start": "2026-08-27",
+          "end": "2026-08-29"
+        },
+        "timeShortage": {
+          "hasShortage": false,
+          "totalNeededMinutes": 375,
+          "totalAvailableMinutes": 1260,
+          "totalScheduledMinutes": 375,
+          "shortageMinutes": 0,
+          "affectedTasks": []
+        }
+      }
+    },
+    "2026-08-28": {
+      "date": "2026-08-28",
+      "taskIds": [],
+      "totalEstimatedMinutes": 0,
+      "scheduledBlocks": [],
+      "weekday": "fri",
+      "note": "",
+      "details": {
+        "rationale": "计划在2026-08-27至2026-08-29期间完成，每天可用时间为14:00-21:00。建议将375分钟分为每天不超过90分钟的连续段，每段不超过45分钟，每套完成后休息至少10分钟。确保在截止日期前完成。",
+        "risks": [
+          "估计基于5个样例，但样例覆盖可能不完整，实际用时可能超过估计。",
+          "试卷任务要求连续时间不超过45分钟，需要多次分段完成，可能增加总时间。",
+          "每日高负荷任务不超过90分钟的规则，可能导致安排跨多天，但任务必须在截止日期前完成即可。"
+        ],
+        "taskEstimates": [
+          {
+            "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+            "title": "中考模拟数学卷3张",
+            "estimatedMinutes": 375,
+            "reason": "根据参数估计（p50=375分钟）和模板匹配，考虑到高年级和慢速系数1.18，保持基线估计。证据充分支持该时长。",
+            "evidence_ids": [
+              "rate_math_test_paper_set",
+              "tpl_math_test_paper_standard",
+              "case_math_test_paper_exam_sprint_medium_003"
+            ]
+          }
+        ],
+        "ragTopK": 5,
+        "ragExamples": [
+          {
+            "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+            "title": "中考模拟数学卷3张",
+            "examples": [
+              {
+                "sample_id": "rate_math_test_paper_set",
+                "source": "unit_rate",
+                "task_title": "单位速率 set×3",
+                "actual_minutes": 375,
+                "estimated_minutes": 375,
+                "estimated_minutes_min": 305,
+                "estimated_minutes_max": 461,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_math_test_paper_exam_sprint_medium_003",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一套高考难度数学模拟卷，包括选择题、填空题和解答题。",
+                "actual_minutes": 118,
+                "estimated_minutes": 118,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_math_test_paper_senior_high_medium_001",
+                "source": "calibration_case",
+                "task_title": "高中学生完成数学试卷第1-2页，主要包含选择题和填空题。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "case_math_test_paper_middle_high_medium_052",
+                "source": "calibration_case",
+                "task_title": "初中高年级学生完成一套完整数学试卷。",
+                "actual_minutes": 88,
+                "estimated_minutes": 88,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "tpl_math_test_paper_standard",
+                "source": "task_template",
+                "task_title": "中考模拟数学卷3张",
+                "actual_minutes": 375,
+                "estimated_minutes": 375,
+                "estimated_minutes_min": 305,
+                "estimated_minutes_max": 461,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "planning_advice": "setup(8.0) + 3×rate×fatigue(1.1) ×diff(1.0)×grade(1.0)×subj(1.05)×P(1.18)",
+                "score": 0.65
+              }
+            ]
+          }
+        ],
+        "planningWindow": {
+          "start": "2026-08-27",
+          "end": "2026-08-29"
+        },
+        "timeShortage": {
+          "hasShortage": false,
+          "totalNeededMinutes": 375,
+          "totalAvailableMinutes": 1260,
+          "totalScheduledMinutes": 375,
+          "shortageMinutes": 0,
+          "affectedTasks": []
+        }
+      }
+    },
+    "2026-08-29": {
+      "date": "2026-08-29",
+      "taskIds": [],
+      "totalEstimatedMinutes": 0,
+      "scheduledBlocks": [],
+      "weekday": "sat",
+      "note": "",
+      "details": {
+        "rationale": "计划在2026-08-27至2026-08-29期间完成，每天可用时间为14:00-21:00。建议将375分钟分为每天不超过90分钟的连续段，每段不超过45分钟，每套完成后休息至少10分钟。确保在截止日期前完成。",
+        "risks": [
+          "估计基于5个样例，但样例覆盖可能不完整，实际用时可能超过估计。",
+          "试卷任务要求连续时间不超过45分钟，需要多次分段完成，可能增加总时间。",
+          "每日高负荷任务不超过90分钟的规则，可能导致安排跨多天，但任务必须在截止日期前完成即可。"
+        ],
+        "taskEstimates": [
+          {
+            "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+            "title": "中考模拟数学卷3张",
+            "estimatedMinutes": 375,
+            "reason": "根据参数估计（p50=375分钟）和模板匹配，考虑到高年级和慢速系数1.18，保持基线估计。证据充分支持该时长。",
+            "evidence_ids": [
+              "rate_math_test_paper_set",
+              "tpl_math_test_paper_standard",
+              "case_math_test_paper_exam_sprint_medium_003"
+            ]
+          }
+        ],
+        "ragTopK": 5,
+        "ragExamples": [
+          {
+            "taskId": "042191be-9118-4a15-966f-2f98055f385f",
+            "title": "中考模拟数学卷3张",
+            "examples": [
+              {
+                "sample_id": "rate_math_test_paper_set",
+                "source": "unit_rate",
+                "task_title": "单位速率 set×3",
+                "actual_minutes": 375,
+                "estimated_minutes": 375,
+                "estimated_minutes_min": 305,
+                "estimated_minutes_max": 461,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_math_test_paper_exam_sprint_medium_003",
+                "source": "calibration_case",
+                "task_title": "冲刺阶段学生完成一套高考难度数学模拟卷，包括选择题、填空题和解答题。",
+                "actual_minutes": 118,
+                "estimated_minutes": 118,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.85
+              },
+              {
+                "sample_id": "case_math_test_paper_senior_high_medium_001",
+                "source": "calibration_case",
+                "task_title": "高中学生完成数学试卷第1-2页，主要包含选择题和填空题。",
+                "actual_minutes": 53,
+                "estimated_minutes": 53,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "case_math_test_paper_middle_high_medium_052",
+                "source": "calibration_case",
+                "task_title": "初中高年级学生完成一套完整数学试卷。",
+                "actual_minutes": 88,
+                "estimated_minutes": 88,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "score": 0.75
+              },
+              {
+                "sample_id": "tpl_math_test_paper_standard",
+                "source": "task_template",
+                "task_title": "中考模拟数学卷3张",
+                "actual_minutes": 375,
+                "estimated_minutes": 375,
+                "estimated_minutes_min": 305,
+                "estimated_minutes_max": 461,
+                "subject": "math",
+                "task_type": "test_paper",
+                "difficulty": "medium",
+                "planning_advice": "setup(8.0) + 3×rate×fatigue(1.1) ×diff(1.0)×grade(1.0)×subj(1.05)×P(1.18)",
+                "score": 0.65
+              }
+            ]
+          }
+        ],
+        "planningWindow": {
+          "start": "2026-08-27",
+          "end": "2026-08-29"
+        },
+        "timeShortage": {
+          "hasShortage": false,
+          "totalNeededMinutes": 375,
+          "totalAvailableMinutes": 1260,
+          "totalScheduledMinutes": 375,
+          "shortageMinutes": 0,
+          "affectedTasks": []
+        }
+      }
+    }
+  },
+  "checkins": [],
+  "lastPlanner": "deepseek:deepseek-chat+rag_top_k=5",
+  "weeklyAvailability": {
+    "mon": [
+      {
+        "start": "14:00",
+        "end": "21:00"
+      }
+    ],
+    "tue": [
+      {
+        "start": "14:00",
+        "end": "21:00"
+      }
+    ],
+    "wed": [
+      {
+        "start": "14:00",
+        "end": "21:00"
+      }
+    ],
+    "thu": [
+      {
+        "start": "14:00",
+        "end": "21:00"
+      }
+    ],
+    "fri": [
+      {
+        "start": "14:00",
+        "end": "21:00"
+      }
+    ],
+    "sat": [
+      {
+        "start": "14:00",
+        "end": "21:00"
+      }
+    ],
+    "sun": [
+      {
+        "start": "14:00",
+        "end": "21:00"
+      }
+    ]
+  },
+  "theme": {
+    "background": {
+      "type": "default",
+      "opacity": 0.45,
+      "customUrl": null
+    },
+    "colors": {
+      "primary": "#ef8b50",
+      "accentMode": "auto",
+      "accent": "#5cbd92"
+    }
+  }
+}

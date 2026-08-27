@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J人模拟器 2.0 · 产品发布会</title>
+<style>
+:root{
+  --accent:#E8823C;
+  --accent-soft:rgba(232,130,60,.14);
+  --ink:#2E3A45;
+  --ink-soft:#61707C;
+  --card:rgba(255,255,255,.80);
+  --edge:rgba(255,255,255,.9);
+}
+*{box-sizing:border-box;margin:0;padding:0;min-width:0;min-height:0}
+html,body{height:100%}
+body{
+  font-family:"PingFang SC","Source Han Sans SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+  color:var(--ink);background:#0c1a24;overflow:hidden;
+}
+#viewport{position:fixed;inset:0 0 44px 0;overflow:hidden}
+#stage{
+  position:absolute;left:50%;top:50%;
+  width:1280px;height:720px;
+  transform:translate(-50%,-50%) scale(1);
+  transform-origin:center center;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);
+  overflow:hidden;
+}
+.slide{
+  position:absolute;inset:0;overflow:hidden;
+  padding:48px 56px;
+  display:none;flex-direction:column;
+  background:
+    radial-gradient(ellipse at 8% 92%, rgba(232,196,90,.22) 0%, transparent 46%),
+    radial-gradient(ellipse at 92% 8%, rgba(255,255,255,.6) 0%, transparent 48%),
+    linear-gradient(180deg,#A6D7F0 0%,#C7E5F2 30%,#E6F1E2 62%,#F7F2E0 100%);
+}
+.slide.active{display:flex}
+.slide::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background-image:radial-gradient(rgba(255,255,255,.55) 1px, transparent 1px);
+  background-size:15px 15px;opacity:.34;
+}
+.slide > *{position:relative;z-index:2}
+
+h1{font-size:64px;line-height:1.14;letter-spacing:-1px;font-weight:800}
+h2{font-size:40px;line-height:1.24;font-weight:800;margin-bottom:24px;flex:none}
+.sub{font-size:24px;color:var(--ink-soft);line-height:1.5}
+.byline{font-size:16px;color:var(--ink-soft);flex:none}
+.kicker{font-size:17px;color:var(--ink-soft);letter-spacing:1px;margin-bottom:12px}
+.tag{font-size:16px;color:var(--ink-soft);letter-spacing:1px;margin-bottom:8px;flex:none}
+.accent{color:var(--accent)}
+strong{color:var(--accent);font-weight:800}
+
+.body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;overflow:hidden}
+
+.card{
+  background:var(--card);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--edge);border-radius:18px;
+  padding:18px 24px;
+  box-shadow:0 6px 20px rgba(46,58,69,.09);
+  font-size:22px;line-height:1.45;
+}
+.card .k{display:block;font-size:16px;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.5px}
+.card.quiet{background:rgba(255,255,255,.5)}
+.card.note{background:rgba(255,251,240,.92);border:1px dashed rgba(232,130,60,.5)}
+.card.hl{border:2px solid var(--accent);background:rgba(255,255,255,.9)}
+
+.cols{flex:1;display:flex;gap:20px;align-items:stretch;overflow:hidden}
+.cols > .col{flex:1 1 0;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.cols > .col > .card{flex:1;display:flex;flex-direction:column;justify-content:center}
+.cols > .mid{flex:0 0 40px;display:flex;flex-direction:column;
+  justify-content:space-around;align-items:center;color:var(--accent);font-size:26px}
+
+.flow{display:flex;align-items:stretch;gap:0;flex:none}
+.flow .node{
+  flex:1 1 0;background:var(--card);backdrop-filter:blur(12px);
+  border:1px solid var(--edge);border-radius:14px;
+  padding:14px 10px;text-align:center;font-size:19px;line-height:1.35;
+  display:flex;align-items:center;justify-content:center;
+}
+.flow .node.hot{background:rgba(232,130,60,.16);border-color:rgba(232,130,60,.55);font-weight:700}
+.flow .arw{flex:0 0 30px;display:flex;align-items:center;justify-content:center;
+  color:var(--accent);font-size:22px}
+
+.nums{display:flex;justify-content:center;gap:52px;align-items:baseline;flex:none}
+.nums .n{font-size:52px;font-weight:800;color:var(--accent);line-height:1}
+.nums .u{font-size:16px;color:var(--ink-soft);margin-left:6px}
+
+.bottomline{
+  flex:none;margin-top:16px;font-size:23px;font-weight:700;line-height:1.4;
+  background:var(--accent-soft);border-left:5px solid var(--accent);
+  border-radius:0 12px 12px 0;padding:15px 22px;
+}
+.demoline{
+  flex:none;margin-top:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:22px;background:rgba(255,255,255,.88);border:1px solid var(--edge);
+  border-radius:14px;padding:17px 22px;text-align:center;
+}
+.endline{flex:none;margin-top:14px;font-size:26px;font-weight:800;color:var(--accent)}
+
+.badge{
+  position:absolute;top:44px;right:56px;z-index:3;
+  width:88px;height:88px;border-radius:50%;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;
+  box-shadow:0 8px 22px rgba(232,130,60,.42);
+}
+.qr{
+  position:absolute;right:56px;bottom:44px;z-index:3;text-align:center;
+  background:rgba(255,255,255,.94);border:1px solid var(--edge);
+  border-radius:14px;padding:12px;font-size:12px;color:var(--ink-soft);
+}
+.qr img{display:block;width:104px;height:104px;margin-bottom:6px}
+.qr .box{width:104px;height:104px;border:2px dashed rgba(46,58,69,.3);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:13px;margin-bottom:6px}
+#bar{position:absolute;left:0;bottom:0;height:4px;background:var(--accent);z-index:5;
+  transition:width .25s ease}
+
+#hud{
+  position:fixed;left:0;right:0;bottom:0;height:44px;z-index:50;
+  display:flex;align-items:center;gap:20px;padding:0 20px;
+  background:rgba(12,26,36,.94);color:#cfe0ea;font-size:14px;
+  font-variant-numeric:tabular-nums;
+}
+#hud .sp{flex:1}
+#hud b{color:#fff}
+#hud .over{color:#ff9a8f;font-weight:700}
+#hud button{background:rgba(255,255,255,.13);color:#e8f2f8;border:0;border-radius:7px;
+  padding:6px 12px;font-size:13px;cursor:pointer;font-family:inherit}
+#hud button:hover{background:rgba(255,255,255,.24)}
+#notes{
+  position:fixed;left:0;right:0;bottom:44px;z-index:49;display:none;
+  max-height:34vh;overflow:auto;
+  background:rgba(12,26,36,.97);color:#dbe8f0;padding:18px 24px;font-size:16px;line-height:1.65;
+}
+#notes.on{display:block}
+#notes .t{color:var(--accent);font-weight:700;margin-bottom:6px;font-size:13px;letter-spacing:1px}
+
+@media print{
+  body{background:#fff;overflow:visible}
+  #viewport{position:static;inset:auto}
+  #hud,#notes{display:none!important}
+  #stage{position:relative;left:auto;top:auto;transform:none!important;box-shadow:none}
+  .slide{display:flex!important;position:relative;width:1280px;height:720px;page-break-after:always}
+  @page{size:1280px 720px;margin:0}
+}
+</style>
+</head>
+<body>
+
+<div id="viewport"><div id="stage">
+
+  <!-- 1 -->
+  <section class="slide" data-end="5">
+    <div class="badge">2.0</div>
+    <div class="body" style="gap:22px">
+      <div class="kicker" style="margin:0">《大模型工程》学生产品发布会</div>
+      <h1>J人模拟器 <span class="accent">2.0</span></h1>
+      <p class="sub">一句话，把学习任务排进你真实的空闲时间</p>
+    </div>
+    <p class="byline">刘知行 Ballie　·　2026.08.29　·　醋溜科技展示场地</p>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide" data-end="45">
+    <h2>1.0 已经能排计划了，但没人愿意用</h2>
+    <div class="body">
+      <div class="card"><span class="k">它确实是通的</span>录任务、设空闲、生成跨天时间轴，闭环已经跑起来了</div>
+      <div class="card"><span class="k">但录一个任务要点十下</span>得切到计划列表，一个字段一个字段填表</div>
+      <div class="card"><span class="k">而且慢</span>计划生成跑本地小模型 <strong>qwen3:0.6b</strong>，经常吐不出能用的结果</div>
+    </div>
+    <div class="bottomline">它能用，但我自己都不愿意每天打开它。</div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide" data-end="120">
+    <h2>升级不是我想加功能，是这三行字</h2>
+    <div class="cols">
+      <div class="col">
+        <div class="tag">1.0 讲完那天，我写下的下周计划</div>
+        <div class="card note">解决模型太慢的问题 直接用deepseek？</div>
+        <div class="card note">新增新用户的ai对话设置功能</div>
+        <div class="card note">把ai对话的界面放到一个更显眼的界面</div>
+      </div>
+      <div class="mid"><span>→</span><span>→</span><span>→</span></div>
+      <div class="col">
+        <div class="tag">2.0 逐条做完了</div>
+        <div class="card">接入 DeepSeek，换掉本地小模型</div>
+        <div class="card">空闲时间可以直接用一句话说</div>
+        <div class="card">对话搬到主页，成为主体交互</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide" data-end="360">
+    <h2>现场看一次：从一句话到一张时间表</h2>
+    <div class="body">
+      <div class="flow">
+        <div class="node">遇到问题</div><div class="arw">→</div>
+        <div class="node hot">一句话输入</div><div class="arw">→</div>
+        <div class="node">AI 自己调工具</div><div class="arw">→</div>
+        <div class="node">可编辑时间轴</div><div class="arw">→</div>
+        <div class="node">知道今天先做什么</div>
+      </div>
+    </div>
+    <div class="demoline">工作日晚上7点到9点有空，数学卷3张周一前，帮我排计划</div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide" data-end="420">
+    <h2>我把 AI 对话搬到了主页正中央</h2>
+    <div class="cols" style="flex:0 0 190px">
+      <div class="col">
+        <div class="tag">1.0　手机小屏</div>
+        <div class="card">主页只有一个计时器，要录任务得先切到计划列表填表</div>
+      </div>
+      <div class="mid"><span>→</span></div>
+      <div class="col">
+        <div class="tag">2.0　电脑网页三栏</div>
+        <div class="card">打开就能直接跟 AI 说话，看板一屏铺开</div>
+      </div>
+    </div>
+    <div class="body" style="flex:1 1 auto">
+      <div class="card">
+        <span class="k">代价，以及我怎么按住它</span>
+        AI 可能嘴上答应却不真的保存。所以提示词里写死一条硬规则——<strong>能用工具就用工具，不许假装已经保存</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide" data-end="450">
+    <h2>AI 凭什么说这张卷子要 <span class="accent">375 分钟</span></h2>
+    <div class="body">
+      <div class="flow">
+        <div class="node">「数学卷3张」</div><div class="arw">→</div>
+        <div class="node">抽出数量 3</div><div class="arw">→</div>
+        <div class="node">命中知识库模板</div>
+      </div>
+      <div class="flow">
+        <div class="node">速率 × 疲劳 × 难度</div><div class="arw">→</div>
+        <div class="node hot">算出三档时长</div><div class="arw">→</div>
+        <div class="node">AI 只能微调 ±15%</div>
+      </div>
+      <div class="nums">
+        <div><span class="n">305</span><span class="u">最快</span></div>
+        <div><span class="n">375</span><span class="u">常见</span></div>
+        <div><span class="n">461</span><span class="u">最慢</span></div>
+      </div>
+    </div>
+    <div class="bottomline">不是让 AI 拍脑袋估时间，是让它在有证据的区间里做小幅校准。</div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide" data-end="540">
+    <h2>一次真实的崩溃，和我现在的边界</h2>
+    <div class="cols" style="flex:0 0 210px">
+      <div class="col"><div class="card"><span class="k">现象</span>后端刚启动时第一个请求会连接超时，1.0 直接崩掉，页面一片空白</div></div>
+      <div class="col"><div class="card"><span class="k">修改</span>请求前先花 3 秒探活，模型不可用就返回一句中文提示，超时单独处理</div></div>
+      <div class="col"><div class="card"><span class="k">结果</span>最坏情况是看到一句「DeepSeek 暂时不可用」，产品还在，<strong>不会白屏</strong></div></div>
+    </div>
+    <div class="body" style="flex:1 1 auto">
+      <div class="card quiet">
+        <span class="k">我还没解决的</span>
+        失败后不会自动重试，得手动再发一次　·　对话没有逐字输出　·　估时的检索还比较粗糙
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide" data-end="600">
+    <h2>下一步，以及我想找的两个人</h2>
+    <div class="body" style="padding-right:150px">
+      <div class="card quiet"><span class="k">现在做到了</span>端到端闭环可用　·　知识库 329 条　·　2 个不用联网就能跑的测试　·　3 组估时用例全过</div>
+      <div class="card hl"><span class="k">知识库数据伙伴　不需要写代码</span>我已经做好了问卷，你帮我收 <strong>30 份</strong>真实高中生的任务耗时，补进知识库当校准案例</div>
+      <div class="card hl"><span class="k">评测伙伴</span>估时现在只有 3 组用例，你帮我扩到 <strong>30 组以上</strong>，写成一条命令跑完的自动回归，让「变准了」有数可证</div>
+    </div>
+    <div class="endline">把大任务拆小，把计划变行动。</div>
+    <div class="qr"><img src="qr_github.png" alt="GitHub 二维码">github.com/diaq011/P2J</div>
+  </section>
+
+  <div id="bar"></div>
+</div></div>
+
+<div id="notes"><div class="t">演讲备注</div><div id="notes-body"></div></div>
+
+<div id="hud">
+  <span>第 <b id="pg">1</b> / 8 页</span>
+  <span>本页目标 <b id="target">—</b></span>
+  <span>已用 <b id="clock">0:00</b></span>
+  <span id="warn"></span>
+  <span class="sp"></span>
+  <button id="btn-timer">开始计时 (T)</button>
+  <button id="btn-reset">归零</button>
+  <button id="btn-notes">备注 (N)</button>
+  <span style="opacity:.6">← → 翻页　F 全屏</span>
+</div>
+
+<script>
+const NOTES = [
+  "不要念标题。直接进入下一页的场景。",
+  "严格不超过 45 秒。三个月前我在这里讲过 1.0。它能用，但我自己都不愿意每天打开它——录一个任务要点十下，生成一次计划要等很久。这一页只花 45 秒。",
+  "先读左边那三行原话，然后说「三个月后，这三行都做完了」。这一页是全场的支点。讲完接一句：这三件事说起来简单，我直接跑一遍给你们看。",
+  "切出幻灯片，打开真实产品。只演示这一条完整流程，不要浏览其他页面。演示台词就是页面底部那句话。回来时接一句：刚才那一句话背后，其实是两个决定。先说改界面那个。",
+  "这是这次升级里我最想讲的一个决定。以前用户得自己搞懂每个页面干什么，现在打开网页就能直接说话。风险是 AI 光说不做，所以必须用提示词把它按住。",
+  "不要解释什么是 RAG，不要出现英文缩写。只讲一件事：估时必须有依据，而且这个依据可以复算。305 / 375 / 461 是真实的测试输出。",
+  "这一页要讲得坦诚。失败不会让项目显得不完整，能解释失败并且改掉才说明工程能力。最后那条边界一定要说，不要跳过。",
+  "招募必须说具体的活，不要只说欢迎加入。两个方向各一句话讲完，然后停在这一页等提问。"
+];
+
+const slides = [...document.querySelectorAll('.slide')];
+const ends = slides.map(s => +s.dataset.end);
+const $ = id => document.getElementById(id);
+let cur = 0, running = false, elapsed = 0, tick = null;
+
+const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+
+function render(){
+  slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+  $('pg').textContent = cur + 1;
+  const from = cur === 0 ? 0 : ends[cur - 1];
+  $('target').textContent = fmt(from) + '–' + fmt(ends[cur]);
+  $('notes-body').textContent = NOTES[cur];
+  $('bar').style.width = ((cur + 1) / slides.length * 100) + '%';
+  paint();
+}
+
+function paint(){
+  $('clock').textContent = fmt(elapsed);
+  const w = $('warn');
+  if(elapsed > ends[cur] + 1){
+    w.className = 'over';
+    w.textContent = '超出本页 ' + fmt(elapsed - ends[cur]);
+  } else { w.className = ''; w.textContent = ''; }
+}
+
+const clamp = i => Math.max(0, Math.min(slides.length - 1, i));
+const go = d => { cur = clamp(cur + d); location.hash = cur + 1; render(); };
+
+function fromHash(){
+  const n = parseInt(location.hash.slice(1), 10);
+  if(!isNaN(n)) cur = clamp(n - 1);
+}
+window.addEventListener('hashchange', () => { fromHash(); render(); });
+
+function toggleTimer(){
+  running = !running;
+  $('btn-timer').textContent = running ? '暂停 (T)' : '开始计时 (T)';
+  clearInterval(tick);
+  if(running) tick = setInterval(() => { elapsed++; paint(); }, 1000);
+}
+
+$('btn-timer').onclick = toggleTimer;
+$('btn-reset').onclick = () => {
+  elapsed = 0; running = false; clearInterval(tick);
+  $('btn-timer').textContent = '开始计时 (T)';
+  paint();
+};
+$('btn-notes').onclick = () => $('notes').classList.toggle('on');
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); go(1); }
+  else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); go(-1); }
+  else if(e.key === 'n' || e.key === 'N') $('notes').classList.toggle('on');
+  else if(e.key === 't' || e.key === 'T') toggleTimer();
+  else if(e.key === 'f' || e.key === 'F'){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  }
+});
+
+function fit(){
+  const vp = $('viewport');
+  const k = Math.min(vp.clientWidth / 1280, vp.clientHeight / 720);
+  $('stage').style.transform = 'translate(-50%,-50%) scale(' + k + ')';
+}
+window.addEventListener('resize', fit);
+document.addEventListener('fullscreenchange', fit);
+fit();
+fromHash();
+render();
+</script>
+</body>
+</html>
