@@ -42,48 +42,51 @@
     }
   ],
   "todayPlan": {
-    "date": "2026-08-07",
+    "date": "2026-08-29",
     "taskIds": [
       "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
       "f507b401-95c9-4f3e-af61-c95164c00a88"
     ],
-    "totalEstimatedMinutes": 120,
+    "totalEstimatedMinutes": 180,
     "scheduledBlocks": [
       {
         "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-        "startMinute": 1140,
-        "endMinute": 1242,
+        "startMinute": 840,
+        "endMinute": 960,
         "title": "数学函数专题卷",
         "deadline": "2026-08-09"
       },
       {
         "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-        "startMinute": 1242,
-        "endMinute": 1260,
+        "startMinute": 960,
+        "endMinute": 1020,
         "title": "英语议论文300词",
         "deadline": "2026-08-10"
       }
     ],
-    "weekday": "fri",
-    "note": "以下任务未能完全排入DDL前：语文古诗文背诵10篇",
+    "weekday": "sat",
+    "note": "以下任务未能完全排入DDL前：英语议论文300词, 语文古诗文背诵10篇, 物理力学错题整理",
     "details": {
-      "rationale": "整体计划基于较紧时间安排，优先保证数学试卷在8月9日前完成，英语作文分散多天，注意控制每日高负荷任务累计不超过90分钟。建议每天安排背诵任务时优先早晨或睡前，错题整理可放在晚间或碎片时段。",
+      "rationale": "注意：规划窗口仅2026-08-29一天，但所有任务截止日期在8月9日至8月12日，均已过期，无法按正常规则安排。建议忽略截止日期，但必须指出风险。所有任务的估计时长已基于参数化估时，英语作文和语文背诵可根据实际情况调整。",
       "risks": [
-        "英语议论文300词估时480分钟，但计划窗口内可用时段仅640分钟（含周末），且需满足每日高负荷不超过90分钟，可能导致任务无法完成或风险过高。",
-        "数学试卷估时102分钟，但证据包提示模板匹配度低，可能实际用时浮动较大，建议预留缓冲。",
-        "语文背诵任务关键证据少，估时基于较少标定案例，实际难度可能存在偏差。",
+        "英语议论文任务强烈依赖参数化估时（480分钟），但已有案例（如71分钟/篇）显示实际用时可能远低，存在高估风险。",
+        "数学试卷的参数化估时与初中案例偏差36%，有不确定性，但综合考虑高中难度，估计仍较可靠。",
+        "语文背诵估计基于每段30分钟，但短诗案例仅18-20分钟，可能高估。",
+        "所有任务计划在一天内完成，但总估计用时约971分钟，远超当天可用时间，必须拆分到多天，但规划窗口仅一天，无法满足，存在严重风险。",
         "空闲时段不足，部分任务无法在DDL前完成。",
-        "总需求 904 分钟，高于可用时段 840 分钟。",
-        "已安排 766 / 904 分钟，建议压缩任务或增加空闲时段。"
+        "总需求 971 分钟，高于可用时段 180 分钟。",
+        "已安排 180 / 971 分钟，建议压缩任务或增加空闲时段。"
       ],
       "taskEstimates": [
         {
           "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
           "title": "数学函数专题卷",
-          "estimatedMinutes": 102,
-          "reason": "参数化估时为120分钟，但参考标定案例（88分钟）与模板匹配度低（0.55），且该任务难度为普通，可适当缩短。调整至120*0.85=102分钟（下限），符合证据包指示的偏差。",
+          "estimatedMinutes": 120,
+          "reason": "参数化估时为120分钟，与冲刺阶段案例118分钟和高中中等偏上案例130分钟接近，且历史完成速度中，使用120分钟作为估计。",
           "evidence_ids": [
             "rate_math_test_paper_set",
+            "case_math_test_paper_exam_sprint_medium_003",
+            "case_math_test_paper_senior_high_hard_002",
             "case_math_test_paper_middle_high_medium_052",
             "tpl_math_test_paper_standard"
           ]
@@ -92,29 +95,38 @@
           "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
           "title": "英语议论文300词",
           "estimatedMinutes": 480,
-          "reason": "参数化估时为480分钟，任务为困难且单位数300，证据充分，但可分配时间有限，需分散到多天完成。调整至480分钟（下限），符合规则。",
+          "reason": "参数化估时为480分钟，是最为一致的基准；虽然单个案例差异较大，但参数化估时明确，且300词的写作量支持480分钟的估计。",
           "evidence_ids": [
             "rate_english_essay_article",
+            "case_english_essay_exam_sprint_hard_011",
+            "case_english_essay_senior_high_medium_010",
+            "case_english_essay_exam_sprint_medium_063",
             "tpl_english_essay_standard"
           ]
         },
         {
           "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
           "title": "语文古诗文背诵10篇",
-          "estimatedMinutes": 276,
-          "reason": "参数化估时为325分钟，但标定案例显示每篇约33分钟，10篇约330分钟，与参数化一致。为符合每日负荷限制，调整至276分钟（325*0.85），并为风险留出余量。",
+          "estimatedMinutes": 325,
+          "reason": "参数化估时为325分钟，基于10段背诵，每段约30分钟，与高中背诵一段33分钟的案例相符，使用325分钟作为估计。",
           "evidence_ids": [
             "rate_chinese_recitation_paragraph",
-            "case_chinese_recitation_senior_high_medium_022"
+            "tpl_chinese_recitation_standard",
+            "case_chinese_recitation_senior_high_medium_022",
+            "case_chinese_recitation_middle_high_easy_084",
+            "case_chinese_recitation_senior_high_easy_089"
           ]
         },
         {
           "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
           "title": "物理力学错题整理",
           "estimatedMinutes": 46,
-          "reason": "参数化估时为46分钟，与标定案例均值一致，且模板匹配度低（0.35），但无调整依据，维持原估计。",
+          "reason": "参数化估时为46分钟，且10道错题的冲刺案例为53分钟，因此46分钟是合理估计。",
           "evidence_ids": [
             "rate_general_mistake_review_problem",
+            "case_physics_mistake_review_exam_sprint_hard_074",
+            "case_physics_mistake_review_senior_high_medium_029",
+            "case_physics_mistake_review_middle_high_medium_181",
             "tpl_general_mistake_review_standard"
           ]
         }
@@ -387,432 +399,91 @@
         }
       ],
       "planningWindow": {
-        "start": "2026-08-07",
-        "end": "2026-08-12"
+        "start": "2026-08-29",
+        "end": "2026-08-29"
       },
       "timeShortage": {
         "hasShortage": true,
-        "totalNeededMinutes": 904,
-        "totalAvailableMinutes": 840,
-        "totalScheduledMinutes": 766,
-        "shortageMinutes": 64,
+        "totalNeededMinutes": 971,
+        "totalAvailableMinutes": 180,
+        "totalScheduledMinutes": 180,
+        "shortageMinutes": 791,
         "affectedTasks": [
+          {
+            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
+            "title": "英语议论文300词",
+            "deadline": "2026-08-10",
+            "estimatedMinutes": 480,
+            "scheduledMinutes": 60,
+            "shortageMinutes": 420
+          },
           {
             "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
             "title": "语文古诗文背诵10篇",
             "deadline": "2026-08-11",
-            "estimatedMinutes": 276,
-            "scheduledMinutes": 138,
-            "shortageMinutes": 138
+            "estimatedMinutes": 325,
+            "scheduledMinutes": 0,
+            "shortageMinutes": 325
+          },
+          {
+            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
+            "title": "物理力学错题整理",
+            "deadline": "2026-08-12",
+            "estimatedMinutes": 46,
+            "scheduledMinutes": 0,
+            "shortageMinutes": 46
           }
         ]
       }
     }
   },
   "plansByDate": {
-    "2026-08-07": {
-      "date": "2026-08-07",
+    "2026-08-29": {
+      "date": "2026-08-29",
       "taskIds": [
         "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-        "f507b401-95c9-4f3e-af61-c95164c00a88"
-      ],
-      "totalEstimatedMinutes": 120,
-      "scheduledBlocks": [
-        {
-          "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-          "startMinute": 1140,
-          "endMinute": 1242,
-          "title": "数学函数专题卷",
-          "deadline": "2026-08-09"
-        },
-        {
-          "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-          "startMinute": 1242,
-          "endMinute": 1260,
-          "title": "英语议论文300词",
-          "deadline": "2026-08-10"
-        }
-      ],
-      "weekday": "fri",
-      "note": "以下任务未能完全排入DDL前：语文古诗文背诵10篇",
-      "details": {
-        "rationale": "整体计划基于较紧时间安排，优先保证数学试卷在8月9日前完成，英语作文分散多天，注意控制每日高负荷任务累计不超过90分钟。建议每天安排背诵任务时优先早晨或睡前，错题整理可放在晚间或碎片时段。",
-        "risks": [
-          "英语议论文300词估时480分钟，但计划窗口内可用时段仅640分钟（含周末），且需满足每日高负荷不超过90分钟，可能导致任务无法完成或风险过高。",
-          "数学试卷估时102分钟，但证据包提示模板匹配度低，可能实际用时浮动较大，建议预留缓冲。",
-          "语文背诵任务关键证据少，估时基于较少标定案例，实际难度可能存在偏差。",
-          "空闲时段不足，部分任务无法在DDL前完成。",
-          "总需求 904 分钟，高于可用时段 840 分钟。",
-          "已安排 766 / 904 分钟，建议压缩任务或增加空闲时段。"
-        ],
-        "taskEstimates": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "estimatedMinutes": 102,
-            "reason": "参数化估时为120分钟，但参考标定案例（88分钟）与模板匹配度低（0.55），且该任务难度为普通，可适当缩短。调整至120*0.85=102分钟（下限），符合证据包指示的偏差。",
-            "evidence_ids": [
-              "rate_math_test_paper_set",
-              "case_math_test_paper_middle_high_medium_052",
-              "tpl_math_test_paper_standard"
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "estimatedMinutes": 480,
-            "reason": "参数化估时为480分钟，任务为困难且单位数300，证据充分，但可分配时间有限，需分散到多天完成。调整至480分钟（下限），符合规则。",
-            "evidence_ids": [
-              "rate_english_essay_article",
-              "tpl_english_essay_standard"
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "estimatedMinutes": 276,
-            "reason": "参数化估时为325分钟，但标定案例显示每篇约33分钟，10篇约330分钟，与参数化一致。为符合每日负荷限制，调整至276分钟（325*0.85），并为风险留出余量。",
-            "evidence_ids": [
-              "rate_chinese_recitation_paragraph",
-              "case_chinese_recitation_senior_high_medium_022"
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "estimatedMinutes": 46,
-            "reason": "参数化估时为46分钟，与标定案例均值一致，且模板匹配度低（0.35），但无调整依据，维持原估计。",
-            "evidence_ids": [
-              "rate_general_mistake_review_problem",
-              "tpl_general_mistake_review_standard"
-            ]
-          }
-        ],
-        "ragTopK": 5,
-        "ragExamples": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "examples": [
-              {
-                "sample_id": "rate_math_test_paper_set",
-                "source": "unit_rate",
-                "task_title": "单位速率 set×1",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_exam_sprint_medium_003",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一套高考难度数学模拟卷，包括选择题、填空题和解答题。",
-                "actual_minutes": 118,
-                "estimated_minutes": 118,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_senior_high_hard_002",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一套完整数学试卷，包括选择题、填空题和解答题，难度中等偏上。",
-                "actual_minutes": 130,
-                "estimated_minutes": 130,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_math_test_paper_middle_high_medium_052",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生完成一套完整数学试卷。",
-                "actual_minutes": 88,
-                "estimated_minutes": 88,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_math_test_paper_standard",
-                "source": "task_template",
-                "task_title": "数学函数专题卷",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "planning_advice": "setup(8.0) + 1×rate×fatigue(1.1) ×diff(1.0)×grade(1.0)×subj(1.05)×P(1.18)",
-                "score": 0.55
-              }
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "examples": [
-              {
-                "sample_id": "rate_english_essay_article",
-                "source": "unit_rate",
-                "task_title": "单位速率 article×300",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_hard_011",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
-                "actual_minutes": 71,
-                "estimated_minutes": 71,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_english_essay_senior_high_medium_010",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_medium_063",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_english_essay_standard",
-                "source": "task_template",
-                "task_title": "英语议论文300词",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "planning_advice": "setup(6.0) + 300×rate×fatigue(1.08) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
-                "score": 0.65
-              }
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "examples": [
-              {
-                "sample_id": "rate_chinese_recitation_paragraph",
-                "source": "unit_rate",
-                "task_title": "单位速率 paragraph×10",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "tpl_chinese_recitation_standard",
-                "source": "task_template",
-                "task_title": "语文古诗文背诵10篇",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "planning_advice": "setup(3.0) + 10×rate×fatigue(1.03) ×diff(1.0)×grade(1.0)×subj(1.08)×P(1.18)",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_medium_022",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一段文言文或古诗（约100字），包括熟读和理解。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_chinese_recitation_middle_high_easy_084",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生背诵一首短诗（4-8句）。",
-                "actual_minutes": 18,
-                "estimated_minutes": 18,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_easy_089",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一首短古诗（50字以内）。",
-                "actual_minutes": 20,
-                "estimated_minutes": 20,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              }
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "examples": [
-              {
-                "sample_id": "rate_general_mistake_review_problem",
-                "source": "unit_rate",
-                "task_title": "单位速率 problem×10",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_physics_mistake_review_exam_sprint_hard_074",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生整理10道物理综合错题（含压轴题）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_physics_mistake_review_senior_high_medium_029",
-                "source": "calibration_case",
-                "task_title": "高中学生整理8道物理错题，包括分析错误原因、正确解法、知识点回顾。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_physics_mistake_review_middle_high_medium_181",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生整理8道物理错题。",
-                "actual_minutes": 24,
-                "estimated_minutes": 24,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "tpl_general_mistake_review_standard",
-                "source": "task_template",
-                "task_title": "物理力学错题整理",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "planning_advice": "setup(5.0) + 10×rate×fatigue(1.02) ×diff(1.0)×grade(1.0)×subj(1.06)×P(1.18)",
-                "score": 0.35
-              }
-            ]
-          }
-        ],
-        "planningWindow": {
-          "start": "2026-08-07",
-          "end": "2026-08-12"
-        },
-        "timeShortage": {
-          "hasShortage": true,
-          "totalNeededMinutes": 904,
-          "totalAvailableMinutes": 840,
-          "totalScheduledMinutes": 766,
-          "shortageMinutes": 64,
-          "affectedTasks": [
-            {
-              "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-              "title": "语文古诗文背诵10篇",
-              "deadline": "2026-08-11",
-              "estimatedMinutes": 276,
-              "scheduledMinutes": 138,
-              "shortageMinutes": 138
-            }
-          ]
-        }
-      }
-    },
-    "2026-08-08": {
-      "date": "2026-08-08",
-      "taskIds": [
         "f507b401-95c9-4f3e-af61-c95164c00a88"
       ],
       "totalEstimatedMinutes": 180,
       "scheduledBlocks": [
         {
-          "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
+          "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
           "startMinute": 840,
+          "endMinute": 960,
+          "title": "数学函数专题卷",
+          "deadline": "2026-08-09"
+        },
+        {
+          "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
+          "startMinute": 960,
           "endMinute": 1020,
           "title": "英语议论文300词",
           "deadline": "2026-08-10"
         }
       ],
       "weekday": "sat",
-      "note": "",
+      "note": "以下任务未能完全排入DDL前：英语议论文300词, 语文古诗文背诵10篇, 物理力学错题整理",
       "details": {
-        "rationale": "整体计划基于较紧时间安排，优先保证数学试卷在8月9日前完成，英语作文分散多天，注意控制每日高负荷任务累计不超过90分钟。建议每天安排背诵任务时优先早晨或睡前，错题整理可放在晚间或碎片时段。",
+        "rationale": "注意：规划窗口仅2026-08-29一天，但所有任务截止日期在8月9日至8月12日，均已过期，无法按正常规则安排。建议忽略截止日期，但必须指出风险。所有任务的估计时长已基于参数化估时，英语作文和语文背诵可根据实际情况调整。",
         "risks": [
-          "英语议论文300词估时480分钟，但计划窗口内可用时段仅640分钟（含周末），且需满足每日高负荷不超过90分钟，可能导致任务无法完成或风险过高。",
-          "数学试卷估时102分钟，但证据包提示模板匹配度低，可能实际用时浮动较大，建议预留缓冲。",
-          "语文背诵任务关键证据少，估时基于较少标定案例，实际难度可能存在偏差。",
+          "英语议论文任务强烈依赖参数化估时（480分钟），但已有案例（如71分钟/篇）显示实际用时可能远低，存在高估风险。",
+          "数学试卷的参数化估时与初中案例偏差36%，有不确定性，但综合考虑高中难度，估计仍较可靠。",
+          "语文背诵估计基于每段30分钟，但短诗案例仅18-20分钟，可能高估。",
+          "所有任务计划在一天内完成，但总估计用时约971分钟，远超当天可用时间，必须拆分到多天，但规划窗口仅一天，无法满足，存在严重风险。",
           "空闲时段不足，部分任务无法在DDL前完成。",
-          "总需求 904 分钟，高于可用时段 840 分钟。",
-          "已安排 766 / 904 分钟，建议压缩任务或增加空闲时段。"
+          "总需求 971 分钟，高于可用时段 180 分钟。",
+          "已安排 180 / 971 分钟，建议压缩任务或增加空闲时段。"
         ],
         "taskEstimates": [
           {
             "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
             "title": "数学函数专题卷",
-            "estimatedMinutes": 102,
-            "reason": "参数化估时为120分钟，但参考标定案例（88分钟）与模板匹配度低（0.55），且该任务难度为普通，可适当缩短。调整至120*0.85=102分钟（下限），符合证据包指示的偏差。",
+            "estimatedMinutes": 120,
+            "reason": "参数化估时为120分钟，与冲刺阶段案例118分钟和高中中等偏上案例130分钟接近，且历史完成速度中，使用120分钟作为估计。",
             "evidence_ids": [
               "rate_math_test_paper_set",
+              "case_math_test_paper_exam_sprint_medium_003",
+              "case_math_test_paper_senior_high_hard_002",
               "case_math_test_paper_middle_high_medium_052",
               "tpl_math_test_paper_standard"
             ]
@@ -821,29 +492,38 @@
             "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
             "title": "英语议论文300词",
             "estimatedMinutes": 480,
-            "reason": "参数化估时为480分钟，任务为困难且单位数300，证据充分，但可分配时间有限，需分散到多天完成。调整至480分钟（下限），符合规则。",
+            "reason": "参数化估时为480分钟，是最为一致的基准；虽然单个案例差异较大，但参数化估时明确，且300词的写作量支持480分钟的估计。",
             "evidence_ids": [
               "rate_english_essay_article",
+              "case_english_essay_exam_sprint_hard_011",
+              "case_english_essay_senior_high_medium_010",
+              "case_english_essay_exam_sprint_medium_063",
               "tpl_english_essay_standard"
             ]
           },
           {
             "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
             "title": "语文古诗文背诵10篇",
-            "estimatedMinutes": 276,
-            "reason": "参数化估时为325分钟，但标定案例显示每篇约33分钟，10篇约330分钟，与参数化一致。为符合每日负荷限制，调整至276分钟（325*0.85），并为风险留出余量。",
+            "estimatedMinutes": 325,
+            "reason": "参数化估时为325分钟，基于10段背诵，每段约30分钟，与高中背诵一段33分钟的案例相符，使用325分钟作为估计。",
             "evidence_ids": [
               "rate_chinese_recitation_paragraph",
-              "case_chinese_recitation_senior_high_medium_022"
+              "tpl_chinese_recitation_standard",
+              "case_chinese_recitation_senior_high_medium_022",
+              "case_chinese_recitation_middle_high_easy_084",
+              "case_chinese_recitation_senior_high_easy_089"
             ]
           },
           {
             "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
             "title": "物理力学错题整理",
             "estimatedMinutes": 46,
-            "reason": "参数化估时为46分钟，与标定案例均值一致，且模板匹配度低（0.35），但无调整依据，维持原估计。",
+            "reason": "参数化估时为46分钟，且10道错题的冲刺案例为53分钟，因此46分钟是合理估计。",
             "evidence_ids": [
               "rate_general_mistake_review_problem",
+              "case_physics_mistake_review_exam_sprint_hard_074",
+              "case_physics_mistake_review_senior_high_medium_029",
+              "case_physics_mistake_review_middle_high_medium_181",
               "tpl_general_mistake_review_standard"
             ]
           }
@@ -1116,1471 +796,39 @@
           }
         ],
         "planningWindow": {
-          "start": "2026-08-07",
-          "end": "2026-08-12"
+          "start": "2026-08-29",
+          "end": "2026-08-29"
         },
         "timeShortage": {
           "hasShortage": true,
-          "totalNeededMinutes": 904,
-          "totalAvailableMinutes": 840,
-          "totalScheduledMinutes": 766,
-          "shortageMinutes": 64,
+          "totalNeededMinutes": 971,
+          "totalAvailableMinutes": 180,
+          "totalScheduledMinutes": 180,
+          "shortageMinutes": 791,
           "affectedTasks": [
+            {
+              "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
+              "title": "英语议论文300词",
+              "deadline": "2026-08-10",
+              "estimatedMinutes": 480,
+              "scheduledMinutes": 60,
+              "shortageMinutes": 420
+            },
             {
               "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
               "title": "语文古诗文背诵10篇",
               "deadline": "2026-08-11",
-              "estimatedMinutes": 276,
-              "scheduledMinutes": 138,
-              "shortageMinutes": 138
-            }
-          ]
-        }
-      }
-    },
-    "2026-08-09": {
-      "date": "2026-08-09",
-      "taskIds": [
-        "f507b401-95c9-4f3e-af61-c95164c00a88"
-      ],
-      "totalEstimatedMinutes": 180,
-      "scheduledBlocks": [
-        {
-          "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-          "startMinute": 840,
-          "endMinute": 1020,
-          "title": "英语议论文300词",
-          "deadline": "2026-08-10"
-        }
-      ],
-      "weekday": "sun",
-      "note": "",
-      "details": {
-        "rationale": "整体计划基于较紧时间安排，优先保证数学试卷在8月9日前完成，英语作文分散多天，注意控制每日高负荷任务累计不超过90分钟。建议每天安排背诵任务时优先早晨或睡前，错题整理可放在晚间或碎片时段。",
-        "risks": [
-          "英语议论文300词估时480分钟，但计划窗口内可用时段仅640分钟（含周末），且需满足每日高负荷不超过90分钟，可能导致任务无法完成或风险过高。",
-          "数学试卷估时102分钟，但证据包提示模板匹配度低，可能实际用时浮动较大，建议预留缓冲。",
-          "语文背诵任务关键证据少，估时基于较少标定案例，实际难度可能存在偏差。",
-          "空闲时段不足，部分任务无法在DDL前完成。",
-          "总需求 904 分钟，高于可用时段 840 分钟。",
-          "已安排 766 / 904 分钟，建议压缩任务或增加空闲时段。"
-        ],
-        "taskEstimates": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "estimatedMinutes": 102,
-            "reason": "参数化估时为120分钟，但参考标定案例（88分钟）与模板匹配度低（0.55），且该任务难度为普通，可适当缩短。调整至120*0.85=102分钟（下限），符合证据包指示的偏差。",
-            "evidence_ids": [
-              "rate_math_test_paper_set",
-              "case_math_test_paper_middle_high_medium_052",
-              "tpl_math_test_paper_standard"
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "estimatedMinutes": 480,
-            "reason": "参数化估时为480分钟，任务为困难且单位数300，证据充分，但可分配时间有限，需分散到多天完成。调整至480分钟（下限），符合规则。",
-            "evidence_ids": [
-              "rate_english_essay_article",
-              "tpl_english_essay_standard"
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "estimatedMinutes": 276,
-            "reason": "参数化估时为325分钟，但标定案例显示每篇约33分钟，10篇约330分钟，与参数化一致。为符合每日负荷限制，调整至276分钟（325*0.85），并为风险留出余量。",
-            "evidence_ids": [
-              "rate_chinese_recitation_paragraph",
-              "case_chinese_recitation_senior_high_medium_022"
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "estimatedMinutes": 46,
-            "reason": "参数化估时为46分钟，与标定案例均值一致，且模板匹配度低（0.35），但无调整依据，维持原估计。",
-            "evidence_ids": [
-              "rate_general_mistake_review_problem",
-              "tpl_general_mistake_review_standard"
-            ]
-          }
-        ],
-        "ragTopK": 5,
-        "ragExamples": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "examples": [
-              {
-                "sample_id": "rate_math_test_paper_set",
-                "source": "unit_rate",
-                "task_title": "单位速率 set×1",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_exam_sprint_medium_003",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一套高考难度数学模拟卷，包括选择题、填空题和解答题。",
-                "actual_minutes": 118,
-                "estimated_minutes": 118,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_senior_high_hard_002",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一套完整数学试卷，包括选择题、填空题和解答题，难度中等偏上。",
-                "actual_minutes": 130,
-                "estimated_minutes": 130,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_math_test_paper_middle_high_medium_052",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生完成一套完整数学试卷。",
-                "actual_minutes": 88,
-                "estimated_minutes": 88,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_math_test_paper_standard",
-                "source": "task_template",
-                "task_title": "数学函数专题卷",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "planning_advice": "setup(8.0) + 1×rate×fatigue(1.1) ×diff(1.0)×grade(1.0)×subj(1.05)×P(1.18)",
-                "score": 0.55
-              }
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "examples": [
-              {
-                "sample_id": "rate_english_essay_article",
-                "source": "unit_rate",
-                "task_title": "单位速率 article×300",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_hard_011",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
-                "actual_minutes": 71,
-                "estimated_minutes": 71,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_english_essay_senior_high_medium_010",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_medium_063",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_english_essay_standard",
-                "source": "task_template",
-                "task_title": "英语议论文300词",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "planning_advice": "setup(6.0) + 300×rate×fatigue(1.08) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
-                "score": 0.65
-              }
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "examples": [
-              {
-                "sample_id": "rate_chinese_recitation_paragraph",
-                "source": "unit_rate",
-                "task_title": "单位速率 paragraph×10",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "tpl_chinese_recitation_standard",
-                "source": "task_template",
-                "task_title": "语文古诗文背诵10篇",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "planning_advice": "setup(3.0) + 10×rate×fatigue(1.03) ×diff(1.0)×grade(1.0)×subj(1.08)×P(1.18)",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_medium_022",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一段文言文或古诗（约100字），包括熟读和理解。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_chinese_recitation_middle_high_easy_084",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生背诵一首短诗（4-8句）。",
-                "actual_minutes": 18,
-                "estimated_minutes": 18,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_easy_089",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一首短古诗（50字以内）。",
-                "actual_minutes": 20,
-                "estimated_minutes": 20,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              }
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "examples": [
-              {
-                "sample_id": "rate_general_mistake_review_problem",
-                "source": "unit_rate",
-                "task_title": "单位速率 problem×10",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_physics_mistake_review_exam_sprint_hard_074",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生整理10道物理综合错题（含压轴题）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_physics_mistake_review_senior_high_medium_029",
-                "source": "calibration_case",
-                "task_title": "高中学生整理8道物理错题，包括分析错误原因、正确解法、知识点回顾。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_physics_mistake_review_middle_high_medium_181",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生整理8道物理错题。",
-                "actual_minutes": 24,
-                "estimated_minutes": 24,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "tpl_general_mistake_review_standard",
-                "source": "task_template",
-                "task_title": "物理力学错题整理",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "planning_advice": "setup(5.0) + 10×rate×fatigue(1.02) ×diff(1.0)×grade(1.0)×subj(1.06)×P(1.18)",
-                "score": 0.35
-              }
-            ]
-          }
-        ],
-        "planningWindow": {
-          "start": "2026-08-07",
-          "end": "2026-08-12"
-        },
-        "timeShortage": {
-          "hasShortage": true,
-          "totalNeededMinutes": 904,
-          "totalAvailableMinutes": 840,
-          "totalScheduledMinutes": 766,
-          "shortageMinutes": 64,
-          "affectedTasks": [
+              "estimatedMinutes": 325,
+              "scheduledMinutes": 0,
+              "shortageMinutes": 325
+            },
             {
-              "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-              "title": "语文古诗文背诵10篇",
-              "deadline": "2026-08-11",
-              "estimatedMinutes": 276,
-              "scheduledMinutes": 138,
-              "shortageMinutes": 138
-            }
-          ]
-        }
-      }
-    },
-    "2026-08-10": {
-      "date": "2026-08-10",
-      "taskIds": [
-        "f507b401-95c9-4f3e-af61-c95164c00a88",
-        "3f47eafa-a26e-438f-8240-fb70227041d7"
-      ],
-      "totalEstimatedMinutes": 120,
-      "scheduledBlocks": [
-        {
-          "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-          "startMinute": 1140,
-          "endMinute": 1242,
-          "title": "英语议论文300词",
-          "deadline": "2026-08-10"
-        },
-        {
-          "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-          "startMinute": 1242,
-          "endMinute": 1260,
-          "title": "语文古诗文背诵10篇",
-          "deadline": "2026-08-11"
-        }
-      ],
-      "weekday": "mon",
-      "note": "",
-      "details": {
-        "rationale": "整体计划基于较紧时间安排，优先保证数学试卷在8月9日前完成，英语作文分散多天，注意控制每日高负荷任务累计不超过90分钟。建议每天安排背诵任务时优先早晨或睡前，错题整理可放在晚间或碎片时段。",
-        "risks": [
-          "英语议论文300词估时480分钟，但计划窗口内可用时段仅640分钟（含周末），且需满足每日高负荷不超过90分钟，可能导致任务无法完成或风险过高。",
-          "数学试卷估时102分钟，但证据包提示模板匹配度低，可能实际用时浮动较大，建议预留缓冲。",
-          "语文背诵任务关键证据少，估时基于较少标定案例，实际难度可能存在偏差。",
-          "空闲时段不足，部分任务无法在DDL前完成。",
-          "总需求 904 分钟，高于可用时段 840 分钟。",
-          "已安排 766 / 904 分钟，建议压缩任务或增加空闲时段。"
-        ],
-        "taskEstimates": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "estimatedMinutes": 102,
-            "reason": "参数化估时为120分钟，但参考标定案例（88分钟）与模板匹配度低（0.55），且该任务难度为普通，可适当缩短。调整至120*0.85=102分钟（下限），符合证据包指示的偏差。",
-            "evidence_ids": [
-              "rate_math_test_paper_set",
-              "case_math_test_paper_middle_high_medium_052",
-              "tpl_math_test_paper_standard"
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "estimatedMinutes": 480,
-            "reason": "参数化估时为480分钟，任务为困难且单位数300，证据充分，但可分配时间有限，需分散到多天完成。调整至480分钟（下限），符合规则。",
-            "evidence_ids": [
-              "rate_english_essay_article",
-              "tpl_english_essay_standard"
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "estimatedMinutes": 276,
-            "reason": "参数化估时为325分钟，但标定案例显示每篇约33分钟，10篇约330分钟，与参数化一致。为符合每日负荷限制，调整至276分钟（325*0.85），并为风险留出余量。",
-            "evidence_ids": [
-              "rate_chinese_recitation_paragraph",
-              "case_chinese_recitation_senior_high_medium_022"
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "estimatedMinutes": 46,
-            "reason": "参数化估时为46分钟，与标定案例均值一致，且模板匹配度低（0.35），但无调整依据，维持原估计。",
-            "evidence_ids": [
-              "rate_general_mistake_review_problem",
-              "tpl_general_mistake_review_standard"
-            ]
-          }
-        ],
-        "ragTopK": 5,
-        "ragExamples": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "examples": [
-              {
-                "sample_id": "rate_math_test_paper_set",
-                "source": "unit_rate",
-                "task_title": "单位速率 set×1",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_exam_sprint_medium_003",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一套高考难度数学模拟卷，包括选择题、填空题和解答题。",
-                "actual_minutes": 118,
-                "estimated_minutes": 118,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_senior_high_hard_002",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一套完整数学试卷，包括选择题、填空题和解答题，难度中等偏上。",
-                "actual_minutes": 130,
-                "estimated_minutes": 130,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_math_test_paper_middle_high_medium_052",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生完成一套完整数学试卷。",
-                "actual_minutes": 88,
-                "estimated_minutes": 88,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_math_test_paper_standard",
-                "source": "task_template",
-                "task_title": "数学函数专题卷",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "planning_advice": "setup(8.0) + 1×rate×fatigue(1.1) ×diff(1.0)×grade(1.0)×subj(1.05)×P(1.18)",
-                "score": 0.55
-              }
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "examples": [
-              {
-                "sample_id": "rate_english_essay_article",
-                "source": "unit_rate",
-                "task_title": "单位速率 article×300",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_hard_011",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
-                "actual_minutes": 71,
-                "estimated_minutes": 71,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_english_essay_senior_high_medium_010",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_medium_063",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_english_essay_standard",
-                "source": "task_template",
-                "task_title": "英语议论文300词",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "planning_advice": "setup(6.0) + 300×rate×fatigue(1.08) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
-                "score": 0.65
-              }
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "examples": [
-              {
-                "sample_id": "rate_chinese_recitation_paragraph",
-                "source": "unit_rate",
-                "task_title": "单位速率 paragraph×10",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "tpl_chinese_recitation_standard",
-                "source": "task_template",
-                "task_title": "语文古诗文背诵10篇",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "planning_advice": "setup(3.0) + 10×rate×fatigue(1.03) ×diff(1.0)×grade(1.0)×subj(1.08)×P(1.18)",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_medium_022",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一段文言文或古诗（约100字），包括熟读和理解。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_chinese_recitation_middle_high_easy_084",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生背诵一首短诗（4-8句）。",
-                "actual_minutes": 18,
-                "estimated_minutes": 18,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_easy_089",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一首短古诗（50字以内）。",
-                "actual_minutes": 20,
-                "estimated_minutes": 20,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              }
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "examples": [
-              {
-                "sample_id": "rate_general_mistake_review_problem",
-                "source": "unit_rate",
-                "task_title": "单位速率 problem×10",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_physics_mistake_review_exam_sprint_hard_074",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生整理10道物理综合错题（含压轴题）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_physics_mistake_review_senior_high_medium_029",
-                "source": "calibration_case",
-                "task_title": "高中学生整理8道物理错题，包括分析错误原因、正确解法、知识点回顾。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_physics_mistake_review_middle_high_medium_181",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生整理8道物理错题。",
-                "actual_minutes": 24,
-                "estimated_minutes": 24,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "tpl_general_mistake_review_standard",
-                "source": "task_template",
-                "task_title": "物理力学错题整理",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "planning_advice": "setup(5.0) + 10×rate×fatigue(1.02) ×diff(1.0)×grade(1.0)×subj(1.06)×P(1.18)",
-                "score": 0.35
-              }
-            ]
-          }
-        ],
-        "planningWindow": {
-          "start": "2026-08-07",
-          "end": "2026-08-12"
-        },
-        "timeShortage": {
-          "hasShortage": true,
-          "totalNeededMinutes": 904,
-          "totalAvailableMinutes": 840,
-          "totalScheduledMinutes": 766,
-          "shortageMinutes": 64,
-          "affectedTasks": [
-            {
-              "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-              "title": "语文古诗文背诵10篇",
-              "deadline": "2026-08-11",
-              "estimatedMinutes": 276,
-              "scheduledMinutes": 138,
-              "shortageMinutes": 138
-            }
-          ]
-        }
-      }
-    },
-    "2026-08-11": {
-      "date": "2026-08-11",
-      "taskIds": [
-        "3f47eafa-a26e-438f-8240-fb70227041d7"
-      ],
-      "totalEstimatedMinutes": 120,
-      "scheduledBlocks": [
-        {
-          "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-          "startMinute": 1140,
-          "endMinute": 1260,
-          "title": "语文古诗文背诵10篇",
-          "deadline": "2026-08-11"
-        }
-      ],
-      "weekday": "tue",
-      "note": "",
-      "details": {
-        "rationale": "整体计划基于较紧时间安排，优先保证数学试卷在8月9日前完成，英语作文分散多天，注意控制每日高负荷任务累计不超过90分钟。建议每天安排背诵任务时优先早晨或睡前，错题整理可放在晚间或碎片时段。",
-        "risks": [
-          "英语议论文300词估时480分钟，但计划窗口内可用时段仅640分钟（含周末），且需满足每日高负荷不超过90分钟，可能导致任务无法完成或风险过高。",
-          "数学试卷估时102分钟，但证据包提示模板匹配度低，可能实际用时浮动较大，建议预留缓冲。",
-          "语文背诵任务关键证据少，估时基于较少标定案例，实际难度可能存在偏差。",
-          "空闲时段不足，部分任务无法在DDL前完成。",
-          "总需求 904 分钟，高于可用时段 840 分钟。",
-          "已安排 766 / 904 分钟，建议压缩任务或增加空闲时段。"
-        ],
-        "taskEstimates": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "estimatedMinutes": 102,
-            "reason": "参数化估时为120分钟，但参考标定案例（88分钟）与模板匹配度低（0.55），且该任务难度为普通，可适当缩短。调整至120*0.85=102分钟（下限），符合证据包指示的偏差。",
-            "evidence_ids": [
-              "rate_math_test_paper_set",
-              "case_math_test_paper_middle_high_medium_052",
-              "tpl_math_test_paper_standard"
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "estimatedMinutes": 480,
-            "reason": "参数化估时为480分钟，任务为困难且单位数300，证据充分，但可分配时间有限，需分散到多天完成。调整至480分钟（下限），符合规则。",
-            "evidence_ids": [
-              "rate_english_essay_article",
-              "tpl_english_essay_standard"
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "estimatedMinutes": 276,
-            "reason": "参数化估时为325分钟，但标定案例显示每篇约33分钟，10篇约330分钟，与参数化一致。为符合每日负荷限制，调整至276分钟（325*0.85），并为风险留出余量。",
-            "evidence_ids": [
-              "rate_chinese_recitation_paragraph",
-              "case_chinese_recitation_senior_high_medium_022"
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "estimatedMinutes": 46,
-            "reason": "参数化估时为46分钟，与标定案例均值一致，且模板匹配度低（0.35），但无调整依据，维持原估计。",
-            "evidence_ids": [
-              "rate_general_mistake_review_problem",
-              "tpl_general_mistake_review_standard"
-            ]
-          }
-        ],
-        "ragTopK": 5,
-        "ragExamples": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "examples": [
-              {
-                "sample_id": "rate_math_test_paper_set",
-                "source": "unit_rate",
-                "task_title": "单位速率 set×1",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_exam_sprint_medium_003",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一套高考难度数学模拟卷，包括选择题、填空题和解答题。",
-                "actual_minutes": 118,
-                "estimated_minutes": 118,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_senior_high_hard_002",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一套完整数学试卷，包括选择题、填空题和解答题，难度中等偏上。",
-                "actual_minutes": 130,
-                "estimated_minutes": 130,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_math_test_paper_middle_high_medium_052",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生完成一套完整数学试卷。",
-                "actual_minutes": 88,
-                "estimated_minutes": 88,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_math_test_paper_standard",
-                "source": "task_template",
-                "task_title": "数学函数专题卷",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "planning_advice": "setup(8.0) + 1×rate×fatigue(1.1) ×diff(1.0)×grade(1.0)×subj(1.05)×P(1.18)",
-                "score": 0.55
-              }
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "examples": [
-              {
-                "sample_id": "rate_english_essay_article",
-                "source": "unit_rate",
-                "task_title": "单位速率 article×300",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_hard_011",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
-                "actual_minutes": 71,
-                "estimated_minutes": 71,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_english_essay_senior_high_medium_010",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_medium_063",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_english_essay_standard",
-                "source": "task_template",
-                "task_title": "英语议论文300词",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "planning_advice": "setup(6.0) + 300×rate×fatigue(1.08) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
-                "score": 0.65
-              }
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "examples": [
-              {
-                "sample_id": "rate_chinese_recitation_paragraph",
-                "source": "unit_rate",
-                "task_title": "单位速率 paragraph×10",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "tpl_chinese_recitation_standard",
-                "source": "task_template",
-                "task_title": "语文古诗文背诵10篇",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "planning_advice": "setup(3.0) + 10×rate×fatigue(1.03) ×diff(1.0)×grade(1.0)×subj(1.08)×P(1.18)",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_medium_022",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一段文言文或古诗（约100字），包括熟读和理解。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_chinese_recitation_middle_high_easy_084",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生背诵一首短诗（4-8句）。",
-                "actual_minutes": 18,
-                "estimated_minutes": 18,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_easy_089",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一首短古诗（50字以内）。",
-                "actual_minutes": 20,
-                "estimated_minutes": 20,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              }
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "examples": [
-              {
-                "sample_id": "rate_general_mistake_review_problem",
-                "source": "unit_rate",
-                "task_title": "单位速率 problem×10",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_physics_mistake_review_exam_sprint_hard_074",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生整理10道物理综合错题（含压轴题）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_physics_mistake_review_senior_high_medium_029",
-                "source": "calibration_case",
-                "task_title": "高中学生整理8道物理错题，包括分析错误原因、正确解法、知识点回顾。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_physics_mistake_review_middle_high_medium_181",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生整理8道物理错题。",
-                "actual_minutes": 24,
-                "estimated_minutes": 24,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "tpl_general_mistake_review_standard",
-                "source": "task_template",
-                "task_title": "物理力学错题整理",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "planning_advice": "setup(5.0) + 10×rate×fatigue(1.02) ×diff(1.0)×grade(1.0)×subj(1.06)×P(1.18)",
-                "score": 0.35
-              }
-            ]
-          }
-        ],
-        "planningWindow": {
-          "start": "2026-08-07",
-          "end": "2026-08-12"
-        },
-        "timeShortage": {
-          "hasShortage": true,
-          "totalNeededMinutes": 904,
-          "totalAvailableMinutes": 840,
-          "totalScheduledMinutes": 766,
-          "shortageMinutes": 64,
-          "affectedTasks": [
-            {
-              "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-              "title": "语文古诗文背诵10篇",
-              "deadline": "2026-08-11",
-              "estimatedMinutes": 276,
-              "scheduledMinutes": 138,
-              "shortageMinutes": 138
-            }
-          ]
-        }
-      }
-    },
-    "2026-08-12": {
-      "date": "2026-08-12",
-      "taskIds": [
-        "8620e40a-acb8-4b71-840b-6d033974b9fd"
-      ],
-      "totalEstimatedMinutes": 46,
-      "scheduledBlocks": [
-        {
-          "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-          "startMinute": 1140,
-          "endMinute": 1186,
-          "title": "物理力学错题整理",
-          "deadline": "2026-08-12"
-        }
-      ],
-      "weekday": "wed",
-      "note": "",
-      "details": {
-        "rationale": "整体计划基于较紧时间安排，优先保证数学试卷在8月9日前完成，英语作文分散多天，注意控制每日高负荷任务累计不超过90分钟。建议每天安排背诵任务时优先早晨或睡前，错题整理可放在晚间或碎片时段。",
-        "risks": [
-          "英语议论文300词估时480分钟，但计划窗口内可用时段仅640分钟（含周末），且需满足每日高负荷不超过90分钟，可能导致任务无法完成或风险过高。",
-          "数学试卷估时102分钟，但证据包提示模板匹配度低，可能实际用时浮动较大，建议预留缓冲。",
-          "语文背诵任务关键证据少，估时基于较少标定案例，实际难度可能存在偏差。",
-          "空闲时段不足，部分任务无法在DDL前完成。",
-          "总需求 904 分钟，高于可用时段 840 分钟。",
-          "已安排 766 / 904 分钟，建议压缩任务或增加空闲时段。"
-        ],
-        "taskEstimates": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "estimatedMinutes": 102,
-            "reason": "参数化估时为120分钟，但参考标定案例（88分钟）与模板匹配度低（0.55），且该任务难度为普通，可适当缩短。调整至120*0.85=102分钟（下限），符合证据包指示的偏差。",
-            "evidence_ids": [
-              "rate_math_test_paper_set",
-              "case_math_test_paper_middle_high_medium_052",
-              "tpl_math_test_paper_standard"
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "estimatedMinutes": 480,
-            "reason": "参数化估时为480分钟，任务为困难且单位数300，证据充分，但可分配时间有限，需分散到多天完成。调整至480分钟（下限），符合规则。",
-            "evidence_ids": [
-              "rate_english_essay_article",
-              "tpl_english_essay_standard"
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "estimatedMinutes": 276,
-            "reason": "参数化估时为325分钟，但标定案例显示每篇约33分钟，10篇约330分钟，与参数化一致。为符合每日负荷限制，调整至276分钟（325*0.85），并为风险留出余量。",
-            "evidence_ids": [
-              "rate_chinese_recitation_paragraph",
-              "case_chinese_recitation_senior_high_medium_022"
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "estimatedMinutes": 46,
-            "reason": "参数化估时为46分钟，与标定案例均值一致，且模板匹配度低（0.35），但无调整依据，维持原估计。",
-            "evidence_ids": [
-              "rate_general_mistake_review_problem",
-              "tpl_general_mistake_review_standard"
-            ]
-          }
-        ],
-        "ragTopK": 5,
-        "ragExamples": [
-          {
-            "taskId": "f1b50af7-4c9c-4931-926c-3ae955ce04f7",
-            "title": "数学函数专题卷",
-            "examples": [
-              {
-                "sample_id": "rate_math_test_paper_set",
-                "source": "unit_rate",
-                "task_title": "单位速率 set×1",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_exam_sprint_medium_003",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一套高考难度数学模拟卷，包括选择题、填空题和解答题。",
-                "actual_minutes": 118,
-                "estimated_minutes": 118,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_math_test_paper_senior_high_hard_002",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一套完整数学试卷，包括选择题、填空题和解答题，难度中等偏上。",
-                "actual_minutes": 130,
-                "estimated_minutes": 130,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_math_test_paper_middle_high_medium_052",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生完成一套完整数学试卷。",
-                "actual_minutes": 88,
-                "estimated_minutes": 88,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_math_test_paper_standard",
-                "source": "task_template",
-                "task_title": "数学函数专题卷",
-                "actual_minutes": 120,
-                "estimated_minutes": 120,
-                "estimated_minutes_min": 99,
-                "estimated_minutes_max": 146,
-                "subject": "math",
-                "task_type": "test_paper",
-                "difficulty": "medium",
-                "planning_advice": "setup(8.0) + 1×rate×fatigue(1.1) ×diff(1.0)×grade(1.0)×subj(1.05)×P(1.18)",
-                "score": 0.55
-              }
-            ]
-          },
-          {
-            "taskId": "f507b401-95c9-4f3e-af61-c95164c00a88",
-            "title": "英语议论文300词",
-            "examples": [
-              {
-                "sample_id": "rate_english_essay_article",
-                "source": "unit_rate",
-                "task_title": "单位速率 article×300",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_hard_011",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高质量英语作文（150-200词），包括构思、初稿、多次修改和润色。",
-                "actual_minutes": 71,
-                "estimated_minutes": 71,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.8
-              },
-              {
-                "sample_id": "case_english_essay_senior_high_medium_010",
-                "source": "calibration_case",
-                "task_title": "高中学生完成一篇中等难度英语作文（120-150词），包括审题、列提纲、写作和简单修改。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_english_essay_exam_sprint_medium_063",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生完成一篇高考难度英语作文（100-120词）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "score": 0.75
-              },
-              {
-                "sample_id": "tpl_english_essay_standard",
-                "source": "task_template",
-                "task_title": "英语议论文300词",
-                "actual_minutes": 480,
-                "estimated_minutes": 480,
-                "estimated_minutes_min": 480,
-                "estimated_minutes_max": 480,
-                "subject": "english",
-                "task_type": "essay",
-                "difficulty": "hard",
-                "planning_advice": "setup(6.0) + 300×rate×fatigue(1.08) ×diff(1.25)×grade(1.0)×subj(1.0)×P(1.18)",
-                "score": 0.65
-              }
-            ]
-          },
-          {
-            "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-            "title": "语文古诗文背诵10篇",
-            "examples": [
-              {
-                "sample_id": "rate_chinese_recitation_paragraph",
-                "source": "unit_rate",
-                "task_title": "单位速率 paragraph×10",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "tpl_chinese_recitation_standard",
-                "source": "task_template",
-                "task_title": "语文古诗文背诵10篇",
-                "actual_minutes": 325,
-                "estimated_minutes": 325,
-                "estimated_minutes_min": 238,
-                "estimated_minutes_max": 442,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "planning_advice": "setup(3.0) + 10×rate×fatigue(1.03) ×diff(1.0)×grade(1.0)×subj(1.08)×P(1.18)",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_medium_022",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一段文言文或古诗（约100字），包括熟读和理解。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_chinese_recitation_middle_high_easy_084",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生背诵一首短诗（4-8句）。",
-                "actual_minutes": 18,
-                "estimated_minutes": 18,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              },
-              {
-                "sample_id": "case_chinese_recitation_senior_high_easy_089",
-                "source": "calibration_case",
-                "task_title": "高中学生背诵一首短古诗（50字以内）。",
-                "actual_minutes": 20,
-                "estimated_minutes": 20,
-                "subject": "chinese",
-                "task_type": "recitation",
-                "difficulty": "medium",
-                "score": 0.6
-              }
-            ]
-          },
-          {
-            "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
-            "title": "物理力学错题整理",
-            "examples": [
-              {
-                "sample_id": "rate_general_mistake_review_problem",
-                "source": "unit_rate",
-                "task_title": "单位速率 problem×10",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.85
-              },
-              {
-                "sample_id": "case_physics_mistake_review_exam_sprint_hard_074",
-                "source": "calibration_case",
-                "task_title": "冲刺阶段学生整理10道物理综合错题（含压轴题）。",
-                "actual_minutes": 53,
-                "estimated_minutes": 53,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.75
-              },
-              {
-                "sample_id": "case_physics_mistake_review_senior_high_medium_029",
-                "source": "calibration_case",
-                "task_title": "高中学生整理8道物理错题，包括分析错误原因、正确解法、知识点回顾。",
-                "actual_minutes": 33,
-                "estimated_minutes": 33,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "case_physics_mistake_review_middle_high_medium_181",
-                "source": "calibration_case",
-                "task_title": "初中高年级学生整理8道物理错题。",
-                "actual_minutes": 24,
-                "estimated_minutes": 24,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "score": 0.65
-              },
-              {
-                "sample_id": "tpl_general_mistake_review_standard",
-                "source": "task_template",
-                "task_title": "物理力学错题整理",
-                "actual_minutes": 46,
-                "estimated_minutes": 46,
-                "estimated_minutes_min": 38,
-                "estimated_minutes_max": 56,
-                "subject": "physics",
-                "task_type": "mistake_review",
-                "difficulty": "medium",
-                "planning_advice": "setup(5.0) + 10×rate×fatigue(1.02) ×diff(1.0)×grade(1.0)×subj(1.06)×P(1.18)",
-                "score": 0.35
-              }
-            ]
-          }
-        ],
-        "planningWindow": {
-          "start": "2026-08-07",
-          "end": "2026-08-12"
-        },
-        "timeShortage": {
-          "hasShortage": true,
-          "totalNeededMinutes": 904,
-          "totalAvailableMinutes": 840,
-          "totalScheduledMinutes": 766,
-          "shortageMinutes": 64,
-          "affectedTasks": [
-            {
-              "taskId": "3f47eafa-a26e-438f-8240-fb70227041d7",
-              "title": "语文古诗文背诵10篇",
-              "deadline": "2026-08-11",
-              "estimatedMinutes": 276,
-              "scheduledMinutes": 138,
-              "shortageMinutes": 138
+              "taskId": "8620e40a-acb8-4b71-840b-6d033974b9fd",
+              "title": "物理力学错题整理",
+              "deadline": "2026-08-12",
+              "estimatedMinutes": 46,
+              "scheduledMinutes": 0,
+              "shortageMinutes": 46
             }
           ]
         }

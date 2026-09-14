@@ -6,13 +6,12 @@
 <title>J人模拟器 2.0 · 产品发布会</title>
 <style>
 :root{
-  --accent:#F5811F;
-  --accent-soft:rgba(245,129,31,.15);
-  --teal:#12A88B;
-  --ink:#1F313C;
-  --ink-soft:#5B6E7A;
-  --card:rgba(255,255,255,.90);
-  --edge:rgba(255,255,255,.96);
+  --accent:#E8823C;
+  --accent-soft:rgba(232,130,60,.14);
+  --ink:#2E3A45;
+  --ink-soft:#61707C;
+  --card:rgba(255,255,255,.80);
+  --edge:rgba(255,255,255,.9);
 }
 *{box-sizing:border-box;margin:0;padding:0;min-width:0;min-height:0}
 html,body{height:100%}
@@ -31,13 +30,12 @@ body{
 }
 .slide{
   position:absolute;inset:0;overflow:hidden;
-  padding:42px 52px;
+  padding:48px 56px;
   display:none;flex-direction:column;
   background:
-    radial-gradient(ellipse at 6% 96%, rgba(255,214,92,.34) 0%, transparent 48%),
-    radial-gradient(ellipse at 94% 6%, rgba(255,255,255,.85) 0%, transparent 50%),
-    radial-gradient(ellipse at 78% 88%, rgba(18,168,139,.14) 0%, transparent 44%),
-    linear-gradient(180deg,#A9E4FF 0%,#CDEFFB 26%,#E2F8EC 58%,#FFF7E2 100%);
+    radial-gradient(ellipse at 8% 92%, rgba(232,196,90,.22) 0%, transparent 46%),
+    radial-gradient(ellipse at 92% 8%, rgba(255,255,255,.6) 0%, transparent 48%),
+    linear-gradient(180deg,#A6D7F0 0%,#C7E5F2 30%,#E6F1E2 62%,#F7F2E0 100%);
 }
 .slide.active{display:flex}
 .slide::before{
@@ -47,98 +45,74 @@ body{
 }
 .slide > *{position:relative;z-index:2}
 
-h1{font-size:72px;line-height:1.12;letter-spacing:-1.5px;font-weight:800}
-h2{font-size:42px;line-height:1.22;font-weight:800;margin-bottom:18px;flex:none}
-.sub{font-size:26px;color:var(--ink-soft);line-height:1.5}
+h1{font-size:64px;line-height:1.14;letter-spacing:-1px;font-weight:800}
+h2{font-size:40px;line-height:1.24;font-weight:800;margin-bottom:24px;flex:none}
+.sub{font-size:24px;color:var(--ink-soft);line-height:1.5}
 .byline{font-size:16px;color:var(--ink-soft);flex:none}
-.kicker{font-size:18px;color:var(--teal);font-weight:700;letter-spacing:1.5px;margin-bottom:12px}
-.tag{font-size:16px;color:var(--teal);font-weight:700;letter-spacing:1.5px;margin-bottom:8px;flex:none}
+.kicker{font-size:17px;color:var(--ink-soft);letter-spacing:1px;margin-bottom:12px}
+.tag{font-size:16px;color:var(--ink-soft);letter-spacing:1px;margin-bottom:8px;flex:none}
 .accent{color:var(--accent)}
 strong{color:var(--accent);font-weight:800}
 
-.body{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;gap:14px;overflow:hidden}
+.body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;overflow:hidden}
 
 .card{
   background:var(--card);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border:1px solid var(--edge);border-radius:18px;
-  padding:22px 28px;
-  box-shadow:0 8px 22px rgba(31,49,60,.10);
-  font-size:23px;line-height:1.5;
+  padding:18px 24px;
+  box-shadow:0 6px 20px rgba(46,58,69,.09);
+  font-size:22px;line-height:1.45;
 }
-.card .k{display:block;font-size:16px;color:var(--teal);font-weight:700;margin-bottom:6px;letter-spacing:.5px}
-.card.quiet{background:rgba(255,255,255,.66)}
-.card.note{background:rgba(255,250,232,.95);border:1px dashed rgba(245,129,31,.55)}
-.card.hl{border:2px solid var(--accent);background:rgba(255,255,255,.96);
-  box-shadow:0 10px 26px rgba(245,129,31,.20)}
-.card.big{font-size:27px;line-height:1.5}
+.card .k{display:block;font-size:16px;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.5px}
+.card.quiet{background:rgba(255,255,255,.5)}
+.card.note{background:rgba(255,251,240,.92);border:1px dashed rgba(232,130,60,.5)}
+.card.hl{border:2px solid var(--accent);background:rgba(255,255,255,.9)}
+.card.big{font-size:26px;line-height:1.5}
 
-.cols{flex:1;display:flex;gap:18px;align-items:stretch;overflow:hidden}
-.cols > .col{flex:1 1 0;display:flex;flex-direction:column;gap:12px;overflow:hidden}
-.cols > .col > .card{flex:1}
-.cols > .mid{flex:0 0 38px;display:flex;flex-direction:column;
+.cols{flex:1;display:flex;gap:20px;align-items:stretch;overflow:hidden}
+.cols > .col{flex:1 1 0;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.cols > .col > .card{flex:1;display:flex;flex-direction:column;justify-content:center}
+.cols > .mid{flex:0 0 40px;display:flex;flex-direction:column;
   justify-content:space-around;align-items:center;color:var(--accent);font-size:26px}
 
 .flow{display:flex;align-items:stretch;gap:0;flex:none}
 .flow .node{
   flex:1 1 0;background:var(--card);backdrop-filter:blur(12px);
   border:1px solid var(--edge);border-radius:14px;
-  padding:15px 10px;text-align:center;font-size:20px;line-height:1.35;
-  box-shadow:0 6px 16px rgba(31,49,60,.08);
+  padding:14px 10px;text-align:center;font-size:19px;line-height:1.35;
   display:flex;align-items:center;justify-content:center;
 }
-.flow .node.hot{background:linear-gradient(180deg,rgba(255,214,150,.75),rgba(245,129,31,.24));
-  border-color:rgba(245,129,31,.6);font-weight:800}
-.flow .arw{flex:0 0 28px;display:flex;align-items:center;justify-content:center;
-  color:var(--accent);font-size:22px;font-weight:700}
+.flow .node.hot{background:rgba(232,130,60,.16);border-color:rgba(232,130,60,.55);font-weight:700}
+.flow .arw{flex:0 0 30px;display:flex;align-items:center;justify-content:center;
+  color:var(--accent);font-size:22px}
 
-.row{display:flex;gap:16px;align-items:stretch;flex:none;overflow:hidden}
-.row > .card{flex:1 1 0}
-
-.chips{display:flex;gap:12px;flex-wrap:wrap;flex:none}
-.chips span{
-  background:rgba(255,255,255,.9);border:1px solid var(--edge);border-radius:999px;
-  padding:9px 20px;font-size:19px;font-weight:700;color:var(--ink-soft);
-  box-shadow:0 6px 16px rgba(31,49,60,.08);
-}
-.chips.sm span{padding:6px 16px;font-size:17px;background:var(--accent-soft);
-  border-color:rgba(245,129,31,.35);color:var(--accent)}
-
-.nums{display:flex;justify-content:center;gap:26px;align-items:center;flex:none}
-.nums > div{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  background:var(--card);border:1px solid var(--edge);border-radius:18px;
-  padding:20px 40px;box-shadow:0 8px 22px rgba(31,49,60,.10);
-}
-.nums .n{font-size:62px;font-weight:800;color:var(--accent);line-height:1}
-.nums .u{font-size:17px;color:var(--ink-soft)}
+.nums{display:flex;justify-content:center;gap:52px;align-items:baseline;flex:none}
+.nums .n{font-size:52px;font-weight:800;color:var(--accent);line-height:1}
+.nums .u{font-size:16px;color:var(--ink-soft);margin-left:6px}
 
 .bottomline{
-  flex:none;margin-top:14px;font-size:24px;font-weight:700;line-height:1.4;
-  background:linear-gradient(90deg,rgba(245,129,31,.20),rgba(255,214,92,.12));
-  border-left:6px solid var(--accent);
-  border-radius:0 14px 14px 0;padding:15px 24px;
+  flex:none;margin-top:16px;font-size:23px;font-weight:700;line-height:1.4;
+  background:var(--accent-soft);border-left:5px solid var(--accent);
+  border-radius:0 12px 12px 0;padding:15px 22px;
 }
 .demoline{
-  flex:none;margin-top:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:22px;background:rgba(255,255,255,.94);border:1px solid var(--edge);
+  flex:none;margin-top:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:22px;background:rgba(255,255,255,.88);border:1px solid var(--edge);
   border-radius:14px;padding:17px 22px;text-align:center;
-  box-shadow:0 8px 20px rgba(31,49,60,.10);
 }
-.endline{flex:none;margin-top:12px;font-size:27px;font-weight:800;color:var(--accent)}
+.endline{flex:none;margin-top:14px;font-size:26px;font-weight:800;color:var(--accent)}
 
 .badge{
-  position:absolute;top:40px;right:52px;z-index:3;
-  width:92px;height:92px;border-radius:50%;
-  background:linear-gradient(150deg,#FFA23D,var(--accent));color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:31px;font-weight:800;
-  box-shadow:0 10px 26px rgba(245,129,31,.45);
+  position:absolute;top:44px;right:56px;z-index:3;
+  width:88px;height:88px;border-radius:50%;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;
+  box-shadow:0 8px 22px rgba(232,130,60,.42);
 }
 .qr{
-  position:absolute;right:52px;bottom:40px;z-index:3;text-align:center;
-  background:rgba(255,255,255,.96);border:1px solid var(--edge);
+  position:absolute;right:56px;bottom:44px;z-index:3;text-align:center;
+  background:rgba(255,255,255,.94);border:1px solid var(--edge);
   border-radius:14px;padding:12px;font-size:12px;color:var(--ink-soft);
-  box-shadow:0 8px 20px rgba(31,49,60,.14);
 }
 .qr img{display:block;width:104px;height:104px;margin-bottom:6px}
 #bar{position:absolute;left:0;bottom:0;height:4px;background:var(--accent);z-index:5;
@@ -164,14 +138,6 @@ strong{color:var(--accent);font-weight:800}
 #notes.on{display:block}
 #notes .t{color:var(--accent);font-weight:700;margin-bottom:6px;font-size:13px;letter-spacing:1px}
 
-/* 全屏：只留幻灯片，按 H 可临时召回底栏 */
-body.fs #viewport{inset:0}
-body.fs #hud{display:none}
-body.fs #notes{bottom:0}
-body.fs.hud #hud{display:flex}
-body.fs.hud #viewport{inset:0 0 44px 0}
-body.fs.hud #notes{bottom:44px}
-
 @media print{
   body{background:#fff;overflow:visible}
   #viewport{position:static;inset:auto}
@@ -189,16 +155,12 @@ body.fs.hud #notes{bottom:44px}
   <!-- 1 封面 -->
   <section class="slide" data-end="20">
     <div class="badge">2.0</div>
-    <div class="body" style="gap:20px">
+    <div class="body" style="gap:22px">
       <div class="kicker" style="margin:0">《大模型工程》学生产品发布会</div>
       <h1>J人模拟器 <span class="accent">2.0</span></h1>
       <p class="sub">一句话，把学习任务排进你真实的空闲时间</p>
-      <div class="chips">
-        <span>说一句话</span><span>自动估时</span><span>排进空闲</span><span>可编辑时间轴</span>
-      </div>
     </div>
     <p class="byline">刘知行 Ballie　·　2026.08.29　·　醋溜科技展示场地</p>
-    <div class="qr"><img src="qr_github.png" alt="GitHub 二维码">github.com/diaq011/P2J</div>
   </section>
 
   <!-- 2 自我介绍 -->
@@ -259,10 +221,9 @@ body.fs.hud #notes{bottom:44px}
         <div class="node">可编辑时间轴</div><div class="arw">→</div>
         <div class="node">知道今天先做什么</div>
       </div>
-      <div class="row">
-        <div class="card quiet"><span class="k">先看老办法</span>手动填一个任务：学科、类型、难度、截止日，一个一个选完才算录进去</div>
-        <div class="card hl"><span class="k">再看现在</span>打开网页，把下面这句话直接打进去，剩下的它自己做</div>
-        <div class="card quiet"><span class="k">你会看到</span>它记下任务、估出耗时、把 3 张卷子切块排进这周真实的空闲时段</div>
+      <div class="card quiet">
+        <span class="k">演示顺序</span>
+        先看老办法：手动填一个任务，学科、类型、难度、截止日，一个一个选　→　再看现在：一句话
       </div>
     </div>
     <div class="demoline">工作日晚上7点到9点有空，数学卷3张周一前，帮我排计划</div>
@@ -287,12 +248,8 @@ body.fs.hud #notes{bottom:44px}
         <span class="k">但这样有个风险，以及我怎么按住它</span>
         AI 很会把话说得让你满意，它可能回一句「已经记下了」，其实什么都没存。
         所以我给了它五个真能动手的工具，并写死一条规则——<strong>能用工具就用工具，不许假装已经保存</strong>
-        <div class="chips sm" style="margin-top:14px">
-          <span>记空闲时间</span><span>加任务</span><span>生成计划</span><span>查任务</span><span>看计划</span>
-        </div>
       </div>
     </div>
-    <div class="bottomline">主页换成聊天框，不是换了个皮肤，是把「先学会怎么用」这一步整个删掉了。</div>
   </section>
 
   <!-- 7 工程亮点 -->
@@ -318,8 +275,24 @@ body.fs.hud #notes{bottom:44px}
     <div class="bottomline">不是让 AI 拍脑袋估时间，是让它在算好的区间里做小幅校准。</div>
   </section>
 
-  <!-- 8 这半年改了什么 -->
-  <section class="slide" data-end="565">
+  <!-- 8 失败与边界 -->
+  <section class="slide" data-end="585">
+    <h2>一次真实的崩溃，和我现在的边界</h2>
+    <div class="cols" style="flex:0 0 210px">
+      <div class="col"><div class="card"><span class="k">现象</span>后端刚启动时第一个请求会连接超时，整个页面白掉，用户不知道发生了什么</div></div>
+      <div class="col"><div class="card"><span class="k">修改</span>正式请求前先花 3 秒确认模型在不在，不在就返回一句人话，超时单独处理</div></div>
+      <div class="col"><div class="card"><span class="k">结果</span>最坏情况是看到一句「DeepSeek 暂时不可用」，产品还在，<strong>不会白屏</strong></div></div>
+    </div>
+    <div class="body" style="flex:1 1 auto">
+      <div class="card quiet">
+        <span class="k">我还没解决的</span>
+        失败后不会自动重试，得手动再发一次　·　对话没有逐字输出　·　估时的检索还比较粗糙
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 这半年改了什么 -->
+  <section class="slide" data-end="620">
     <h2>顺带一提，这半年它变了三件事</h2>
     <div class="body">
       <div class="card"><span class="k">从手机搬到电脑</span>大屏能把整个看板一次铺开，对时间的感觉完全不一样</div>
@@ -328,8 +301,8 @@ body.fs.hud #notes{bottom:44px}
     </div>
   </section>
 
-  <!-- 9 下一步 -->
-  <section class="slide" data-end="600">
+  <!-- 10 下一步 -->
+  <section class="slide" data-end="655">
     <h2>下一步：让它更懂你</h2>
     <div class="body">
       <div class="card quiet"><span class="k">它现在已经会记了</span>你每次打卡，实际花的时间会被存下来，下次估同类任务会参考</div>
@@ -339,8 +312,8 @@ body.fs.hud #notes{bottom:44px}
     <div class="bottomline">同样一张卷子，给不同的人排的时间，本来就该不一样。</div>
   </section>
 
-  <!-- 10 招募 -->
-  <section class="slide" data-end="645">
+  <!-- 11 招募 -->
+  <section class="slide" data-end="700">
     <h2>我想找的两个人</h2>
     <div class="body" style="padding-right:150px">
       <div class="card quiet"><span class="k">现在做到了</span>端到端闭环可用　·　知识库 329 条　·　2 个不用联网就能跑的测试　·　3 组估时用例全过</div>
@@ -357,7 +330,7 @@ body.fs.hud #notes{bottom:44px}
 <div id="notes"><div class="t">演讲备注</div><div id="notes-body"></div></div>
 
 <div id="hud">
-  <span>第 <b id="pg">1</b> / 10 页</span>
+  <span>第 <b id="pg">1</b> / 11 页</span>
   <span>本页目标 <b id="target">—</b></span>
   <span>已用 <b id="clock">0:00</b></span>
   <span id="warn"></span>
@@ -365,7 +338,7 @@ body.fs.hud #notes{bottom:44px}
   <button id="btn-timer">开始计时 (T)</button>
   <button id="btn-reset">归零</button>
   <button id="btn-notes">备注 (N)</button>
-  <span style="opacity:.6">← → 翻页　F 全屏　全屏后 H 召回本栏</span>
+  <span style="opacity:.6">← → 翻页　F 全屏</span>
 </div>
 
 <script>
@@ -377,6 +350,7 @@ const NOTES = [
   "先演老办法：手动填一个任务，学科、类型、难度、截止日一个个选，让观众自己感觉到烦。然后说「所以我把它改成了这样」，再一句话演示。这个对比不用讲，演出来就够了。演示完回来接一句：刚才那一句话背后，其实有两个设计。",
   "先说表单的问题，再说现在。重点是后半段：AI 很会说漂亮话，所以我不能只让它说话，得给它真能动手的工具，还要用规则按住它。",
   "不要解释什么是 RAG，不要出现英文缩写。只讲一件事：估时是算出来的，不是猜的。305 / 375 / 461 是真实的测试输出，现场数字有浮动就说那是 AI 在做微调。",
+  "讲得坦诚。失败不会让项目显得不完整，能解释失败并且改掉才说明工程能力。最后那条边界一定要说，不要跳过。",
   "这一页 35 秒带过就行，语气是「顺带一提」，不要展开。观众没听过 1.0，不用铺垫，直接说这半年变了什么。",
   "先说它已经会记了，再说这还不够。落点是那句「同样一张卷子，给不同的人排的时间本来就该不一样」。",
   "招募要说具体的活，不要只说欢迎加入。两个方向各一句话讲完，然后停在这一页等提问，别急着退出。"
@@ -441,7 +415,6 @@ document.addEventListener('keydown', e => {
     if(document.fullscreenElement) document.exitFullscreen();
     else document.documentElement.requestFullscreen();
   }
-  else if(e.key === 'h' || e.key === 'H'){ document.body.classList.toggle('hud'); fit(); }
 });
 
 function fit(){
@@ -450,11 +423,7 @@ function fit(){
   $('stage').style.transform = 'translate(-50%,-50%) scale(' + k + ')';
 }
 window.addEventListener('resize', fit);
-document.addEventListener('fullscreenchange', () => {
-  document.body.classList.toggle('fs', !!document.fullscreenElement);
-  document.body.classList.remove('hud');
-  fit();
-});
+document.addEventListener('fullscreenchange', fit);
 fit();
 fromHash();
 render();

@@ -74,5 +74,35 @@
     "password_hash": "fbe3f0fbcda25890f386b9b3eb958405f93bfef89a1e16ccf863db3117ef4756",
     "created_at": "2026-08-27T20:23:30",
     "type": "phone"
+  },
+  "13567892938": {
+    "salt": "c4f7b4f677bb0031",
+    "password_hash": "6c4275995bbcdb76a42638614651d064a6d8e5db82c594ada26ba7f57b4fd6db",
+    "created_at": "2026-08-27T20:39:07",
+    "type": "phone"
+  },
+  "15362861234": {
+    "salt": "69991227dd3caeb5",
+    "password_hash": "cf94f8939a795d4623c82a9bf7785889b8ecf4743dfa301bfbd6f0ebc2f3b526",
+    "created_at": "2026-08-28T22:09:02",
+    "type": "phone"
+  },
+  "szzxliu@163.com": {
+    "salt": "8c1c031807a21c76",
+    "password_hash": "50a18057c4098cb6f81fd150c844d980bf14a9a2ffd409829b3cdb8827b2e87f",
+    "created_at": "2026-08-29T09:24:24",
+    "type": "email"
+  },
+  "szzzxliu@163.com": {
+    "salt": "8422fa59a164ada6",
+    "password_hash": "31faa70e26cbb7e27e675c44ae7776e38a9c3b66747804d950448772d6010b85",
+    "created_at": "2026-08-29T10:20:35",
+    "type": "email"
+  },
+  "13882091131": {
+    "salt": "10c4e523efdfb698",
+    "password_hash": "6d0623dac1bb864cc09a144449cad099458522edc267be80faebae944ad0c637",
+    "created_at": "2026-08-29T10:42:35",
+    "type": "phone"
   }
 }

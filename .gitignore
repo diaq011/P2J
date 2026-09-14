@@ -212,5 +212,12 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Local auth session tokens (do not commit)
+# Local auth session tokens / user credentials / per-user state (do not commit)
+# Path used to be v0_demo/; product lives under j/ now.
 v0_demo/backend/data/sessions.json
+v0_demo/backend/data/users.json
+v0_demo/backend/data/users/
+j/backend/data/sessions.json
+j/backend/data/users.json
+j/backend/data/users/
+j/backend/data/users/uploads/
