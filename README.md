@@ -40,8 +40,8 @@
 ---
 
 ## 四、技术栈
-- **后端**：Python 3 + Flask（`v0_demo/backend/app.py`），标准库 `urllib` 直连 LLM，无重依赖。
-- **前端**：原生 HTML / CSS / JS 单页应用（`v0_demo/index.html` / `app.js` / `styles.css`），桌面优先，左侧导航 + 右侧动作栏 + 动画登录页。
+- **后端**：Python 3 + Flask（`j/backend/app.py`），标准库 `urllib` 直连 LLM，无重依赖。
+- **前端**：原生 HTML / CSS / JS 单页应用（`j/index.html` / `app.js` / `styles.css`），桌面优先，左侧导航 + 右侧动作栏 + 动画登录页。
 - **LLM**：DeepSeek `deepseek-chat`（OpenAI 兼容），可切 Qwen / Ollama。
 - **Agent**：`assistant_agent.py` 多轮 function calling 循环（5 个工具）。
 - **RAG**：`knowledge_rag.py` + `data/knowledge/task_knowledge_v2.jsonl` 参数化知识库。
@@ -53,23 +53,37 @@
 
 ## 五、安装与运行
 
-> 应用代码位于 `v0_demo/`。仅需 Python 3 与 Flask，其余为标准库。
+> 应用代码位于 **`j/`**（旧目录名 `v0_demo/` 已废弃）。仅需 Python 3 与 Flask，其余为标准库。
 
 ### 1. 安装依赖
 ```bash
-cd v0_demo/backend
+cd j/backend
 python3 -m venv .venv
 source .venv/bin/activate          # Windows: .\.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. 配置环境变量（从模板复制，勿提交真实 key）
+### 2. 配置 API Key（必做，仓库里不含真实 key）
+
+对话 / 估时 / 排计划都要调用 DeepSeek，所以部署方必须自己准备一把 API Key：
+
+1. 打开 [DeepSeek 开放平台](https://platform.deepseek.com/)，注册并创建 API Key  
+2. 在 `j/backend/` 下复制模板并填入：
+
 ```bash
 cp run.local.env.example run.local.env
-# 编辑 run.local.env，填入你的 DEEPSEEK_API_KEY
+# 编辑 run.local.env，把 DEEPSEEK_API_KEY=sk-... 换成你自己的 key
 ```
-`run.local.env` 已被 `.gitignore` 忽略；后端启动时由 `_load_local_env()` 自动加载。
-需要的键见 `run.local.env.example`：`DEEPSEEK_API_KEY`、`DEEPSEEK_API_URL`、`DEEPSEEK_MODEL`、`AVAILABILITY_DEEPSEEK_MODEL`、`APP_PORT`。
+
+`run.local.env` 已被 `.gitignore` 忽略；后端启动时由 `_load_local_env()` 自动加载。  
+**请勿把真实 key 提交进 Git。** 也可以不建文件，直接用环境变量：
+
+```bash
+export DEEPSEEK_API_KEY=sk-你的key
+export APP_PORT=5001   # 可选
+```
+
+模板里其他可选键：`DEEPSEEK_API_URL`、`DEEPSEEK_MODEL`、`AVAILABILITY_DEEPSEEK_MODEL`、`APP_PORT`。
 
 ### 3. 启动
 ```bash
@@ -77,13 +91,27 @@ python3 app.py
 ```
 然后浏览器访问：**http://127.0.0.1:5001/**
 
-> 端口说明：macOS 的 AirPlay 常占用 5000，模板默认 `APP_PORT=5001`。如需更改，改 `run.local.env` 里的 `APP_PORT` 即可。
+> 端口说明：macOS 的 AirPlay 常占用 5000，模板默认 `APP_PORT=5001`。服务器部署可改成 `5000` 或其他端口。
 
 ### 4. 快速自检
 ```bash
 curl http://127.0.0.1:5001/api/health     # 查看 deepseekApiReady 是否为 true
 ```
 
+### 5. 服务器部署说明（给老师 / 运维）
+
+```bash
+git clone https://github.com/diaq011/P2J.git
+cd P2J/j/backend
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp run.local.env.example run.local.env   # 填入 DEEPSEEK_API_KEY
+python3 app.py                           # 默认监听 0.0.0.0，局域网可访问
+```
+
+- **可以 pull 后部署**，但必须配置 `DEEPSEEK_API_KEY`，否则页面能开、AI 对话不可用。  
+- 当前是 Flask 开发服务器 + JSON 文件存储，适合演示 / 内网试用，不是生产级（无正式 WSGI、数据库、HTTPS）。  
+- 服务器需能访问 `https://api.deepseek.com`。
 ---
 
 ## 六、示例输入 / 输出
@@ -153,7 +181,7 @@ curl http://127.0.0.1:5001/api/health     # 查看 deepseekApiReady 是否为 tr
 - 📜 [`CHANGELOG.md`](CHANGELOG.md) — 迭代更新日志（对应 GitHub commit）
 - 📓 [`docs/DEVELOPMENT_LOG.md`](docs/DEVELOPMENT_LOG.md) — 逐轮开发日志
 - 🔎 [`docs/rag_knowledge_base_design.md`](docs/rag_knowledge_base_design.md) — RAG 知识库设计
-- 📁 [`v0_demo/`](v0_demo/) — 应用源码（前端 + Flask 后端）
+- 📁 [`j/`](j/) — 应用源码（前端 + Flask 后端）
 
 ---
 
